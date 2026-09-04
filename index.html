@@ -818,18 +818,27 @@ function renderPredictionPanel() {
 
   container.innerHTML = '';
 
-  const qualifyingStarted =
-    hasQualifyingStarted(currentRace);
+  const lock =
+    getPredictionLock(currentTab);
 
-  if (qualifyingStarted) {
+  if (lock.locked) {
 
     container.innerHTML = `
+
       <div class="message">
-        Qualifying has started. Predictions are now locked.
+
+        🔒 <strong>${escapeHtml(lock.title)}</strong>
+
+        <br>
+
+        ${escapeHtml(lock.message)}
+
       </div>
+
     `;
 
-    document.getElementById('saveButton').disabled = true;
+    document.getElementById('saveButton').disabled =
+      true;
 
     renderReadOnlyPredictions();
 
@@ -837,13 +846,11 @@ function renderPredictionPanel() {
 
   }
 
-  document.getElementById('saveButton').disabled = false;
-
-  const predictionType =
-    currentTab;
+  document.getElementById('saveButton').disabled =
+    false;
 
   const saved =
-    getSavedOrder(predictionType);
+    getSavedOrder(currentTab);
 
   const orderedDrivers =
     saved.length
@@ -902,10 +909,15 @@ function renderPredictionPanel() {
     document.getElementById('availableList');
 
   const selectedIds =
-    orderedDrivers.map(d => d.driverId);
+    orderedDrivers.map(
+      d => d.driverId
+    );
 
   drivers
-    .filter(d => !selectedIds.includes(d.driverId))
+    .filter(
+      d =>
+        !selectedIds.includes(d.driverId)
+    )
     .forEach(driver => {
 
       availableList.appendChild(
@@ -1268,10 +1280,13 @@ async function savePredictions() {
 
   if (!currentRace) return;
 
-  if (hasQualifyingStarted(currentRace)) {
+  const lock =
+    getPredictionLock(currentTab);
+
+  if (lock.locked) {
 
     showMessage(
-      'Qualifying has already started. Predictions are locked.',
+      lock.title + ' ' + lock.message,
       'error'
     );
 
@@ -1294,7 +1309,8 @@ async function savePredictions() {
 
       session: sessionToken,
 
-      raceId: currentRace.raceId,
+      raceId:
+        currentRace.raceId,
 
       predictions:
         JSON.stringify(payload)
@@ -1314,6 +1330,8 @@ async function savePredictions() {
       'success'
     );
 
+    renderPredictionPanel();
+
   } catch (error) {
 
     console.error(error);
@@ -1326,12 +1344,12 @@ async function savePredictions() {
   } finally {
 
     button.disabled = false;
-    button.textContent = 'Save Predictions';
+    button.textContent =
+      'Save Predictions';
 
   }
 
 }
-
 
 /* =========================================================
    BUILD PAYLOAD
@@ -1772,19 +1790,21 @@ function renderOtherSection(title, order) {
 
 function hasQualifyingStarted(race) {
 
-  if (!race || !race.qualifyingStart) {
+  if (
+    !race ||
+    !race.qualifyingStart
+  ) {
 
     return false;
 
   }
 
-  const start =
-    new Date(race.qualifyingStart);
-
-  return Date.now() >= start.getTime();
+  return Date.now() >=
+    new Date(
+      race.qualifyingStart
+    ).getTime();
 
 }
-
 
 /* =========================================================
    HELPERS
@@ -1867,6 +1887,103 @@ function logout() {
     .style.display = 'none';
 
   google.accounts.id.disableAutoSelect();
+
+}
+
+function getPredictionLock(type) {
+
+  if (!currentRace) {
+
+    return {
+      locked: false
+    };
+
+  }
+
+  const now =
+    Date.now();
+
+
+  /*
+    Sprint Qualifying and Sprint
+    lock when Sprint Qualifying begins.
+  */
+
+  if (
+    currentRace.sprint &&
+    (
+      type === 'sprintQualifying' ||
+      type === 'sprint'
+    )
+  ) {
+
+    if (
+      currentRace.sprintQualifyingStart &&
+      now >=
+      new Date(
+        currentRace.sprintQualifyingStart
+      ).getTime()
+    ) {
+
+      return {
+
+        locked: true,
+
+        title:
+          type === 'sprint'
+            ? 'Sprint predictions are locked.'
+            : 'Sprint Qualifying predictions are locked.',
+
+        message:
+          'Sprint Qualifying has started.'
+
+      };
+
+    }
+
+  }
+
+
+  /*
+    GP Qualifying and Race
+    lock when GP Qualifying begins.
+  */
+
+  if (
+    type === 'qualifying' ||
+    type === 'race'
+  ) {
+
+    if (
+      currentRace.qualifyingStart &&
+      now >=
+      new Date(
+        currentRace.qualifyingStart
+      ).getTime()
+    ) {
+
+      return {
+
+        locked: true,
+
+        title:
+          type === 'race'
+            ? 'Race predictions are locked.'
+            : 'Qualifying predictions are locked.',
+
+        message:
+          'GP Qualifying has started.'
+
+      };
+
+    }
+
+  }
+
+
+  return {
+    locked: false
+  };
 
 }
 
