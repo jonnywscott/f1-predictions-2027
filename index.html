@@ -1,235 +1,951 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>F1 Predictions 2027</title>
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script
+    src="https://accounts.google.com/gsi/client"
+    async
+    defer
+  ></script>
+
 
   <style>
+
     * {
       box-sizing: border-box;
     }
 
+
     body {
+
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f3f3f3;
+
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        Arial,
+        sans-serif;
+
+      background: #f2f2f2;
+
       color: #151515;
+
     }
+
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
 
     .header {
+
       background: #111;
+
       color: white;
+
       padding: 18px 24px;
+
     }
+
 
     .header-inner {
+
       max-width: 1100px;
+
       margin: auto;
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
     }
+
 
     .logo {
+
       font-size: 21px;
-      font-weight: 700;
+
+      font-weight: 800;
+
+      letter-spacing: -.3px;
+
     }
+
+
+    /* =====================================================
+       LAYOUT
+       ===================================================== */
 
     .container {
+
       max-width: 1100px;
+
       margin: 35px auto;
+
       padding: 0 20px;
+
     }
+
 
     .card {
+
       background: white;
-      border-radius: 14px;
+
+      border-radius: 16px;
+
       padding: 30px;
-      box-shadow: 0 3px 15px rgba(0,0,0,.07);
+
+      box-shadow:
+        0 4px 20px rgba(0,0,0,.07);
+
     }
 
-    #app {
-      display: none;
-    }
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
 
     #login {
+
       max-width: 500px;
+
       margin: 80px auto;
+
       text-align: center;
+
     }
 
-    .flag {
-      font-size: 55px;
+
+    #app {
+
+      display: none;
+
+    }
+
+
+    .race-car {
+
+      font-size: 58px;
+
       margin-bottom: 10px;
+
     }
 
-    h1 {
-      margin: 0 0 10px;
+
+    .login-title {
+
+      font-size: 34px;
+
+      font-weight: 800;
+
+      margin: 0;
+
     }
 
-    h2 {
-      margin-top: 30px;
-    }
 
     .subtitle {
+
       color: #666;
-      margin-bottom: 30px;
+
+      margin:
+        10px 0 30px;
+
+      font-size: 16px;
+
     }
+
 
     #googleButton {
+
       display: flex;
+
       justify-content: center;
-      margin-top: 25px;
+
     }
 
-    .message {
-      padding: 14px 16px;
-      border-radius: 9px;
-      margin: 20px 0;
-      background: #f1f1f1;
-    }
 
-    .error {
-      background: #ffe4e4;
-      color: #9b0000;
-    }
-
-    .success {
-      background: #e5f7e8;
-      color: #176b25;
-    }
+    /* =====================================================
+       TOP BAR
+       ===================================================== */
 
     .topbar {
+
       display: flex;
+
       justify-content: space-between;
+
       align-items: center;
+
       gap: 20px;
+
       flex-wrap: wrap;
+
       margin-bottom: 25px;
+
     }
 
-    .player {
-      font-size: 16px;
+
+    .welcome {
+
+      font-size: 17px;
+
     }
 
-    select {
-      padding: 11px 14px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 15px;
-      background: white;
+
+    .welcome strong {
+
+      font-weight: 800;
+
     }
+
 
     .race-selector {
+
       display: flex;
+
       align-items: center;
-      gap: 12px;
+
+      gap: 10px;
+
     }
 
-    .driver-row {
-      display: grid;
-      grid-template-columns: 1fr 130px 130px;
-      gap: 15px;
-      align-items: center;
-      padding: 12px 5px;
-      border-bottom: 1px solid #eee;
-    }
 
-    .driver-name {
-      font-weight: 600;
-    }
+    select {
 
-    .team {
-      display: block;
-      color: #777;
-      font-size: 13px;
-      margin-top: 3px;
-    }
+      padding:
+        11px 14px;
 
-    .position-label {
-      font-size: 12px;
-      color: #777;
-      margin-bottom: 4px;
-      display: block;
-    }
+      border:
+        1px solid #ccc;
 
-    button {
-      border: none;
-      background: #111;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
+      border-radius: 9px;
+
+      background: white;
+
       font-size: 15px;
+
+    }
+
+
+    /* =====================================================
+       RACE INFORMATION
+       ===================================================== */
+
+    .race-info {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
+      gap: 12px;
+
+      margin-bottom: 25px;
+
+    }
+
+
+    .info-box {
+
+      background: #f6f6f6;
+
+      border-radius: 10px;
+
+      padding: 14px 16px;
+
+    }
+
+
+    .info-label {
+
+      display: block;
+
+      font-size: 12px;
+
+      color: #777;
+
+      text-transform: uppercase;
+
+      font-weight: 700;
+
+      margin-bottom: 4px;
+
+    }
+
+
+    .info-value {
+
+      font-weight: 700;
+
+    }
+
+
+    /* =====================================================
+       LOCK / NOTICE
+       ===================================================== */
+
+    .notice {
+
+      padding: 15px 17px;
+
+      border-radius: 10px;
+
+      margin-bottom: 25px;
+
+      line-height: 1.5;
+
+    }
+
+
+    .notice.private {
+
+      background: #fff6d7;
+
+      border-left:
+        4px solid #d3a500;
+
+    }
+
+
+    .notice.unlocked {
+
+      background: #e8f7eb;
+
+      border-left:
+        4px solid #299447;
+
+    }
+
+
+    .notice.locked {
+
+      background: #eee;
+
+      border-left:
+        4px solid #777;
+
+    }
+
+
+    /* =====================================================
+       PREDICTION TABS
+       ===================================================== */
+
+    .prediction-tabs {
+
+      display: flex;
+
+      gap: 8px;
+
+      margin-bottom: 20px;
+
+      border-bottom:
+        1px solid #ddd;
+
+      padding-bottom: 8px;
+
+    }
+
+
+    .tab {
+
+      background: transparent;
+
+      color: #555;
+
+      border: none;
+
+      padding:
+        10px 18px;
+
+      border-radius: 8px;
+
+      font-weight: 700;
+
       cursor: pointer;
+
     }
 
-    button:hover {
-      opacity: .85;
+
+    .tab.active {
+
+      background: #111;
+
+      color: white;
+
     }
 
-    .save-container {
-      margin-top: 25px;
+
+    .prediction-panel {
+
+      display: none;
+
     }
+
+
+    .prediction-panel.active {
+
+      display: block;
+
+    }
+
+
+    /* =====================================================
+       PREDICTION HEADER
+       ===================================================== */
+
+    .prediction-heading {
+
+      display: flex;
+
+      justify-content: space-between;
+
+      align-items: center;
+
+      gap: 20px;
+
+      margin-bottom: 12px;
+
+    }
+
+
+    .prediction-heading h2 {
+
+      margin: 0;
+
+      font-size: 23px;
+
+    }
+
+
+    .drag-hint {
+
+      color: #777;
+
+      font-size: 13px;
+
+    }
+
+
+    /* =====================================================
+       DRIVER LIST
+       ===================================================== */
 
     .prediction-list {
-      padding-left: 25px;
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 7px;
+
+      min-height: 100px;
+
     }
 
-    .prediction-list li {
-      margin: 7px 0;
+
+    .driver-card {
+
+      display: grid;
+
+      grid-template-columns:
+        48px 1fr auto;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding:
+        9px 12px;
+
+      border:
+        1px solid #ddd;
+
+      border-radius: 10px;
+
+      background: white;
+
+      cursor: grab;
+
+      user-select: none;
+
+      transition:
+        transform .12s,
+        box-shadow .12s,
+        opacity .12s;
+
     }
 
-    .private-notice {
-      background: #fff6d8;
-      border-left: 4px solid #d9a900;
+
+    .driver-card:hover {
+
+      box-shadow:
+        0 3px 10px rgba(0,0,0,.08);
+
     }
 
-    .public-notice {
-      background: #e5f7e8;
-      border-left: 4px solid #2d8a3d;
+
+    .driver-card.dragging {
+
+      opacity: .45;
+
+      transform:
+        scale(.98);
+
     }
+
+
+    .driver-card.drag-over {
+
+      border:
+        2px solid #111;
+
+      transform:
+        translateY(2px);
+
+    }
+
+
+    .position {
+
+      width: 40px;
+
+      height: 40px;
+
+      display: flex;
+
+      justify-content: center;
+
+      align-items: center;
+
+      border-radius: 8px;
+
+      background: #111;
+
+      color: white;
+
+      font-weight: 800;
+
+      font-size: 15px;
+
+    }
+
+
+    .driver-details {
+
+      min-width: 0;
+
+    }
+
+
+    .driver-name {
+
+      font-weight: 800;
+
+      font-size: 15px;
+
+    }
+
+
+    .driver-team {
+
+      color: #777;
+
+      font-size: 12px;
+
+      margin-top: 2px;
+
+    }
+
+
+    .drag-handle {
+
+      color: #999;
+
+      font-size: 20px;
+
+      padding:
+        5px;
+
+    }
+
+
+    /* =====================================================
+       MOBILE MOVE BUTTONS
+       ===================================================== */
+
+    .move-buttons {
+
+      display: flex;
+
+      gap: 4px;
+
+    }
+
+
+    .move-button {
+
+      width: 30px;
+
+      height: 30px;
+
+      padding: 0;
+
+      border: 1px solid #ddd;
+
+      background: #f7f7f7;
+
+      color: #333;
+
+      border-radius: 6px;
+
+      font-size: 15px;
+
+      cursor: pointer;
+
+    }
+
+
+    .move-button:hover {
+
+      background: #e8e8e8;
+
+    }
+
+
+    /* =====================================================
+       SAVE
+       ===================================================== */
+
+    .save-section {
+
+      margin-top: 25px;
+
+      display: flex;
+
+      align-items: center;
+
+      gap: 15px;
+
+      flex-wrap: wrap;
+
+    }
+
+
+    .save-button {
+
+      background: #111;
+
+      color: white;
+
+      border: none;
+
+      padding:
+        13px 24px;
+
+      border-radius: 9px;
+
+      font-size: 15px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+    }
+
+
+    .save-button:hover {
+
+      opacity: .85;
+
+    }
+
+
+    .save-button:disabled {
+
+      opacity: .45;
+
+      cursor: not-allowed;
+
+    }
+
+
+    /* =====================================================
+       OTHER PLAYERS
+       ===================================================== */
+
+    .other-players {
+
+      margin-top: 40px;
+
+      border-top:
+        1px solid #ddd;
+
+      padding-top: 25px;
+
+    }
+
+
+    .player-section {
+
+      margin-top: 25px;
+
+    }
+
+
+    .player-section h3 {
+
+      margin-bottom: 10px;
+
+    }
+
+
+    .readonly-list {
+
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 5px;
+
+    }
+
+
+    .readonly-row {
+
+      display: grid;
+
+      grid-template-columns:
+        40px 1fr;
+
+      align-items: center;
+
+      gap: 10px;
+
+      padding:
+        7px 10px;
+
+      background: #f6f6f6;
+
+      border-radius: 7px;
+
+    }
+
+
+    .readonly-position {
+
+      font-weight: 800;
+
+    }
+
+
+    /* =====================================================
+       MESSAGES
+       ===================================================== */
+
+    .message {
+
+      padding:
+        13px 16px;
+
+      border-radius: 9px;
+
+      margin-top: 15px;
+
+    }
+
+
+    .error {
+
+      background: #ffe4e4;
+
+      color: #990000;
+
+    }
+
+
+    .success {
+
+      background: #e6f7e9;
+
+      color: #176b26;
+
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
 
     @media (max-width: 650px) {
 
-      .driver-row {
-        grid-template-columns: 1fr 90px 90px;
-        gap: 8px;
+      .container {
+
+        margin-top: 15px;
+
+        padding:
+          0 10px;
+
       }
+
 
       .card {
-        padding: 20px;
+
+        padding: 18px;
+
+        border-radius: 12px;
+
       }
 
-      .container {
-        margin-top: 15px;
+
+      .header {
+
+        padding:
+          15px;
+
+      }
+
+
+      .logo {
+
+        font-size: 18px;
+
+      }
+
+
+      .topbar {
+
+        align-items: stretch;
+
+      }
+
+
+      .race-selector {
+
+        width: 100%;
+
+      }
+
+
+      .race-selector select {
+
+        flex: 1;
+
+      }
+
+
+      .prediction-heading {
+
+        display: block;
+
+      }
+
+
+      .drag-hint {
+
+        display: block;
+
+        margin-top: 5px;
+
+      }
+
+
+      .driver-card {
+
+        grid-template-columns:
+          42px 1fr auto;
+
+        gap: 9px;
+
+        padding:
+          8px;
+
+      }
+
+
+      .position {
+
+        width: 36px;
+
+        height: 36px;
+
+      }
+
+
+      .drag-handle {
+
+        display: none;
+
+      }
+
+
+      .move-button {
+
+        width: 32px;
+
+        height: 32px;
+
       }
 
     }
+
   </style>
+
 </head>
+
 
 <body>
 
+
+<!-- =======================================================
+     HEADER
+     ======================================================= -->
+
 <header class="header">
+
   <div class="header-inner">
-    <div class="logo">🏁 F1 Predictions 2027</div>
+
+    <div class="logo">
+      🏁 F1 Predictions 2027
+    </div>
+
   </div>
+
 </header>
 
 
 <div class="container">
 
-  <!-- LOGIN -->
 
-  <div class="card" id="login">
+  <!-- =====================================================
+       LOGIN
+       ===================================================== -->
 
-    <div class="flag">🏎️</div>
+  <div
+    class="card"
+    id="login"
+  >
 
-    <h1>F1 Predictions 2027</h1>
+    <div class="race-car">
+      🏎️
+    </div>
+
+    <h1 class="login-title">
+      F1 Predictions 2027
+    </h1>
 
     <div class="subtitle">
       Make your predictions. Beat your mates.
@@ -242,16 +958,24 @@
   </div>
 
 
-  <!-- APP -->
+  <!-- =====================================================
+       APP
+       ===================================================== -->
 
-  <div class="card" id="app">
+  <div
+    class="card"
+    id="app"
+  >
 
     <div class="topbar">
 
-      <div class="player">
+      <div class="welcome">
+
         Welcome back,
         <strong id="playerName"></strong>
+
       </div>
+
 
       <div class="race-selector">
 
@@ -265,11 +989,139 @@
 
     </div>
 
-    <div id="raceInfo"></div>
 
-    <div id="predictionArea"></div>
+    <div
+      class="race-info"
+      id="raceInfo"
+    ></div>
+
+
+    <div
+      id="predictionNotice"
+    ></div>
+
+
+    <!-- ===================================================
+         TABS
+         =================================================== -->
+
+    <div class="prediction-tabs">
+
+      <button
+        class="tab active"
+        id="qualifyingTab"
+        onclick="switchTab('qualifying')"
+      >
+        🕐 Qualifying
+      </button>
+
+
+      <button
+        class="tab"
+        id="raceTab"
+        onclick="switchTab('race')"
+      >
+        🏁 Race
+      </button>
+
+    </div>
+
+
+    <!-- ===================================================
+         QUALIFYING
+         =================================================== -->
+
+    <div
+      class="prediction-panel active"
+      id="qualifyingPanel"
+    >
+
+      <div class="prediction-heading">
+
+        <h2>
+          Qualifying Prediction
+        </h2>
+
+        <span class="drag-hint">
+          Drag drivers into your predicted order
+        </span>
+
+      </div>
+
+
+      <div
+        class="prediction-list"
+        id="qualifyingList"
+      ></div>
+
+    </div>
+
+
+    <!-- ===================================================
+         RACE
+         =================================================== -->
+
+    <div
+      class="prediction-panel"
+      id="racePanel"
+    >
+
+      <div class="prediction-heading">
+
+        <h2>
+          Race Prediction
+        </h2>
+
+        <span class="drag-hint">
+          Drag drivers into your predicted order
+        </span>
+
+      </div>
+
+
+      <div
+        class="prediction-list"
+        id="raceList"
+      ></div>
+
+    </div>
+
+
+    <!-- ===================================================
+         SAVE
+         =================================================== -->
+
+    <div
+      class="save-section"
+      id="saveSection"
+    >
+
+      <button
+        class="save-button"
+        id="saveButton"
+        onclick="savePredictions()"
+      >
+        💾 Save Predictions
+      </button>
+
+      <span
+        id="saveStatus"
+      ></span>
+
+    </div>
+
 
     <div id="appMessage"></div>
+
+
+    <!-- ===================================================
+         OTHER PLAYERS
+         =================================================== -->
+
+    <div
+      class="other-players"
+      id="otherPlayers"
+    ></div>
 
   </div>
 
@@ -278,79 +1130,150 @@
 
 <script>
 
+
+/* =========================================================
+   CONFIG
+   ========================================================= */
+
 const CLIENT_ID =
   '618343895277-klbvf987p9vqvr8tf72si0ht79v1cpj8.apps.googleusercontent.com';
+
 
 const API_URL =
   'https://script.google.com/macros/s/AKfycbxioW-0oLb8U-yGFvV5iVNYVClr7W5NJl0ofQ-NoXdOxxQdgUAs4_w4Ei_0rbCuN70IfA/exec';
 
-let session = null;
-let currentPlayer = null;
-let races = [];
-let drivers = [];
-
 
 /* =========================================================
-   INITIALISE GOOGLE SIGN-IN
+   STATE
    ========================================================= */
 
-window.onload = function() {
+let session = null;
 
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: handleGoogleCredential
-  });
+let currentPlayer = null;
 
-  google.accounts.id.renderButton(
-    document.getElementById('googleButton'),
-    {
-      theme: 'outline',
-      size: 'large',
-      text: 'continue_with',
-      shape: 'rectangular',
-      width: 280
-    }
-  );
+let races = [];
 
-};
+let drivers = [];
+
+let selectedRace = null;
+
+let qualifyingOrder = [];
+
+let raceOrder = [];
+
+let draggedElement = null;
 
 
 /* =========================================================
    GOOGLE LOGIN
    ========================================================= */
 
-function handleGoogleCredential(response) {
+window.onload = function() {
 
-  showLoginMessage('Signing you in...');
+  google.accounts.id.initialize({
+
+    client_id:
+      CLIENT_ID,
+
+    callback:
+      handleGoogleCredential
+
+  });
+
+
+  google.accounts.id.renderButton(
+
+    document.getElementById(
+      'googleButton'
+    ),
+
+    {
+
+      theme:
+        'outline',
+
+      size:
+        'large',
+
+      text:
+        'continue_with',
+
+      shape:
+        'rectangular',
+
+      width:
+        280
+
+    }
+
+  );
+
+};
+
+
+/* =========================================================
+   HANDLE GOOGLE CREDENTIAL
+   ========================================================= */
+
+function handleGoogleCredential(
+  response
+) {
+
+  showLoginMessage(
+    'Signing you in...'
+  );
+
 
   apiCall(
+
     'login',
+
     {
-      credential: response.credential
+
+      credential:
+        response.credential
+
     },
+
     function(result) {
 
       if (!result.success) {
 
         showLoginMessage(
-          result.error || 'Unable to sign you in.',
+
+          result.error ||
+          'Unable to sign you in.',
+
           true
+
         );
 
         return;
+
       }
 
-      session = result.session;
-      currentPlayer = result.player;
+
+      session =
+        result.session;
+
+
+      currentPlayer =
+        result.player;
+
 
       localStorage.setItem(
+
         'f1_session',
+
         session
+
       );
+
 
       enterApp();
 
     }
+
   );
 
 }
@@ -362,11 +1285,23 @@ function handleGoogleCredential(response) {
 
 function enterApp() {
 
-  document.getElementById('login').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
+  document.getElementById(
+    'login'
+  ).style.display =
+    'none';
 
-  document.getElementById('playerName').textContent =
+
+  document.getElementById(
+    'app'
+  ).style.display =
+    'block';
+
+
+  document.getElementById(
+    'playerName'
+  ).textContent =
     currentPlayer.name;
+
 
   loadRaces();
 
@@ -380,39 +1315,72 @@ function enterApp() {
 function loadRaces() {
 
   apiCall(
+
     'races',
+
     {},
+
     function(result) {
 
       if (!result.success) {
-        showAppMessage(result.error, true);
+
+        showAppMessage(
+          result.error,
+          true
+        );
+
         return;
+
       }
 
-      races = result.races;
+
+      races =
+        result.races;
+
 
       const select =
-        document.getElementById('raceSelect');
+        document.getElementById(
+          'raceSelect'
+        );
 
-      select.innerHTML = '';
 
-      races.forEach(function(race) {
+      select.innerHTML =
+        '';
 
-        const option =
-          document.createElement('option');
 
-        option.value = race.raceId;
-        option.textContent = race.race;
+      races.forEach(
+        function(race) {
 
-        select.appendChild(option);
+          const option =
+            document.createElement(
+              'option'
+            );
 
-      });
 
-      select.onchange = loadRace;
+          option.value =
+            race.raceId;
+
+
+          option.textContent =
+            race.race;
+
+
+          select.appendChild(
+            option
+          );
+
+        }
+      );
+
+
+      select.onchange =
+        loadRace;
+
 
       loadDrivers();
 
     }
+
   );
 
 }
@@ -425,329 +1393,1076 @@ function loadRaces() {
 function loadDrivers() {
 
   apiCall(
+
     'drivers',
+
     {},
+
     function(result) {
 
       if (!result.success) {
-        showAppMessage(result.error, true);
+
+        showAppMessage(
+          result.error,
+          true
+        );
+
         return;
+
       }
 
-      drivers = result.drivers;
+
+      drivers =
+        result.drivers;
+
 
       loadRace();
 
     }
+
   );
 
 }
 
 
 /* =========================================================
-   LOAD SELECTED RACE
+   LOAD RACE
    ========================================================= */
 
 function loadRace() {
 
   const raceId =
-    document.getElementById('raceSelect').value;
+    document.getElementById(
+      'raceSelect'
+    ).value;
 
-  if (!raceId) return;
 
-  const race =
-    races.find(
-      r => r.raceId === raceId
-    );
-
-  if (race) {
-
-    let info = '';
-
-    if (race.qualifyingStart) {
-
-      const date =
-        new Date(race.qualifyingStart);
-
-      info +=
-        '<div class="message">' +
-        '<strong>Qualifying:</strong> ' +
-        date.toLocaleString() +
-        '</div>';
-
-    }
-
-    document.getElementById('raceInfo').innerHTML =
-      info;
-
+  if (!raceId) {
+    return;
   }
 
+
+  selectedRace =
+    races.find(
+      r =>
+        r.raceId === raceId
+    );
+
+
+  renderRaceInfo();
+
+
   apiCall(
+
     'predictions',
+
     {
-      raceId: raceId
+
+      raceId:
+        raceId
+
     },
+
     function(result) {
 
       if (!result.success) {
-        showAppMessage(result.error, true);
+
+        showAppMessage(
+          result.error,
+          true
+        );
+
         return;
+
       }
 
-      renderPredictions(result);
 
-    }
-  );
-
-}
-
-
-/* =========================================================
-   RENDER PREDICTIONS
-   ========================================================= */
-
-function renderPredictions(result) {
-
-  const area =
-    document.getElementById('predictionArea');
-
-  let html = '';
-
-  if (!result.qualifyingStarted) {
-
-    html +=
-      '<div class="message private-notice">' +
-      '<strong>🔒 Predictions are private</strong><br>' +
-      'Other players cannot see your predictions until qualifying starts.' +
-      '</div>';
-
-  } else {
-
-    html +=
-      '<div class="message public-notice">' +
-      '<strong>🔓 Predictions are now visible</strong><br>' +
-      'All players can see each other’s predictions.' +
-      '</div>';
-
-  }
-
-
-  const grouped = {};
-
-  result.predictions.forEach(function(prediction) {
-
-    if (!grouped[prediction.playerId]) {
-
-      grouped[prediction.playerId] = {
-        name: prediction.playerName,
-        predictions: []
-      };
-
-    }
-
-    grouped[prediction.playerId]
-      .predictions
-      .push(prediction);
-
-  });
-
-
-  const mine =
-    grouped[currentPlayer.playerId];
-
-  html += '<h2>Your Predictions</h2>';
-
-  html += renderPredictionEditor(
-    mine ? mine.predictions : [],
-    result.qualifyingStarted
-  );
-
-
-  const others =
-    Object.keys(grouped)
-      .filter(
-        id => id !== currentPlayer.playerId
+      buildOrders(
+        result.predictions
       );
 
 
-  if (result.qualifyingStarted && others.length) {
+      renderPredictionInterface(
+        result
+      );
 
-    html += '<h2>Other Predictions</h2>';
 
-    others.forEach(function(playerId) {
+      renderOtherPlayers(
+        result
+      );
 
-      const player =
-        grouped[playerId];
+    }
 
-      html +=
-        '<h3>' +
-        escapeHtml(player.name) +
-        '</h3>';
-
-      html +=
-        renderReadOnlyPredictions(
-          player.predictions
-        );
-
-    });
-
-  }
-
-  area.innerHTML = html;
+  );
 
 }
 
 
 /* =========================================================
-   PREDICTION EDITOR
+   RACE INFO
    ========================================================= */
 
-function renderPredictionEditor(
-  predictions,
-  locked
-) {
+function renderRaceInfo() {
 
-  const existing = {};
+  if (!selectedRace) {
+    return;
+  }
 
-  predictions.forEach(function(p) {
-    existing[p.driverId] = p;
-  });
 
   let html = '';
 
-  html += '<div id="editor">';
 
-  html +=
-    '<div class="driver-row">' +
-      '<div></div>' +
-      '<div><span class="position-label">QUALIFYING</span></div>' +
-      '<div><span class="position-label">RACE</span></div>' +
-    '</div>';
-
-
-  drivers.forEach(function(driver) {
-
-    const prediction =
-      existing[driver.driverId];
-
-    const q =
-      prediction
-        ? prediction.qualifyingPosition
-        : '';
-
-    const r =
-      prediction
-        ? prediction.racePosition
-        : '';
+  if (
+    selectedRace.qualifyingStart
+  ) {
 
     html +=
-      '<div class="driver-row">' +
+      '<div class="info-box">' +
 
-        '<div class="driver-name">' +
-          escapeHtml(driver.driver) +
-          '<span class="team">' +
-            escapeHtml(driver.team) +
-          '</span>' +
-        '</div>' +
+        '<span class="info-label">' +
+          'Qualifying' +
+        '</span>' +
 
-        '<select class="q-position"' +
-          (locked ? ' disabled' : '') +
-          ' data-driver="' +
-          driver.driverId +
-        '">' +
-          positionOptions(q) +
-        '</select>' +
-
-        '<select class="r-position"' +
-          (locked ? ' disabled' : '') +
-          ' data-driver="' +
-          driver.driverId +
-        '">' +
-          positionOptions(r) +
-        '</select>' +
+        '<span class="info-value">' +
+          formatDate(
+            selectedRace.qualifyingStart
+          ) +
+        '</span>' +
 
       '</div>';
 
-  });
+  }
 
 
-  if (!locked) {
+  if (
+    selectedRace.raceStart
+  ) {
 
     html +=
-      '<div class="save-container">' +
+      '<div class="info-box">' +
 
-        '<button onclick="savePredictions()">' +
-          '💾 Save Predictions' +
-        '</button>' +
+        '<span class="info-label">' +
+          'Race' +
+        '</span>' +
+
+        '<span class="info-value">' +
+          formatDate(
+            selectedRace.raceStart
+          ) +
+        '</span>' +
+
+      '</div>';
+
+  }
+
+
+  if (
+    selectedRace.sprint
+  ) {
+
+    html +=
+      '<div class="info-box">' +
+
+        '<span class="info-label">' +
+          'Weekend' +
+        '</span>' +
+
+        '<span class="info-value">' +
+          'Sprint weekend' +
+        '</span>' +
+
+      '</div>';
+
+  }
+
+
+  document.getElementById(
+    'raceInfo'
+  ).innerHTML =
+    html;
+
+}
+
+
+/* =========================================================
+   BUILD DRIVER ORDERS
+   ========================================================= */
+
+function buildOrders(
+  predictions
+) {
+
+  const myPredictions =
+    predictions.filter(
+      p =>
+        p.playerId ===
+        currentPlayer.playerId
+    );
+
+
+  /*
+   * If we have saved predictions,
+   * reconstruct the order from them.
+   */
+
+  if (
+    myPredictions.length ===
+    drivers.length
+  ) {
+
+    qualifyingOrder =
+      myPredictions
+        .slice()
+        .sort(
+          (a, b) =>
+            a.qualifyingPosition -
+            b.qualifyingPosition
+        )
+        .map(
+          p =>
+            p.driverId
+        );
+
+
+    raceOrder =
+      myPredictions
+        .slice()
+        .sort(
+          (a, b) =>
+            a.racePosition -
+            b.racePosition
+        )
+        .map(
+          p =>
+            p.driverId
+        );
+
+  } else {
+
+    /*
+     * No saved predictions yet.
+     * Start with the drivers in their
+     * Drivers sheet order.
+     */
+
+    qualifyingOrder =
+      drivers.map(
+        d =>
+          d.driverId
+      );
+
+
+    raceOrder =
+      drivers.map(
+        d =>
+          d.driverId
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER PREDICTION INTERFACE
+   ========================================================= */
+
+function renderPredictionInterface(
+  result
+) {
+
+  const locked =
+    result.qualifyingStarted;
+
+
+  if (locked) {
+
+    document.getElementById(
+      'predictionNotice'
+    ).innerHTML =
+
+      '<div class="notice locked">' +
+
+        '<strong>🔒 Predictions locked</strong><br>' +
+
+        'Qualifying has started, so predictions can no longer be changed.' +
 
       '</div>';
 
   } else {
 
-    html +=
-      '<div class="message">' +
-      'Predictions are locked because qualifying has started.' +
+    document.getElementById(
+      'predictionNotice'
+    ).innerHTML =
+
+      '<div class="notice private">' +
+
+        '<strong>🔒 Your predictions are private</strong><br>' +
+
+        'Other players cannot see them until qualifying starts.' +
+
       '</div>';
 
   }
 
-  html += '</div>';
 
-  return html;
+  renderList(
+    'qualifyingList',
+    qualifyingOrder,
+    locked
+  );
+
+
+  renderList(
+    'raceList',
+    raceOrder,
+    locked
+  );
+
+
+  document.getElementById(
+    'saveSection'
+  ).style.display =
+    locked
+      ? 'none'
+      : 'flex';
 
 }
 
 
 /* =========================================================
-   POSITION OPTIONS
+   RENDER DRIVER LIST
    ========================================================= */
 
-function positionOptions(selected) {
+function renderList(
+  elementId,
+  order,
+  locked
+) {
 
-  let html =
-    '<option value="">—</option>';
+  const container =
+    document.getElementById(
+      elementId
+    );
 
-  for (
-    let i = 1;
-    i <= drivers.length;
-    i++
+
+  container.innerHTML =
+    '';
+
+
+  order.forEach(
+    function(driverId, index) {
+
+      const driver =
+        drivers.find(
+          d =>
+            d.driverId ===
+            driverId
+        );
+
+
+      if (!driver) {
+        return;
+      }
+
+
+      const card =
+        document.createElement(
+          'div'
+        );
+
+
+      card.className =
+        'driver-card';
+
+
+      card.draggable =
+        !locked;
+
+
+      card.dataset.driverId =
+        driver.driverId;
+
+
+      card.dataset.index =
+        index;
+
+
+      card.innerHTML =
+
+        '<div class="position">' +
+
+          'P' +
+          (index + 1) +
+
+        '</div>' +
+
+
+        '<div class="driver-details">' +
+
+          '<div class="driver-name">' +
+
+            escapeHtml(
+              driver.driver
+            ) +
+
+          '</div>' +
+
+          '<div class="driver-team">' +
+
+            escapeHtml(
+              driver.team
+            ) +
+
+          '</div>' +
+
+        '</div>' +
+
+
+        (
+          locked
+
+          ?
+
+          '<div></div>'
+
+          :
+
+          '<div class="move-buttons">' +
+
+            '<button' +
+
+              ' class="move-button"' +
+
+              ' onclick="moveDriver(' +
+
+                "'" +
+                elementId +
+                "'," +
+                index +
+                ",-1" +
+
+              '); event.stopPropagation();"' +
+
+              (
+                index === 0
+                  ? ' disabled'
+                  : ''
+              ) +
+
+            '>' +
+
+              '↑' +
+
+            '</button>' +
+
+
+            '<button' +
+
+              ' class="move-button"' +
+
+              ' onclick="moveDriver(' +
+
+                "'" +
+                elementId +
+                "'," +
+                index +
+                ",1" +
+
+              '); event.stopPropagation();"' +
+
+              (
+                index ===
+                order.length - 1
+                  ? ' disabled'
+                  : ''
+              ) +
+
+            '>' +
+
+              '↓' +
+
+            '</button>' +
+
+          '</div>'
+
+        );
+
+
+      if (!locked) {
+
+        addDragEvents(
+          card,
+          elementId
+        );
+
+      }
+
+
+      container.appendChild(
+        card
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   DRAG EVENTS
+   ========================================================= */
+
+function addDragEvents(
+  card,
+  listId
+) {
+
+  card.addEventListener(
+    'dragstart',
+    function(e) {
+
+      draggedElement =
+        card;
+
+      card.classList.add(
+        'dragging'
+      );
+
+
+      e.dataTransfer.effectAllowed =
+        'move';
+
+
+      e.dataTransfer.setData(
+        'text/plain',
+        card.dataset.driverId
+      );
+
+    }
+  );
+
+
+  card.addEventListener(
+    'dragend',
+    function() {
+
+      card.classList.remove(
+        'dragging'
+      );
+
+
+      document
+        .querySelectorAll(
+          '.driver-card'
+        )
+        .forEach(
+          el =>
+            el.classList.remove(
+              'drag-over'
+            )
+        );
+
+    }
+  );
+
+
+  card.addEventListener(
+    'dragover',
+    function(e) {
+
+      e.preventDefault();
+
+
+      if (
+        card ===
+        draggedElement
+      ) {
+        return;
+      }
+
+
+      card.classList.add(
+        'drag-over'
+      );
+
+    }
+  );
+
+
+  card.addEventListener(
+    'dragleave',
+    function() {
+
+      card.classList.remove(
+        'drag-over'
+      );
+
+    }
+  );
+
+
+  card.addEventListener(
+    'drop',
+    function(e) {
+
+      e.preventDefault();
+
+
+      card.classList.remove(
+        'drag-over'
+      );
+
+
+      if (
+        !draggedElement ||
+        draggedElement === card
+      ) {
+        return;
+      }
+
+
+      const container =
+        document.getElementById(
+          listId
+        );
+
+
+      const cards =
+        Array.from(
+          container.children
+        );
+
+
+      const fromIndex =
+        cards.indexOf(
+          draggedElement
+        );
+
+
+      const toIndex =
+        cards.indexOf(
+          card
+        );
+
+
+      if (
+        fromIndex <
+        toIndex
+      ) {
+
+        container.insertBefore(
+          draggedElement,
+          card.nextSibling
+        );
+
+      } else {
+
+        container.insertBefore(
+          draggedElement,
+          card
+        );
+
+      }
+
+
+      updateOrderFromDOM(
+        listId
+      );
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   UPDATE ORDER
+   ========================================================= */
+
+function updateOrderFromDOM(
+  listId
+) {
+
+  const container =
+    document.getElementById(
+      listId
+    );
+
+
+  const newOrder =
+    Array.from(
+      container.children
+    )
+    .map(
+      card =>
+        card.dataset.driverId
+    );
+
+
+  if (
+    listId ===
+    'qualifyingList'
   ) {
 
-    html +=
-      '<option value="' +
-      i +
-      '"' +
-      (
-        Number(selected) === i
-          ? ' selected'
-          : ''
-      ) +
-      '>' +
-      'P' +
-      i +
-      '</option>';
+    qualifyingOrder =
+      newOrder;
+
+  } else {
+
+    raceOrder =
+      newOrder;
 
   }
 
-  return html;
+
+  refreshPositions(
+    listId
+  );
 
 }
 
 
 /* =========================================================
-   SAVE
+   REFRESH POSITION NUMBERS
+   ========================================================= */
+
+function refreshPositions(
+  listId
+) {
+
+  const container =
+    document.getElementById(
+      listId
+    );
+
+
+  Array.from(
+    container.children
+  ).forEach(
+    function(card, index) {
+
+      const position =
+        card.querySelector(
+          '.position'
+        );
+
+
+      if (position) {
+
+        position.textContent =
+          'P' +
+          (index + 1);
+
+      }
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   MOVE DRIVER
+   ========================================================= */
+
+function moveDriver(
+  listId,
+  index,
+  direction
+) {
+
+  const order =
+    listId ===
+      'qualifyingList'
+      ? qualifyingOrder
+      : raceOrder;
+
+
+  const newIndex =
+    index + direction;
+
+
+  if (
+    newIndex < 0 ||
+    newIndex >= order.length
+  ) {
+    return;
+  }
+
+
+  const temp =
+    order[index];
+
+
+  order[index] =
+    order[newIndex];
+
+
+  order[newIndex] =
+    temp;
+
+
+  renderList(
+    listId,
+    order,
+    false
+  );
+
+}
+
+
+/* =========================================================
+   TABS
+   ========================================================= */
+
+function switchTab(
+  tab
+) {
+
+  const qualifyingTab =
+    document.getElementById(
+      'qualifyingTab'
+    );
+
+
+  const raceTab =
+    document.getElementById(
+      'raceTab'
+    );
+
+
+  const qualifyingPanel =
+    document.getElementById(
+      'qualifyingPanel'
+    );
+
+
+  const racePanel =
+    document.getElementById(
+      'racePanel'
+    );
+
+
+  if (
+    tab ===
+    'qualifying'
+  ) {
+
+    qualifyingTab.classList.add(
+      'active'
+    );
+
+
+    raceTab.classList.remove(
+      'active'
+    );
+
+
+    qualifyingPanel.classList.add(
+      'active'
+    );
+
+
+    racePanel.classList.remove(
+      'active'
+    );
+
+  } else {
+
+    raceTab.classList.add(
+      'active'
+    );
+
+
+    qualifyingTab.classList.remove(
+      'active'
+    );
+
+
+    racePanel.classList.add(
+      'active'
+    );
+
+
+    qualifyingPanel.classList.remove(
+      'active'
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   SAVE PREDICTIONS
    ========================================================= */
 
 function savePredictions() {
 
+  if (!selectedRace) {
+
+    showAppMessage(
+      'Please select a race.',
+      true
+    );
+
+    return;
+
+  }
+
+
+  if (
+    qualifyingOrder.length !==
+    drivers.length ||
+    raceOrder.length !==
+    drivers.length
+  ) {
+
+    showAppMessage(
+      'Please rank every driver.',
+      true
+    );
+
+    return;
+
+  }
+
+
+  const predictionRows = [];
+
+
   /*
-   * Saving will be enabled once the authentication
-   * connection has been confirmed.
+   * Build a lookup for the race positions.
    */
 
-  showAppMessage(
-    'Authentication is working. Saving will be enabled in the next step.',
-    false
+  const racePositions = {};
+
+
+  raceOrder.forEach(
+    function(driverId, index) {
+
+      racePositions[
+        driverId
+      ] =
+        index + 1;
+
+    }
+  );
+
+
+  /*
+   * Combine qualifying and race
+   * positions for each driver.
+   */
+
+  qualifyingOrder.forEach(
+    function(driverId, index) {
+
+      predictionRows.push({
+
+        driverId:
+          driverId,
+
+        qualifyingPosition:
+          index + 1,
+
+        racePosition:
+          racePositions[
+            driverId
+          ]
+
+      });
+
+    }
+  );
+
+
+  const saveButton =
+    document.getElementById(
+      'saveButton'
+    );
+
+
+  saveButton.disabled =
+    true;
+
+
+  document.getElementById(
+    'saveStatus'
+  ).textContent =
+    'Saving...';
+
+
+  apiCall(
+
+    'savePredictions',
+
+    {
+
+      raceId:
+        selectedRace.raceId,
+
+      predictions:
+        JSON.stringify(
+          predictionRows
+        )
+
+    },
+
+    function(result) {
+
+      saveButton.disabled =
+        false;
+
+
+      if (!result.success) {
+
+        document.getElementById(
+          'saveStatus'
+        ).textContent =
+          '';
+
+
+        showAppMessage(
+          result.error ||
+          'Unable to save predictions.',
+          true
+        );
+
+        return;
+
+      }
+
+
+      document.getElementById(
+        'saveStatus'
+      ).textContent =
+        '✓ Saved';
+
+
+      showAppMessage(
+        'Predictions saved successfully.',
+        false
+      );
+
+
+      /*
+       * Reload from the server to confirm
+       * the saved values.
+       */
+
+      setTimeout(
+        function() {
+
+          loadRace();
+
+        },
+        500
+      );
+
+    }
+
   );
 
 }
@@ -757,49 +2472,204 @@ function savePredictions() {
    OTHER PLAYERS
    ========================================================= */
 
-function renderReadOnlyPredictions(predictions) {
+function renderOtherPlayers(
+  result
+) {
 
-  const sorted =
-    predictions
-      .slice()
-      .sort(
-        (a, b) =>
-          a.racePosition -
-          b.racePosition
+  const container =
+    document.getElementById(
+      'otherPlayers'
+    );
+
+
+  container.innerHTML =
+    '';
+
+
+  if (
+    !result.qualifyingStarted
+  ) {
+
+    return;
+
+  }
+
+
+  const grouped = {};
+
+
+  result.predictions.forEach(
+    function(prediction) {
+
+      if (
+        prediction.playerId ===
+        currentPlayer.playerId
+      ) {
+
+        return;
+
+      }
+
+
+      if (
+        !grouped[
+          prediction.playerId
+        ]
+      ) {
+
+        grouped[
+          prediction.playerId
+        ] = {
+
+          name:
+            prediction.playerName,
+
+          predictions: []
+
+        };
+
+      }
+
+
+      grouped[
+        prediction.playerId
+      ]
+      .predictions
+      .push(
+        prediction
       );
+
+    }
+  );
+
+
+  const playerIds =
+    Object.keys(
+      grouped
+    );
+
+
+  if (
+    playerIds.length === 0
+  ) {
+
+    return;
+
+  }
+
 
   let html =
-    '<ol class="prediction-list">';
+    '<h2>Other Predictions</h2>';
 
-  sorted.forEach(function(p) {
 
-    const driver =
-      drivers.find(
-        d =>
-          d.driverId ===
-          p.driverId
+  playerIds.forEach(
+    function(playerId) {
+
+      const player =
+        grouped[
+          playerId
+        ];
+
+
+      const sorted =
+        player.predictions
+          .slice()
+          .sort(
+            (a, b) =>
+              a.racePosition -
+              b.racePosition
+          );
+
+
+      html +=
+
+        '<div class="player-section">' +
+
+          '<h3>' +
+
+            escapeHtml(
+              player.name
+            ) +
+
+          '</h3>' +
+
+
+          '<div class="readonly-list">';
+
+
+      sorted.forEach(
+        function(prediction) {
+
+          const driver =
+            drivers.find(
+              d =>
+                d.driverId ===
+                prediction.driverId
+            );
+
+
+          if (!driver) {
+            return;
+          }
+
+
+          html +=
+
+            '<div class="readonly-row">' +
+
+              '<div class="readonly-position">' +
+
+                'P' +
+                prediction.racePosition +
+
+              '</div>' +
+
+              '<div>' +
+
+                '<strong>' +
+
+                  escapeHtml(
+                    driver.driver
+                  ) +
+
+                '</strong>' +
+
+                '<br>' +
+
+                '<small>' +
+
+                  escapeHtml(
+                    driver.team
+                  ) +
+
+                '</small>' +
+
+              '</div>' +
+
+            '</div>';
+
+        }
       );
 
-    if (!driver) return;
 
-    html +=
-      '<li>' +
-      escapeHtml(driver.driver) +
-      ' — P' +
-      p.racePosition +
-      '</li>';
+      html +=
 
-  });
+          '</div>' +
 
-  html += '</ol>';
+        '</div>';
 
-  return html;
+    }
+  );
+
+
+  container.innerHTML =
+    html;
 
 }
 
 
 /* =========================================================
-   API
+   API CALL
    ========================================================= */
 
 function apiCall(
@@ -816,17 +2686,29 @@ function apiCall(
       Math.random() * 100000
     );
 
-  const script =
-    document.createElement('script');
 
-  window[callbackName] =
+  const script =
+    document.createElement(
+      'script'
+    );
+
+
+  window[
+    callbackName
+  ] =
     function(result) {
 
-      delete window[callbackName];
+      delete window[
+        callbackName
+      ];
+
 
       script.remove();
 
-      callback(result);
+
+      callback(
+        result
+      );
 
     };
 
@@ -834,10 +2716,12 @@ function apiCall(
   const query =
     new URLSearchParams();
 
+
   query.set(
     'action',
     action
   );
+
 
   query.set(
     'callback',
@@ -857,14 +2741,16 @@ function apiCall(
 
   Object.keys(
     params || {}
-  ).forEach(function(key) {
+  ).forEach(
+    function(key) {
 
-    query.set(
-      key,
-      params[key]
-    );
+      query.set(
+        key,
+        params[key]
+      );
 
-  });
+    }
+  );
 
 
   script.src =
@@ -876,26 +2762,36 @@ function apiCall(
   script.onerror =
     function() {
 
-      delete window[callbackName];
+      delete window[
+        callbackName
+      ];
+
 
       script.remove();
 
+
       callback({
-        success: false,
+
+        success:
+          false,
+
         error:
           'Unable to contact the F1 Predictions server.'
+
       });
 
     };
 
 
-  document.body.appendChild(script);
+  document.body.appendChild(
+    script
+  );
 
 }
 
 
 /* =========================================================
-   MESSAGES
+   LOGIN MESSAGE
    ========================================================= */
 
 function showLoginMessage(
@@ -903,64 +2799,143 @@ function showLoginMessage(
   error
 ) {
 
-  const el =
+  const element =
     document.getElementById(
       'loginMessage'
     );
 
-  el.className =
+
+  element.className =
     'message ' +
-    (error ? 'error' : '');
-
-  el.textContent =
-    message;
-
-}
-
-
-function showAppMessage(
-  message,
-  error
-) {
-
-  const el =
-    document.getElementById(
-      'appMessage'
+    (
+      error
+        ? 'error'
+        : ''
     );
 
-  el.className =
-    'message ' +
-    (error ? 'error' : 'success');
 
-  el.textContent =
+  element.textContent =
     message;
 
 }
 
 
 /* =========================================================
-   SECURITY
+   APP MESSAGE
    ========================================================= */
 
-function escapeHtml(value) {
+function showAppMessage(
+  message,
+  error
+) {
 
-  return String(value)
+  const element =
+    document.getElementById(
+      'appMessage'
+    );
+
+
+  element.className =
+    'message ' +
+    (
+      error
+        ? 'error'
+        : 'success'
+    );
+
+
+  element.textContent =
+    message;
+
+}
+
+
+/* =========================================================
+   DATE FORMAT
+   ========================================================= */
+
+function formatDate(
+  value
+) {
+
+  if (!value) {
+    return 'TBC';
+  }
+
+
+  const date =
+    new Date(
+      value
+    );
+
+
+  if (
+    isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return value;
+
+  }
+
+
+  return date.toLocaleString(
+    [],
+    {
+      weekday:
+        'short',
+
+      day:
+        'numeric',
+
+      month:
+        'short',
+
+      hour:
+        '2-digit',
+
+      minute:
+        '2-digit'
+
+    }
+  );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPING
+   ========================================================= */
+
+function escapeHtml(
+  value
+) {
+
+  return String(
+    value
+  )
+
     .replace(
       /&/g,
       '&amp;'
     )
+
     .replace(
       /</g,
       '&lt;'
     )
+
     .replace(
       />/g,
       '&gt;'
     )
+
     .replace(
       /"/g,
       '&quot;'
     )
+
     .replace(
       /'/g,
       '&#039;'
@@ -971,4 +2946,5 @@ function escapeHtml(value) {
 </script>
 
 </body>
+
 </html>
