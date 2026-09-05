@@ -1,481 +1,1044 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>F1 Predictions 2027</title>
+<meta charset="UTF-8">
 
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<title>F1 Predictions 2027</title>
 
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: #f3f3f3;
-      color: #111;
-    }
+<script
+  src="https://accounts.google.com/gsi/client"
+  async
+  defer
+></script>
 
-    header {
-      background: #111;
-      color: white;
-      padding: 18px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-    }
+<style>
 
-    .header-inner {
-      max-width: 1100px;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 15px;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-    }
+body {
 
-    .season {
-      opacity: 0.65;
-      font-size: 14px;
-      margin-top: 3px;
-    }
+  margin: 0;
 
-    #userBox {
-      display: none;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-    }
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 
-    #userBox button {
-      border: 0;
-      background: #333;
-      color: white;
-      border-radius: 8px;
-      padding: 8px 12px;
-      cursor: pointer;
-    }
+  background: #f3f3f3;
 
-    main {
-      max-width: 1100px;
-      margin: 25px auto;
-      padding: 0 15px;
-    }
+  color: #111;
 
-    .card {
-      background: white;
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.06);
-    }
+}
 
-    h1, h2, h3 {
-      margin-top: 0;
-    }
+header {
 
-    #loginScreen {
-      max-width: 500px;
-      margin: 70px auto;
-      text-align: center;
-    }
+  background: #111;
 
-    #loginScreen p {
-      color: #666;
-      line-height: 1.5;
-    }
+  color: white;
 
-    #googleButton {
-      display: flex;
-      justify-content: center;
-      margin-top: 25px;
-    }
+  padding: 18px 20px;
 
-    .message {
-      padding: 12px 15px;
-      border-radius: 9px;
-      margin-bottom: 15px;
-      background: #eee;
-      display: none;
-    }
+  position: sticky;
 
-    .message.error {
-      background: #ffe4e4;
-      color: #9b0000;
-    }
+  top: 0;
 
-    .message.success {
-      background: #e3f7e8;
-      color: #126b2d;
-    }
+  z-index: 20;
 
-    .race-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      flex-wrap: wrap;
-    }
+}
 
-    .race-name {
-      font-size: 25px;
-      font-weight: 800;
-    }
+.header-inner {
 
-    .race-info {
-      color: #777;
-      font-size: 14px;
-      margin-top: 5px;
-    }
+  max-width: 1100px;
 
-    select {
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      background: white;
-      font-size: 15px;
-    }
+  margin: auto;
 
-    .private-notice {
-      background: #fff7d6;
-      border: 1px solid #ead47b;
-      color: #6b5700;
-      padding: 12px 15px;
-      border-radius: 9px;
-      margin-bottom: 18px;
-      line-height: 1.4;
-    }
+  display: flex;
 
-    .tabs {
-      display: flex;
-      gap: 7px;
-      overflow-x: auto;
-      margin-bottom: 18px;
-      padding-bottom: 2px;
-    }
+  align-items: center;
 
-    .tab {
-      border: 0;
-      background: #e7e7e7;
-      padding: 11px 15px;
-      border-radius: 9px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-    }
+  justify-content: space-between;
 
-    .tab.active {
-      background: #111;
-      color: white;
-    }
+  gap: 15px;
 
-    .prediction-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
+}
 
-    @media (max-width: 750px) {
-      .prediction-layout {
-        grid-template-columns: 1fr;
-      }
+.logo {
 
-      .header-inner {
-        align-items: flex-start;
-      }
+  font-size: 22px;
 
-      .logo {
-        font-size: 18px;
-      }
-    }
+  font-weight: 800;
 
-    .panel-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-    }
+}
 
-    .panel-title h3 {
-      margin: 0;
-    }
+.season {
 
-    .hint {
-      color: #777;
-      font-size: 13px;
-    }
+  opacity: .65;
 
-    .driver-list {
-      min-height: 100px;
-      border: 2px dashed #ddd;
-      border-radius: 10px;
-      padding: 8px;
-    }
+  font-size: 14px;
 
-    .driver-list.drag-over {
-      border-color: #111;
-      background: #fafafa;
-    }
+  margin-top: 3px;
 
-    .driver {
-      background: #f8f8f8;
-      border: 1px solid #ddd;
-      border-radius: 9px;
-      padding: 11px;
-      margin-bottom: 7px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      cursor: grab;
-      user-select: none;
-    }
+}
 
-    .driver:last-child {
-      margin-bottom: 0;
-    }
+#userBox {
 
-    .driver:active {
-      cursor: grabbing;
-    }
+  display: none;
 
-    .position {
-      width: 28px;
-      text-align: center;
-      font-weight: 800;
-      color: #777;
-    }
+  align-items: center;
 
-    .driver-name {
-      font-weight: 700;
-      flex: 1;
-    }
+  gap: 10px;
 
-    .team {
-      font-size: 12px;
-      color: #888;
-    }
+  font-size: 14px;
 
-    .mobile-controls {
-      display: flex;
-      gap: 4px;
-    }
+}
 
-    .mobile-controls button {
-      border: 0;
-      background: #ddd;
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: 700;
-    }
+#userBox button {
 
-    .mobile-controls button:hover {
-      background: #ccc;
-    }
+  border: 0;
 
-    .save-bar {
-      position: sticky;
-      bottom: 12px;
-      z-index: 10;
-      display: flex;
-      justify-content: flex-end;
-      margin-top: 20px;
-    }
+  background: #333;
 
-    #saveButton {
-      background: #111;
-      color: white;
-      border: 0;
-      padding: 13px 24px;
-      border-radius: 10px;
-      font-size: 16px;
-      font-weight: 800;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    }
+  color: white;
 
-    #saveButton:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
+  border-radius: 8px;
 
-    .other-player {
-      border-top: 1px solid #eee;
-      padding: 15px 0;
-    }
+  padding: 8px 12px;
 
-    .other-player:first-child {
-      border-top: 0;
-    }
+  cursor: pointer;
 
-    .other-player-name {
-      font-weight: 800;
-      margin-bottom: 8px;
-    }
+}
 
-    .other-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 10px;
-    }
+main {
 
-    .other-section {
-      background: #f6f6f6;
-      border-radius: 9px;
-      padding: 10px;
-    }
+  max-width: 1100px;
 
-    .other-section-title {
-      font-size: 12px;
-      color: #777;
-      font-weight: 700;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
+  margin: 25px auto;
 
-    .other-section-content {
-      font-size: 13px;
-      line-height: 1.6;
-    }
+  padding: 0 15px;
 
-    .loading {
-      text-align: center;
-      padding: 30px;
-      color: #777;
-    }
+}
 
-    .hidden {
-      display: none !important;
-    }
-  </style>
+.card {
+
+  background: white;
+
+  border-radius: 14px;
+
+  padding: 20px;
+
+  margin-bottom: 18px;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,.06);
+
+}
+
+h1,
+h2,
+h3 {
+
+  margin-top: 0;
+
+}
+
+#loginScreen {
+
+  max-width: 500px;
+
+  margin: 70px auto;
+
+  text-align: center;
+
+}
+
+#loginScreen p {
+
+  color: #666;
+
+  line-height: 1.5;
+
+}
+
+#googleButton {
+
+  display: flex;
+
+  justify-content: center;
+
+  margin-top: 25px;
+
+}
+
+.message {
+
+  padding: 12px 15px;
+
+  border-radius: 9px;
+
+  margin-bottom: 15px;
+
+  background: #eee;
+
+  display: none;
+
+}
+
+.message.error {
+
+  background: #ffe4e4;
+
+  color: #9b0000;
+
+}
+
+.message.success {
+
+  background: #e3f7e8;
+
+  color: #126b2d;
+
+}
+
+.race-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  flex-wrap: wrap;
+
+}
+
+.race-name {
+
+  font-size: 25px;
+
+  font-weight: 800;
+
+}
+
+.race-info {
+
+  color: #777;
+
+  font-size: 14px;
+
+  margin-top: 5px;
+
+}
+
+select {
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  border: 1px solid #ccc;
+
+  background: white;
+
+  font-size: 15px;
+
+}
+
+.tabs {
+
+  display: flex;
+
+  gap: 7px;
+
+  overflow-x: auto;
+
+  margin-bottom: 18px;
+
+  padding-bottom: 2px;
+
+}
+
+.tab {
+
+  border: 0;
+
+  background: #e7e7e7;
+
+  padding: 11px 15px;
+
+  border-radius: 9px;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  white-space: nowrap;
+
+}
+
+.tab.active {
+
+  background: #111;
+
+  color: white;
+
+}
+
+.prediction-layout {
+
+  display: grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap: 20px;
+
+}
+
+@media(max-width:750px) {
+
+  .prediction-layout {
+
+    grid-template-columns: 1fr;
+
+  }
+
+  .header-inner {
+
+    align-items: flex-start;
+
+  }
+
+  .logo {
+
+    font-size: 18px;
+
+  }
+
+}
+
+.panel-title {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  margin-bottom: 12px;
+
+}
+
+.panel-title h3 {
+
+  margin: 0;
+
+}
+
+.hint {
+
+  color: #777;
+
+  font-size: 13px;
+
+}
+
+.driver-list {
+
+  min-height: 100px;
+
+  border:
+    2px dashed #ddd;
+
+  border-radius: 10px;
+
+  padding: 8px;
+
+}
+
+.driver-list.drag-over {
+
+  border-color: #111;
+
+  background: #fafafa;
+
+}
+
+.driver {
+
+  background: #f8f8f8;
+
+  border:
+    1px solid #ddd;
+
+  border-radius: 9px;
+
+  padding: 11px;
+
+  margin-bottom: 7px;
+
+  display: flex;
+
+  align-items: center;
+
+  gap: 10px;
+
+  cursor: grab;
+
+  user-select: none;
+
+}
+
+.driver:last-child {
+
+  margin-bottom: 0;
+
+}
+
+.driver:active {
+
+  cursor: grabbing;
+
+}
+
+.position {
+
+  width: 28px;
+
+  text-align: center;
+
+  font-weight: 800;
+
+  color: #777;
+
+}
+
+.driver-name {
+
+  font-weight: 700;
+
+  flex: 1;
+
+}
+
+.team {
+
+  font-size: 12px;
+
+  color: #888;
+
+}
+
+.mobile-controls {
+
+  display: flex;
+
+  gap: 4px;
+
+}
+
+.mobile-controls button {
+
+  border: 0;
+
+  background: #ddd;
+
+  width: 28px;
+
+  height: 28px;
+
+  border-radius: 6px;
+
+  cursor: pointer;
+
+  font-weight: 700;
+
+}
+
+.save-bar {
+
+  position: sticky;
+
+  bottom: 12px;
+
+  z-index: 10;
+
+  display: flex;
+
+  justify-content: flex-end;
+
+  margin-top: 20px;
+
+}
+
+.primary-button {
+
+  background: #111;
+
+  color: white;
+
+  border: 0;
+
+  padding: 13px 24px;
+
+  border-radius: 10px;
+
+  font-size: 16px;
+
+  font-weight: 800;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 4px 15px rgba(0,0,0,.2);
+
+}
+
+.primary-button:disabled {
+
+  background: #aaa;
+
+  cursor: not-allowed;
+
+}
+
+.private-notice {
+
+  background: #fff7d6;
+
+  border:
+    1px solid #ead47b;
+
+  color: #6b5700;
+
+  padding: 12px 15px;
+
+  border-radius: 9px;
+
+  margin-bottom: 18px;
+
+}
+
+.other-player {
+
+  border-top:
+    1px solid #eee;
+
+  padding: 15px 0;
+
+}
+
+.other-player:first-child {
+
+  border-top: 0;
+
+}
+
+.other-player-name {
+
+  font-weight: 800;
+
+  margin-bottom: 8px;
+
+}
+
+.other-grid {
+
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fit,
+      minmax(160px,1fr)
+    );
+
+  gap: 10px;
+
+}
+
+.other-section {
+
+  background: #f6f6f6;
+
+  border-radius: 9px;
+
+  padding: 10px;
+
+}
+
+.other-section-title {
+
+  font-size: 12px;
+
+  color: #777;
+
+  font-weight: 700;
+
+  margin-bottom: 6px;
+
+  text-transform: uppercase;
+
+}
+
+.other-section-content {
+
+  font-size: 13px;
+
+  line-height: 1.6;
+
+}
+
+.admin-header {
+
+  display: flex;
+
+  justify-content: space-between;
+
+  align-items: center;
+
+  gap: 15px;
+
+  flex-wrap: wrap;
+
+  margin-bottom: 20px;
+
+}
+
+.admin-badge {
+
+  background: #111;
+
+  color: white;
+
+  padding: 6px 10px;
+
+  border-radius: 7px;
+
+  font-size: 12px;
+
+  font-weight: 800;
+
+}
+
+.result-status {
+
+  padding: 10px 12px;
+
+  border-radius: 8px;
+
+  background: #f1f1f1;
+
+  color: #666;
+
+  margin-bottom: 15px;
+
+  font-size: 14px;
+
+}
+
+.locked {
+
+  background: #ffe4e4;
+
+  color: #9b0000;
+
+}
+
+.complete {
+
+  background: #e3f7e8;
+
+  color: #126b2d;
+
+}
+
+.hidden {
+
+  display: none !important;
+
+}
+
+</style>
+
 </head>
+
 
 <body>
 
-<header>
-  <div class="header-inner">
-    <div>
-      <div class="logo">🏁 F1 Predictions</div>
-      <div class="season">2027 Season</div>
-    </div>
 
-    <div id="userBox">
-      <span id="userName"></span>
-      <button onclick="logout()">Sign out</button>
-    </div>
-  </div>
+<header>
+
+<div class="header-inner">
+
+<div>
+
+<div class="logo">
+🏁 F1 Predictions
+</div>
+
+<div class="season">
+2027 Season
+</div>
+
+</div>
+
+<div id="userBox">
+
+<span id="userName"></span>
+
+<button onclick="logout()">
+Sign out
+</button>
+
+</div>
+
+</div>
+
 </header>
+
 
 <main>
 
-  <div id="loginScreen" class="card">
-    <h1>F1 Predictions 2027</h1>
-    <p>
-      Make your predictions for qualifying, the sprint and the race.
-      Your predictions remain private until qualifying begins.
-    </p>
 
-    <div id="googleButton"></div>
+<div
+  id="loginScreen"
+  class="card"
+>
 
-    <div id="loginError" class="message error"></div>
-  </div>
+<h1>
+F1 Predictions 2027
+</h1>
 
-  <div id="app" class="hidden">
+<p>
+Make your predictions for qualifying,
+the sprint and the race.
+</p>
 
-    <div id="message" class="message"></div>
+<div id="googleButton"></div>
 
-    <div class="card">
-      <div class="race-header">
+<div
+  id="loginError"
+  class="message error"
+></div>
 
-        <div>
-          <div id="raceName" class="race-name">Loading...</div>
-          <div id="raceInfo" class="race-info"></div>
-        </div>
+</div>
 
-        <select id="raceSelect" onchange="changeRace()"></select>
 
-      </div>
-    </div>
+<div
+  id="app"
+  class="hidden"
+>
 
-    <div id="privateNotice" class="private-notice hidden">
-      🔒 <strong>Your predictions are private.</strong>
-      Other players' predictions will become visible once qualifying starts.
-    </div>
 
-    <div class="card">
+<div
+  id="message"
+  class="message"
+></div>
 
-      <div id="tabs" class="tabs"></div>
 
-      <div id="predictionContent"></div>
+<!-- PLAYER SECTION -->
 
-      <div class="save-bar">
-        <button id="saveButton" onclick="savePredictions()">
-          Save Predictions
-        </button>
-      </div>
+<div id="playerSection">
 
-    </div>
 
-    <div id="otherPlayersCard" class="card hidden">
-      <h2>Other Players</h2>
-      <div id="otherPlayers"></div>
-    </div>
+<div class="card">
 
-  </div>
+<div class="race-header">
+
+<div>
+
+<div
+  id="raceName"
+  class="race-name"
+>
+Loading...
+</div>
+
+<div
+  id="raceInfo"
+  class="race-info"
+></div>
+
+</div>
+
+<select
+  id="raceSelect"
+  onchange="changeRace()"
+></select>
+
+</div>
+
+</div>
+
+
+<div
+  id="privateNotice"
+  class="private-notice hidden"
+>
+
+🔒
+<strong>Your predictions are private.</strong>
+
+Other players' predictions become visible
+when GP qualifying starts.
+
+</div>
+
+
+<div class="card">
+
+<div
+  id="tabs"
+  class="tabs"
+></div>
+
+<div id="predictionContent"></div>
+
+<div class="save-bar">
+
+<button
+  id="saveButton"
+  class="primary-button"
+  onclick="savePredictions()"
+>
+Save Predictions
+</button>
+
+</div>
+
+</div>
+
+
+<div
+  id="otherPlayersCard"
+  class="card hidden"
+>
+
+<h2>
+Other Players
+</h2>
+
+<div id="otherPlayers"></div>
+
+</div>
+
+
+</div>
+
+
+<!-- ADMIN SECTION -->
+
+<div
+  id="adminSection"
+  class="hidden"
+>
+
+
+<div class="card">
+
+<div class="admin-header">
+
+<div>
+
+<h2>
+⚙️ Admin Results
+</h2>
+
+<div class="race-info">
+Enter the actual session results.
+</div>
+
+</div>
+
+<div class="admin-badge">
+ADMIN
+</div>
+
+</div>
+
+
+<div class="race-header">
+
+<select
+  id="adminRaceSelect"
+  onchange="changeAdminRace()"
+></select>
+
+<select
+  id="adminSessionSelect"
+  onchange="changeAdminSession()"
+></select>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+
+<div
+  id="adminResultStatus"
+  class="result-status"
+>
+Loading results...
+</div>
+
+
+<div class="prediction-layout">
+
+
+<div>
+
+<div class="panel-title">
+
+<h3>
+Actual Result
+</h3>
+
+<span class="hint">
+Drag to reorder
+</span>
+
+</div>
+
+<div
+  id="resultList"
+  class="driver-list"
+></div>
+
+</div>
+
+
+<div>
+
+<div class="panel-title">
+
+<h3>
+Available Drivers
+</h3>
+
+<span class="hint">
+Drag into result
+</span>
+
+</div>
+
+<div
+  id="resultAvailableList"
+  class="driver-list"
+></div>
+
+</div>
+
+</div>
+
+
+<div class="save-bar">
+
+<button
+  id="saveResultsButton"
+  class="primary-button"
+  onclick="saveResults()"
+>
+Save Results
+</button>
+
+</div>
+
+</div>
+
+
+</div>
+
+
+</div>
+
 
 </main>
 
+
 <script>
 
+
 const CLIENT_ID =
-  '618343895277-klbvf987p9vqvr8tf72si0ht79v1cpj8.apps.googleusercontent.com';
+'618343895277-klbvf987p9vqvr8tf72si0ht79v1cpj8.apps.googleusercontent.com';
+
 
 const API_URL =
-  'https://script.google.com/macros/s/AKfycbxioW-0oLb8U-yGFvV5iVNYVClr7W5NJl0ofQ-NoXdOxxQdgUAs4_w4Ei_0rbCuN70IfA/exec';
+'https://script.google.com/macros/s/AKfycbxioW-0oLb8U-yGFvV5iVNYVClr7W5NJl0ofQ-NoXdOxxQdgUAs4_w4Ei_0rbCuN70IfA/exec';
 
 
 let sessionToken = null;
+
 let currentUser = null;
 
 let races = [];
+
 let drivers = [];
+
 let predictions = [];
 
+let results = [];
+
 let currentRace = null;
+
 let currentTab = 'qualifying';
+
+let currentAdminRace = null;
+
+let currentAdminSession =
+'qualifying';
 
 let draggedElement = null;
 
+let isAdmin = false;
+
 
 /* =========================================================
-   GOOGLE LOGIN
+   GOOGLE
 ========================================================= */
 
-window.onload = function () {
+window.onload = function() {
 
-  google.accounts.id.initialize({
-    client_id: CLIENT_ID,
-    callback: handleGoogleLogin
-  });
+google.accounts.id.initialize({
 
-  google.accounts.id.renderButton(
-    document.getElementById('googleButton'),
-    {
-      theme: 'outline',
-      size: 'large',
-      text: 'signin_with'
-    }
-  );
+client_id:
+CLIENT_ID,
+
+callback:
+handleGoogleLogin
+
+});
+
+google.accounts.id.renderButton(
+
+document.getElementById(
+'googleButton'
+),
+
+{
+
+theme:
+'outline',
+
+size:
+'large',
+
+text:
+'signin_with'
+
+}
 
 };
 
@@ -484,101 +1047,245 @@ window.onload = function () {
    API
 ========================================================= */
 
-function apiCall(action, params = {}) {
+function apiCall(
+action,
+params = {}
+) {
 
-  return new Promise((resolve, reject) => {
+return new Promise(
+(resolve,reject) => {
 
-    const callbackName =
-      'jsonp_' + Date.now() + '_' +
-      Math.random().toString(36).substring(2);
+const callbackName =
+'jsonp_' +
+Date.now() +
+'_' +
+Math.random()
+.toString(36)
+.substring(2);
 
-    const script = document.createElement('script');
 
-    const query = new URLSearchParams();
+const script =
+document.createElement(
+'script'
+);
 
-    query.set('action', action);
-    query.set('callback', callbackName);
 
-    Object.keys(params).forEach(key => {
-      query.set(key, params[key]);
-    });
+const query =
+new URLSearchParams();
 
-    window[callbackName] = function(data) {
 
-      delete window[callbackName];
-      script.remove();
+query.set(
+'action',
+action
+);
 
-      if (data && data.ok === false) {
-        reject(new Error(data.error || 'API error'));
-        return;
-      }
+query.set(
+'callback',
+callbackName
+);
 
-      resolve(data);
 
-    };
+Object.keys(params)
+.forEach(key => {
 
-    script.onerror = function() {
+query.set(
+key,
+params[key]
+);
 
-      delete window[callbackName];
-      script.remove();
+});
 
-      reject(new Error('Could not connect to the server.'));
 
-    };
+window[callbackName] =
+function(data) {
 
-    script.src = API_URL + '?' + query.toString();
+delete window[
+callbackName
+];
 
-    document.body.appendChild(script);
+script.remove();
 
-  });
+
+if (
+data &&
+data.ok === false
+) {
+
+reject(
+new Error(
+data.error ||
+'API error'
+)
+);
+
+return;
+
+}
+
+
+resolve(data);
+
+};
+
+
+script.onerror =
+function() {
+
+delete window[
+callbackName
+];
+
+script.remove();
+
+reject(
+new Error(
+'Could not connect to server.'
+)
+);
+
+};
+
+
+script.src =
+API_URL +
+'?' +
+query.toString();
+
+
+document.body.appendChild(
+script
+);
+
+});
 
 }
 
 
 /* =========================================================
-   GOOGLE LOGIN
+   LOGIN
 ========================================================= */
 
-async function handleGoogleLogin(response) {
+async function handleGoogleLogin(
+response
+) {
 
-  try {
+try {
 
-    showLoginError('');
+showLoginError('');
 
-    const result = await apiCall('login', {
-      idToken: response.credential
-    });
+const result =
+await apiCall(
+'login',
+{
+idToken:
+response.credential
+}
+);
 
-    sessionToken = result.sessionToken;
-    currentUser = result.player;
+sessionToken =
+result.sessionToken;
 
-    document.getElementById('loginScreen').classList.add('hidden');
-    document.getElementById('app').classList.remove('hidden');
+currentUser =
+result.player;
 
-    document.getElementById('userBox').style.display = 'flex';
-    document.getElementById('userName').textContent =
-      currentUser.name;
 
-    await loadApp();
+document
+.getElementById(
+'loginScreen'
+)
+.classList
+.add('hidden');
 
-  } catch (error) {
 
-    console.error(error);
+document
+.getElementById(
+'app'
+)
+.classList
+.remove('hidden');
 
-    showLoginError(error.message);
 
-  }
+document
+.getElementById(
+'userBox'
+)
+.style
+.display =
+'flex';
+
+
+document
+.getElementById(
+'userName'
+)
+.textContent =
+currentUser.name;
+
+
+await loadApp();
+
+
+/*
+  Test admin access.
+*/
+
+try {
+
+await apiCall(
+'results',
+{
+session:
+sessionToken
+}
+);
+
+isAdmin = true;
+
+document
+.getElementById(
+'adminSection'
+)
+.classList
+.remove('hidden');
+
+await loadAdmin();
+
+} catch(error) {
+
+isAdmin = false;
 
 }
 
 
-function showLoginError(message) {
+} catch(error) {
 
-  const el = document.getElementById('loginError');
+console.error(error);
 
-  el.textContent = message;
+showLoginError(
+error.message
+);
 
-  el.style.display = message ? 'block' : 'none';
+}
+
+}
+
+
+function showLoginError(
+message
+) {
+
+const el =
+document.getElementById(
+'loginError'
+);
+
+el.textContent =
+message;
+
+el.style.display =
+message
+? 'block'
+: 'none';
 
 }
 
@@ -589,220 +1296,415 @@ function showLoginError(message) {
 
 async function loadApp() {
 
-  try {
+const [raceData,
+driverData,
+predictionData] =
+await Promise.all([
 
-    const [raceData, driverData, predictionData] =
-      await Promise.all([
+apiCall(
+'races',
+{
+session:
+sessionToken
+}
+),
 
-        apiCall('races', {
-          session: sessionToken
-        }),
+apiCall(
+'drivers',
+{
+session:
+sessionToken
+}
+),
 
-        apiCall('drivers', {
-          session: sessionToken
-        }),
+apiCall(
+'predictions',
+{
+session:
+sessionToken
+}
+)
 
-        apiCall('predictions', {
-          session: sessionToken
-        })
+]);
 
-      ]);
 
-    races = raceData.races || [];
-    drivers = driverData.drivers || [];
-    predictions = predictionData.predictions || [];
+races =
+raceData.races || [];
 
-    if (!races.length) {
+drivers =
+driverData.drivers || [];
 
-      showMessage(
-        'No active races have been configured yet.',
-        'error'
-      );
+predictions =
+predictionData.predictions || [];
 
-      return;
-    }
 
-    populateRaceSelector();
+if (!races.length) {
 
-    currentRace = races[0];
+showMessage(
+'No active races configured.',
+'error'
+);
 
-    renderRace();
+return;
 
-  } catch (error) {
+}
 
-    console.error(error);
 
-    showMessage(error.message, 'error');
+populateRaceSelector();
 
-  }
+currentRace =
+races[0];
+
+renderRace();
 
 }
 
 
 /* =========================================================
-   RACES
+   PLAYER RACES
 ========================================================= */
 
 function populateRaceSelector() {
 
-  const select =
-    document.getElementById('raceSelect');
+const select =
+document.getElementById(
+'raceSelect'
+);
 
-  select.innerHTML = '';
+select.innerHTML = '';
 
-  races.forEach(race => {
+races.forEach(race => {
 
-    const option =
-      document.createElement('option');
+const option =
+document.createElement(
+'option'
+);
 
-    option.value = race.raceId;
-    option.textContent = race.race;
+option.value =
+race.raceId;
 
-    select.appendChild(option);
+option.textContent =
+race.race;
 
-  });
+select.appendChild(
+option
+);
+
+});
 
 }
 
 
 function changeRace() {
 
-  const raceId =
-    document.getElementById('raceSelect').value;
+const raceId =
+document.getElementById(
+'raceSelect'
+).value;
 
-  currentRace =
-    races.find(r => r.raceId === raceId);
 
-  renderRace();
+currentRace =
+races.find(
+r =>
+r.raceId === raceId
+);
+
+
+renderRace();
 
 }
 
 
 function renderRace() {
 
-  if (!currentRace) return;
+if (!currentRace) return;
 
-  document.getElementById('raceName').textContent =
-    currentRace.race;
 
-  document.getElementById('raceInfo').textContent =
-    currentRace.sprint
-      ? 'Sprint weekend'
-      : 'Grand Prix weekend';
+document.getElementById(
+'raceName'
+).textContent =
+currentRace.race;
 
-  document.getElementById('raceSelect').value =
-    currentRace.raceId;
 
-  const qualifyingStarted =
-    hasQualifyingStarted(currentRace);
+document.getElementById(
+'raceInfo'
+).textContent =
+isTrue(currentRace.sprint)
+? 'Sprint weekend'
+: 'Grand Prix weekend';
 
-  document
-    .getElementById('privateNotice')
-    .classList.toggle(
-      'hidden',
-      qualifyingStarted
-    );
 
-  renderTabs();
+document.getElementById(
+'raceSelect'
+).value =
+currentRace.raceId;
 
-  renderPredictionPanel();
 
-  renderOtherPlayers();
+document
+.getElementById(
+'privateNotice'
+)
+.classList
+.toggle(
+'hidden',
+hasQualifyingStarted(
+currentRace
+)
+);
+
+
+renderTabs();
+
+renderPredictionPanel();
+
+renderOtherPlayers();
 
 }
 
 
 /* =========================================================
-   TAB HANDLING
+   PLAYER TABS
 ========================================================= */
 
 function getTabsForRace() {
 
-  if (currentRace && isTrue(currentRace.sprint)) {
+if (
+currentRace &&
+isTrue(
+currentRace.sprint
+)
+) {
 
-    return [
+return [
 
-      {
-        id: 'qualifying',
-        name: 'Qualifying'
-      },
+{
+id:
+'qualifying',
+name:
+'Qualifying'
+},
 
-      {
-        id: 'sprintQualifying',
-        name: 'Sprint Qualifying'
-      },
+{
+id:
+'sprintQualifying',
+name:
+'Sprint Qualifying'
+},
 
-      {
-        id: 'sprint',
-        name: 'Sprint'
-      },
+{
+id:
+'sprint',
+name:
+'Sprint'
+},
 
-      {
-        id: 'race',
-        name: 'Race'
-      }
+{
+id:
+'race',
+name:
+'Race'
+}
 
-    ];
+];
 
-  }
+}
 
-  return [
 
-    {
-      id: 'qualifying',
-      name: 'Qualifying'
-    },
+return [
 
-    {
-      id: 'race',
-      name: 'Race'
-    }
+{
+id:
+'qualifying',
+name:
+'Qualifying'
+},
 
-  ];
+{
+id:
+'race',
+name:
+'Race'
+}
+
+];
 
 }
 
 
 function renderTabs() {
 
-  const tabs =
-    getTabsForRace();
+const tabs =
+getTabsForRace();
 
-  if (!tabs.some(t => t.id === currentTab)) {
 
-    currentTab = 'qualifying';
+if (
+!tabs.some(
+t =>
+t.id ===
+currentTab
+)
+) {
 
-  }
+currentTab =
+'qualifying';
 
-  const container =
-    document.getElementById('tabs');
+}
 
-  container.innerHTML = '';
 
-  tabs.forEach(tab => {
+const container =
+document.getElementById(
+'tabs'
+);
 
-    const button =
-      document.createElement('button');
+container.innerHTML = '';
 
-    button.className =
-      'tab' +
-      (tab.id === currentTab ? ' active' : '');
 
-    button.textContent =
-      tab.name;
+tabs.forEach(tab => {
 
-    button.onclick = function() {
+const button =
+document.createElement(
+'button'
+);
 
-      currentTab = tab.id;
+button.className =
+'tab' +
+(
+tab.id ===
+currentTab
+? ' active'
+: ''
+);
 
-      renderTabs();
-      renderPredictionPanel();
 
-    };
+button.textContent =
+tab.name;
 
-    container.appendChild(button);
 
-  });
+button.onclick =
+function() {
+
+currentTab =
+tab.id;
+
+renderTabs();
+
+renderPredictionPanel();
+
+};
+
+
+container.appendChild(
+button
+);
+
+});
+
+}
+
+
+/* =========================================================
+   PREDICTION LOCK
+========================================================= */
+
+function getPredictionLock(
+type
+) {
+
+if (!currentRace) {
+
+return {
+locked:
+false
+};
+
+}
+
+
+const now =
+Date.now();
+
+
+if (
+currentRace.sprint &&
+(
+type ===
+'sprintQualifying' ||
+type ===
+'sprint'
+)
+) {
+
+if (
+currentRace
+.sprintQualifyingStart &&
+now >=
+new Date(
+currentRace
+.sprintQualifyingStart
+).getTime()
+) {
+
+return {
+
+locked:
+true,
+
+title:
+type === 'sprint'
+? 'Sprint predictions are locked.'
+: 'Sprint Qualifying predictions are locked.',
+
+message:
+'Sprint Qualifying has started.'
+
+};
+
+}
+
+}
+
+
+if (
+type ===
+'qualifying' ||
+type ===
+'race'
+) {
+
+if (
+currentRace
+.qualifyingStart &&
+now >=
+new Date(
+currentRace
+.qualifyingStart
+).getTime()
+) {
+
+return {
+
+locked:
+true,
+
+title:
+type === 'race'
+? 'Race predictions are locked.'
+: 'Qualifying predictions are locked.',
+
+message:
+'GP Qualifying has started.'
+
+};
+
+}
+
+}
+
+
+return {
+locked:
+false
+};
 
 }
 
@@ -813,129 +1715,170 @@ function renderTabs() {
 
 function renderPredictionPanel() {
 
-  const container =
-    document.getElementById('predictionContent');
+const container =
+document.getElementById(
+'predictionContent'
+);
 
-  container.innerHTML = '';
+container.innerHTML = '';
 
-  const lock =
-    getPredictionLock(currentTab);
 
-  if (lock.locked) {
+const lock =
+getPredictionLock(
+currentTab
+);
 
-    container.innerHTML = `
 
-      <div class="message">
+if (lock.locked) {
 
-        🔒 <strong>${escapeHtml(lock.title)}</strong>
+container.innerHTML = `
 
-        <br>
+<div class="message"
+style="display:block">
 
-        ${escapeHtml(lock.message)}
+🔒
+<strong>
+${escapeHtml(lock.title)}
+</strong>
 
-      </div>
+<br>
 
-    `;
+${escapeHtml(lock.message)}
 
-    document.getElementById('saveButton').disabled =
-      true;
+</div>
 
-    renderReadOnlyPredictions();
+`;
 
-    return;
+document.getElementById(
+'saveButton'
+).disabled =
+true;
 
-  }
 
-  document.getElementById('saveButton').disabled =
-    false;
+renderReadOnlyPredictions();
 
-  const saved =
-    getSavedOrder(currentTab);
+return;
 
-  const orderedDrivers =
-    saved.length
-      ? saved
-      : drivers.slice();
+}
 
-  container.innerHTML = `
 
-    <div class="prediction-layout">
+document.getElementById(
+'saveButton'
+).disabled =
+false;
 
-      <div>
 
-        <div class="panel-title">
+const saved =
+getSavedOrder(
+currentTab
+);
 
-          <h3>Your Prediction</h3>
 
-          <span class="hint">
-            Drag to reorder
-          </span>
+const orderedDrivers =
+saved.length
+? saved
+: drivers.slice();
 
-        </div>
 
-        <div
-          id="predictionList"
-          class="driver-list"
-        ></div>
+container.innerHTML = `
 
-      </div>
+<div class="prediction-layout">
 
-      <div>
+<div>
 
-        <div class="panel-title">
+<div class="panel-title">
 
-          <h3>Available Drivers</h3>
+<h3>Your Prediction</h3>
 
-          <span class="hint">
-            Drag drivers into your list
-          </span>
+<span class="hint">
+Drag to reorder
+</span>
 
-        </div>
+</div>
 
-        <div
-          id="availableList"
-          class="driver-list"
-        ></div>
+<div
+id="predictionList"
+class="driver-list"
+></div>
 
-      </div>
+</div>
 
-    </div>
-  `;
+<div>
 
-  const predictionList =
-    document.getElementById('predictionList');
+<div class="panel-title">
 
-  const availableList =
-    document.getElementById('availableList');
+<h3>Available Drivers</h3>
 
-  const selectedIds =
-    orderedDrivers.map(
-      d => d.driverId
-    );
+<span class="hint">
+Drag into prediction
+</span>
 
-  drivers
-    .filter(
-      d =>
-        !selectedIds.includes(d.driverId)
-    )
-    .forEach(driver => {
+</div>
 
-      availableList.appendChild(
-        createDriverElement(driver)
-      );
+<div
+id="availableList"
+class="driver-list"
+></div>
 
-    });
+</div>
 
-  orderedDrivers.forEach(driver => {
+</div>
 
-    predictionList.appendChild(
-      createDriverElement(driver)
-    );
+`;
 
-  });
 
-  setupDragDrop(predictionList);
-  setupDragDrop(availableList);
+const predictionList =
+document.getElementById(
+'predictionList'
+);
+
+const availableList =
+document.getElementById(
+'availableList'
+);
+
+
+const selectedIds =
+orderedDrivers.map(
+d =>
+d.driverId
+);
+
+
+drivers
+.filter(
+d =>
+!selectedIds.includes(
+d.driverId
+)
+)
+.forEach(
+driver =>
+availableList.appendChild(
+createDriverElement(
+driver
+)
+)
+);
+
+
+orderedDrivers.forEach(
+driver =>
+predictionList.appendChild(
+createDriverElement(
+driver
+)
+)
+);
+
+
+setupDragDrop(
+predictionList
+);
+
+setupDragDrop(
+availableList
+);
 
 }
 
@@ -944,57 +1887,78 @@ function renderPredictionPanel() {
    DRIVER ELEMENT
 ========================================================= */
 
-function createDriverElement(driver) {
+function createDriverElement(
+driver
+) {
 
-  const div =
-    document.createElement('div');
+const div =
+document.createElement(
+'div'
+);
 
-  div.className = 'driver';
+div.className =
+'driver';
 
-  div.draggable = true;
+div.draggable =
+true;
 
-  div.dataset.driverId =
-    driver.driverId;
+div.dataset.driverId =
+driver.driverId;
 
-  div.innerHTML = `
 
-    <div class="position"></div>
+div.innerHTML = `
 
-    <div class="driver-name">
-      ${escapeHtml(driver.driver)}
-      <div class="team">
-        ${escapeHtml(driver.team || '')}
-      </div>
-    </div>
+<div class="position"></div>
 
-    <div class="mobile-controls">
+<div class="driver-name">
 
-      <button
-        type="button"
-        title="Move up"
-        onclick="moveDriver(event, this, -1)"
-      >↑</button>
+${escapeHtml(
+driver.driver
+)}
 
-      <button
-        type="button"
-        title="Move down"
-        onclick="moveDriver(event, this, 1)"
-      >↓</button>
+<div class="team">
 
-    </div>
-  `;
+${escapeHtml(
+driver.team || ''
+)}
 
-  div.addEventListener(
-    'dragstart',
-    handleDragStart
-  );
+</div>
 
-  div.addEventListener(
-    'dragend',
-    handleDragEnd
-  );
+</div>
 
-  return div;
+<div class="mobile-controls">
+
+<button
+type="button"
+onclick="moveDriver(event,this,-1)"
+>
+↑
+</button>
+
+<button
+type="button"
+onclick="moveDriver(event,this,1)"
+>
+↓
+</button>
+
+</div>
+
+`;
+
+
+div.addEventListener(
+'dragstart',
+handleDragStart
+);
+
+div.addEventListener(
+'dragend',
+handleDragEnd
+);
+
+
+return div;
 
 }
 
@@ -1003,199 +1967,275 @@ function createDriverElement(driver) {
    DRAG AND DROP
 ========================================================= */
 
-function setupDragDrop(list) {
+function setupDragDrop(
+list
+) {
 
-  list.addEventListener(
-    'dragover',
-    function(event) {
+list.addEventListener(
+'dragover',
+function(event) {
 
-      event.preventDefault();
+event.preventDefault();
 
-      list.classList.add('drag-over');
+list.classList.add(
+'drag-over'
+);
 
-      const afterElement =
-        getDragAfterElement(
-          list,
-          event.clientY
-        );
 
-      if (!afterElement) {
+if (!draggedElement)
+return;
 
-        list.appendChild(
-          draggedElement
-        );
 
-      } else {
+const afterElement =
+getDragAfterElement(
+list,
+event.clientY
+);
 
-        list.insertBefore(
-          draggedElement,
-          afterElement
-        );
 
-      }
+if (!afterElement) {
 
-      updatePositions();
+list.appendChild(
+draggedElement
+);
 
-    }
-  );
+} else {
 
-  list.addEventListener(
-    'dragleave',
-    function() {
-
-      list.classList.remove('drag-over');
-
-    }
-  );
-
-  list.addEventListener(
-    'drop',
-    function(event) {
-
-      event.preventDefault();
-
-      list.classList.remove('drag-over');
-
-      updatePositions();
-
-    }
-  );
+list.insertBefore(
+draggedElement,
+afterElement
+);
 
 }
 
 
-function handleDragStart(event) {
+updatePositions();
 
-  draggedElement =
-    event.currentTarget;
+});
 
-  event.currentTarget.style.opacity =
-    '0.5';
+
+list.addEventListener(
+'dragleave',
+function() {
+
+list.classList.remove(
+'drag-over'
+);
+
+});
+
+
+list.addEventListener(
+'drop',
+function(event) {
+
+event.preventDefault();
+
+list.classList.remove(
+'drag-over'
+);
+
+updatePositions();
+
+});
 
 }
 
 
-function handleDragEnd(event) {
+function handleDragStart(
+event
+) {
 
-  event.currentTarget.style.opacity =
-    '1';
+draggedElement =
+event.currentTarget;
 
-  draggedElement = null;
-
-  updatePositions();
+event.currentTarget.style.opacity =
+'0.5';
 
 }
 
 
-function getDragAfterElement(container, y) {
+function handleDragEnd(
+event
+) {
 
-  const elements =
-    [...container.querySelectorAll('.driver:not([style*="opacity: 0.5"])')];
+event.currentTarget.style.opacity =
+'1';
 
-  return elements.reduce(
+draggedElement =
+null;
 
-    (closest, child) => {
+updatePositions();
 
-      const box =
-        child.getBoundingClientRect();
+}
 
-      const offset =
-        y -
-        box.top -
-        box.height / 2;
 
-      if (
-        offset < 0 &&
-        offset > closest.offset
-      ) {
+function getDragAfterElement(
+container,
+y
+) {
 
-        return {
-          offset: offset,
-          element: child
-        };
+const elements =
+[
+...container.querySelectorAll(
+'.driver'
+)
+]
+.filter(
+el =>
+el !== draggedElement
+);
 
-      }
 
-      return closest;
+return elements.reduce(
 
-    },
+(closest,child) => {
 
-    {
-      offset: Number.NEGATIVE_INFINITY,
-      element: null
-    }
+const box =
+child.getBoundingClientRect();
 
-  ).element;
+const offset =
+y -
+box.top -
+box.height / 2;
+
+
+if (
+offset < 0 &&
+offset >
+closest.offset
+) {
+
+return {
+
+offset:
+offset,
+
+element:
+child
+
+};
+
+}
+
+
+return closest;
+
+},
+
+{
+
+offset:
+Number.NEGATIVE_INFINITY,
+
+element:
+null
+
+}
+
+).element;
 
 }
 
 
 /* =========================================================
-   MOBILE UP / DOWN
+   MOBILE MOVEMENT
 ========================================================= */
 
-function moveDriver(event, button, direction) {
+function moveDriver(
+event,
+button,
+direction
+) {
 
-  event.stopPropagation();
+event.stopPropagation();
 
-  const driver =
-    button.closest('.driver');
 
-  const list =
-    driver.parentElement;
+const driver =
+button.closest(
+'.driver'
+);
 
-  const siblings =
-    [...list.children];
+const list =
+driver.parentElement;
 
-  const index =
-    siblings.indexOf(driver);
 
-  const newIndex =
-    index + direction;
+const siblings =
+[
+...list.children
+];
 
-  if (
-    newIndex < 0 ||
-    newIndex >= siblings.length
-  ) {
 
-    return;
+const index =
+siblings.indexOf(
+driver
+);
 
-  }
 
-  if (direction < 0) {
+const newIndex =
+index +
+direction;
 
-    list.insertBefore(
-      driver,
-      siblings[newIndex]
-    );
 
-  } else {
+if (
+newIndex < 0 ||
+newIndex >=
+siblings.length
+) {
 
-    list.insertBefore(
-      driver,
-      siblings[newIndex].nextSibling
-    );
+return;
 
-  }
+}
 
-  updatePositions();
+
+if (
+direction < 0
+) {
+
+list.insertBefore(
+driver,
+siblings[newIndex]
+);
+
+} else {
+
+list.insertBefore(
+driver,
+siblings[newIndex]
+.nextSibling
+);
+
+}
+
+
+updatePositions();
 
 }
 
 
 function updatePositions() {
 
-  document
-    .querySelectorAll('#predictionList .driver')
-    .forEach((driver, index) => {
+document
+.querySelectorAll(
+'#predictionList .driver, #resultList .driver'
+)
+.forEach(
+(driver,index) => {
 
-      const position =
-        driver.querySelector('.position');
+const position =
+driver.querySelector(
+'.position'
+);
 
-      position.textContent =
-        index + 1;
+if (position) {
 
-    });
+position.textContent =
+index + 1;
+
+}
+
+}
+);
 
 }
 
@@ -1204,337 +2244,405 @@ function updatePositions() {
    SAVED PREDICTIONS
 ========================================================= */
 
-function getSavedOrder(type) {
+function getSavedOrder(
+type
+) {
 
-  const racePredictions =
-    predictions.filter(
-      p =>
-        p.raceId === currentRace.raceId &&
-        p.playerId === currentUser.playerId
-    );
+const racePredictions =
+predictions.filter(
+p =>
+p.raceId ===
+currentRace.raceId &&
+p.playerId ===
+currentUser.playerId
+);
 
-  return racePredictions
 
-    .map(p => {
+return racePredictions
 
-      let position;
+.map(p => {
 
-      switch (type) {
+let position;
 
-        case 'qualifying':
-          position = p.qualifyingPosition;
-          break;
 
-        case 'sprintQualifying':
-          position = p.sprintQualifyingPosition;
-          break;
+switch(type) {
 
-        case 'sprint':
-          position = p.sprintPosition;
-          break;
+case 'qualifying':
+position =
+p.qualifyingPosition;
+break;
 
-        case 'race':
-          position = p.racePosition;
-          break;
+case 'sprintQualifying':
+position =
+p.sprintQualifyingPosition;
+break;
 
-      }
+case 'sprint':
+position =
+p.sprintPosition;
+break;
 
-      return {
-        driverId: p.driverId,
-        position: position
-      };
+case 'race':
+position =
+p.racePosition;
+break;
 
-    })
+}
 
-    .filter(
-      p =>
-        p.position !== null &&
-        p.position !== undefined &&
-        p.position !== ''
-    )
 
-    .sort(
-      (a, b) =>
-        Number(a.position) -
-        Number(b.position)
-    )
+return {
 
-    .map(
-      p =>
-        drivers.find(
-          d =>
-            d.driverId === p.driverId
-        )
-    )
+driverId:
+p.driverId,
 
-    .filter(Boolean);
+position:
+position
+
+};
+
+})
+
+.filter(
+p =>
+p.position !== '' &&
+p.position !== null &&
+p.position !== undefined
+)
+
+.sort(
+(a,b) =>
+Number(a.position) -
+Number(b.position)
+)
+
+.map(
+p =>
+drivers.find(
+d =>
+d.driverId ===
+p.driverId
+)
+)
+
+.filter(Boolean);
 
 }
 
 
 /* =========================================================
-   SAVE
-========================================================= */
-
-async function savePredictions() {
-
-  if (!currentRace) return;
-
-  const lock =
-    getPredictionLock(currentTab);
-
-  if (lock.locked) {
-
-    showMessage(
-      lock.title + ' ' + lock.message,
-      'error'
-    );
-
-    return;
-
-  }
-
-  const button =
-    document.getElementById('saveButton');
-
-  button.disabled = true;
-  button.textContent = 'Saving...';
-
-  try {
-
-    const payload =
-      buildPredictionPayload();
-
-    await apiCall('savePredictions', {
-
-      session: sessionToken,
-
-      raceId:
-        currentRace.raceId,
-
-      predictions:
-        JSON.stringify(payload)
-
-    });
-
-    const predictionData =
-      await apiCall('predictions', {
-        session: sessionToken
-      });
-
-    predictions =
-      predictionData.predictions || [];
-
-    showMessage(
-      'Predictions saved successfully.',
-      'success'
-    );
-
-    renderPredictionPanel();
-
-  } catch (error) {
-
-    console.error(error);
-
-    showMessage(
-      error.message,
-      'error'
-    );
-
-  } finally {
-
-    button.disabled = false;
-    button.textContent =
-      'Save Predictions';
-
-  }
-
-}
-
-/* =========================================================
-   BUILD PAYLOAD
+   BUILD PREDICTIONS
 ========================================================= */
 
 function buildPredictionPayload() {
 
-  const raceId =
-    currentRace.raceId;
-
-  const existing =
-    predictions.filter(
-      p =>
-        p.raceId === raceId &&
-        p.playerId === currentUser.playerId
-    );
-
-  const orders = {};
-
-  const tabs =
-    getTabsForRace();
-
-  tabs.forEach(tab => {
-
-    const saved =
-      getSavedOrder(tab.id);
-
-    if (tab.id === currentTab) {
-
-      const list =
-        document.querySelectorAll(
-          '#predictionList .driver'
-        );
-
-      orders[tab.id] =
-        [...list].map(
-          (el, index) => ({
-
-            driverId:
-              el.dataset.driverId,
-
-            position:
-              index + 1
-
-          })
-        );
-
-    } else {
-
-      orders[tab.id] =
-        saved.map(
-          (driver, index) => ({
-
-            driverId:
-              driver.driverId,
-
-            position:
-              index + 1
-
-          })
-        );
-
-    }
-
-  });
+const orders = {};
 
 
-  /*
-    Build one record per driver.
-  */
+getTabsForRace()
+.forEach(tab => {
 
-  return drivers.map(driver => {
+const saved =
+getSavedOrder(
+tab.id
+);
 
-    const q =
-      orders.qualifying
-        ?.find(
-          x =>
-            x.driverId === driver.driverId
-        );
 
-    const sq =
-      orders.sprintQualifying
-        ?.find(
-          x =>
-            x.driverId === driver.driverId
-        );
+if (
+tab.id ===
+currentTab
+) {
 
-    const s =
-      orders.sprint
-        ?.find(
-          x =>
-            x.driverId === driver.driverId
-        );
+const list =
+document.querySelectorAll(
+'#predictionList .driver'
+);
 
-    const r =
-      orders.race
-        ?.find(
-          x =>
-            x.driverId === driver.driverId
-        );
 
-    return {
+orders[tab.id] =
+[
+...list
+].map(
+(el,index) => ({
 
-      driverId:
-        driver.driverId,
+driverId:
+el.dataset.driverId,
 
-      qualifyingPosition:
-        q ? q.position : '',
+position:
+index + 1
 
-      sprintQualifyingPosition:
-        sq ? sq.position : '',
+})
+);
 
-      sprintPosition:
-        s ? s.position : '',
+} else {
 
-      racePosition:
-        r ? r.position : ''
+orders[tab.id] =
+saved.map(
+(driver,index) => ({
 
-    };
+driverId:
+driver.driverId,
 
-  });
+position:
+index + 1
+
+})
+);
+
+}
+
+});
+
+
+return drivers.map(
+driver => {
+
+const q =
+orders.qualifying
+?.find(
+x =>
+x.driverId ===
+driver.driverId
+);
+
+const sq =
+orders.sprintQualifying
+?.find(
+x =>
+x.driverId ===
+driver.driverId
+);
+
+const s =
+orders.sprint
+?.find(
+x =>
+x.driverId ===
+driver.driverId
+);
+
+const r =
+orders.race
+?.find(
+x =>
+x.driverId ===
+driver.driverId
+);
+
+
+return {
+
+driverId:
+driver.driverId,
+
+qualifyingPosition:
+q
+? q.position
+: '',
+
+sprintQualifyingPosition:
+sq
+? sq.position
+: '',
+
+sprintPosition:
+s
+? s.position
+: '',
+
+racePosition:
+r
+? r.position
+: ''
+
+};
+
+});
 
 }
 
 
 /* =========================================================
-   READ ONLY VIEW
+   SAVE PREDICTIONS
+========================================================= */
+
+async function savePredictions() {
+
+const lock =
+getPredictionLock(
+currentTab
+);
+
+
+if (lock.locked) {
+
+showMessage(
+lock.title +
+' ' +
+lock.message,
+'error'
+);
+
+return;
+
+}
+
+
+const button =
+document.getElementById(
+'saveButton'
+);
+
+button.disabled =
+true;
+
+button.textContent =
+'Saving...';
+
+
+try {
+
+await apiCall(
+'savePredictions',
+{
+
+session:
+sessionToken,
+
+raceId:
+currentRace.raceId,
+
+predictions:
+JSON.stringify(
+buildPredictionPayload()
+)
+
+});
+
+
+const data =
+await apiCall(
+'predictions',
+{
+session:
+sessionToken
+}
+);
+
+predictions =
+data.predictions || [];
+
+
+showMessage(
+'Predictions saved successfully.',
+'success'
+);
+
+renderPredictionPanel();
+
+
+} catch(error) {
+
+showMessage(
+error.message,
+'error'
+);
+
+} finally {
+
+button.disabled =
+false;
+
+button.textContent =
+'Save Predictions';
+
+}
+
+}
+
+
+/* =========================================================
+   READ ONLY
 ========================================================= */
 
 function renderReadOnlyPredictions() {
 
-  const container =
-    document.getElementById('predictionContent');
+const container =
+document.getElementById(
+'predictionContent'
+);
 
-  const saved =
-    getSavedOrder(currentTab);
+const saved =
+getSavedOrder(
+currentTab
+);
 
-  if (!saved.length) {
 
-    container.innerHTML =
-      '<p>No prediction submitted.</p>';
+if (!saved.length) {
 
-    return;
+container.innerHTML =
+'<p>No prediction submitted.</p>';
 
-  }
+return;
 
-  const list =
-    document.createElement('div');
+}
 
-  list.className =
-    'driver-list';
 
-  saved.forEach((driver, index) => {
+const list =
+document.createElement(
+'div'
+);
 
-    const div =
-      document.createElement('div');
+list.className =
+'driver-list';
 
-    div.className =
-      'driver';
 
-    div.draggable = false;
+saved.forEach(
+(driver,index) => {
 
-    div.innerHTML = `
+const div =
+document.createElement(
+'div'
+);
 
-      <div class="position">
-        ${index + 1}
-      </div>
+div.className =
+'driver';
 
-      <div class="driver-name">
 
-        ${escapeHtml(driver.driver)}
+div.innerHTML = `
 
-        <div class="team">
-          ${escapeHtml(driver.team || '')}
-        </div>
+<div class="position">
+${index + 1}
+</div>
 
-      </div>
+<div class="driver-name">
 
-    `;
+${escapeHtml(
+driver.driver
+)}
 
-    list.appendChild(div);
+<div class="team">
 
-  });
+${escapeHtml(
+driver.team || ''
+)}
 
-  container.appendChild(list);
+</div>
+
+</div>
+
+`;
+
+
+list.appendChild(
+div
+);
+
+});
+
+
+container.appendChild(
+list
+);
 
 }
 
@@ -1545,266 +2653,908 @@ function renderReadOnlyPredictions() {
 
 function renderOtherPlayers() {
 
-  const card =
-    document.getElementById('otherPlayersCard');
+const card =
+document.getElementById(
+'otherPlayersCard'
+);
 
-  const container =
-    document.getElementById('otherPlayers');
-
-  if (!hasQualifyingStarted(currentRace)) {
-
-    card.classList.add('hidden');
-
-    return;
-
-  }
-
-  const others =
-    predictions.filter(
-      p =>
-        p.raceId === currentRace.raceId &&
-        p.playerId !== currentUser.playerId
-    );
-
-  if (!others.length) {
-
-    card.classList.remove('hidden');
-
-    container.innerHTML =
-      '<p>No other predictions submitted yet.</p>';
-
-    return;
-
-  }
-
-  const grouped = {};
-
-  others.forEach(prediction => {
-
-    if (!grouped[prediction.playerId]) {
-
-      grouped[prediction.playerId] = {
-
-        name:
-          prediction.playerName,
-
-        predictions: []
-
-      };
-
-    }
-
-    grouped[prediction.playerId]
-      .predictions
-      .push(prediction);
-
-  });
+const container =
+document.getElementById(
+'otherPlayers'
+);
 
 
-  container.innerHTML = '';
+if (
+!hasQualifyingStarted(
+currentRace
+)
+) {
 
-  Object.values(grouped).forEach(player => {
+card.classList.add(
+'hidden'
+);
 
-    const div =
-      document.createElement('div');
-
-    div.className =
-      'other-player';
-
-    const byType =
-      getPlayerOrders(player.predictions);
-
-    div.innerHTML = `
-
-      <div class="other-player-name">
-        ${escapeHtml(player.name)}
-      </div>
-
-      <div class="other-grid">
-
-        ${renderOtherSection(
-          'Qualifying',
-          byType.qualifying
-        )}
-
-        ${
-          currentRace.sprint
-            ? renderOtherSection(
-                'Sprint Qualifying',
-                byType.sprintQualifying
-              )
-            : ''
-        }
-
-        ${
-          currentRace.sprint
-            ? renderOtherSection(
-                'Sprint',
-                byType.sprint
-              )
-            : ''
-        }
-
-        ${renderOtherSection(
-          'Race',
-          byType.race
-        )}
-
-      </div>
-    `;
-
-    container.appendChild(div);
-
-  });
-
-  card.classList.remove('hidden');
+return;
 
 }
 
 
-function getPlayerOrders(playerPredictions) {
-
-  const result = {
-
-    qualifying: [],
-    sprintQualifying: [],
-    sprint: [],
-    race: []
-
-  };
-
-  playerPredictions.forEach(p => {
-
-    if (p.qualifyingPosition) {
-
-      result.qualifying.push({
-
-        driver: p.driverId,
-        position:
-          Number(p.qualifyingPosition)
-
-      });
-
-    }
-
-    if (p.sprintQualifyingPosition) {
-
-      result.sprintQualifying.push({
-
-        driver: p.driverId,
-        position:
-          Number(p.sprintQualifyingPosition)
-
-      });
-
-    }
-
-    if (p.sprintPosition) {
-
-      result.sprint.push({
-
-        driver: p.driverId,
-        position:
-          Number(p.sprintPosition)
-
-      });
-
-    }
-
-    if (p.racePosition) {
-
-      result.race.push({
-
-        driver: p.driverId,
-        position:
-          Number(p.racePosition)
-
-      });
-
-    }
-
-  });
+const others =
+predictions.filter(
+p =>
+p.raceId ===
+currentRace.raceId &&
+p.playerId !==
+currentUser.playerId
+);
 
 
-  Object.keys(result).forEach(type => {
-
-    result[type].sort(
-      (a, b) =>
-        a.position - b.position
-    );
-
-  });
+container.innerHTML = '';
 
 
-  return result;
+if (!others.length) {
+
+container.innerHTML =
+'<p>No other predictions submitted yet.</p>';
+
+card.classList.remove(
+'hidden'
+);
+
+return;
 
 }
 
 
-function renderOtherSection(title, order) {
+const grouped = {};
 
-  const names =
-    order.map(item => {
 
-      const driver =
-        drivers.find(
-          d =>
-            d.driverId === item.driver
-        );
+others.forEach(
+prediction => {
 
-      return driver
-        ? escapeHtml(driver.driver)
-        : item.driver;
+if (
+!grouped[
+prediction.playerId
+]
+) {
 
-    });
+grouped[
+prediction.playerId
+] = {
 
-  return `
+name:
+prediction.playerName,
 
-    <div class="other-section">
+predictions:
+[]
 
-      <div class="other-section-title">
-        ${title}
-      </div>
+};
 
-      <div class="other-section-content">
-        ${
-          names.length
-            ? names.map(
-                (name, index) =>
-                  `${index + 1}. ${name}`
-              ).join('<br>')
-            : 'No prediction'
-        }
-      </div>
+}
 
-    </div>
 
-  `;
+grouped[
+prediction.playerId
+]
+.predictions
+.push(
+prediction
+);
+
+});
+
+
+Object.values(
+grouped
+).forEach(
+player => {
+
+const div =
+document.createElement(
+'div'
+);
+
+div.className =
+'other-player';
+
+
+const byType =
+getPlayerOrders(
+player.predictions
+);
+
+
+div.innerHTML = `
+
+<div class="other-player-name">
+
+${escapeHtml(
+player.name
+)}
+
+</div>
+
+<div class="other-grid">
+
+${renderOtherSection(
+'Qualifying',
+byType.qualifying
+)}
+
+${
+currentRace.sprint
+?
+renderOtherSection(
+'Sprint Qualifying',
+byType.sprintQualifying
+)
+: ''
+}
+
+${
+currentRace.sprint
+?
+renderOtherSection(
+'Sprint',
+byType.sprint
+)
+: ''
+}
+
+${renderOtherSection(
+'Race',
+byType.race
+)}
+
+</div>
+
+`;
+
+
+container.appendChild(
+div
+);
+
+});
+
+
+card.classList.remove(
+'hidden'
+);
+
+}
+
+
+function getPlayerOrders(
+playerPredictions
+) {
+
+const result = {
+
+qualifying: [],
+
+sprintQualifying: [],
+
+sprint: [],
+
+race: []
+
+};
+
+
+playerPredictions.forEach(
+p => {
+
+if (p.qualifyingPosition) {
+
+result.qualifying.push({
+
+driver:
+p.driverId,
+
+position:
+Number(
+p.qualifyingPosition
+)
+
+});
+
+}
+
+
+if (
+p.sprintQualifyingPosition
+) {
+
+result.sprintQualifying.push({
+
+driver:
+p.driverId,
+
+position:
+Number(
+p.sprintQualifyingPosition
+)
+
+});
+
+}
+
+
+if (p.sprintPosition) {
+
+result.sprint.push({
+
+driver:
+p.driverId,
+
+position:
+Number(
+p.sprintPosition
+)
+
+});
+
+}
+
+
+if (p.racePosition) {
+
+result.race.push({
+
+driver:
+p.driverId,
+
+position:
+Number(
+p.racePosition
+)
+
+});
+
+}
+
+});
+
+
+Object.keys(result)
+.forEach(
+type => {
+
+result[type].sort(
+(a,b) =>
+a.position -
+b.position
+);
+
+});
+
+
+return result;
+
+}
+
+
+function renderOtherSection(
+title,
+order
+) {
+
+const names =
+order.map(
+item => {
+
+const driver =
+drivers.find(
+d =>
+d.driverId ===
+item.driver
+);
+
+return driver
+? escapeHtml(
+driver.driver
+)
+: item.driver;
+
+});
+
+
+return `
+
+<div class="other-section">
+
+<div class="other-section-title">
+${title}
+</div>
+
+<div class="other-section-content">
+
+${
+names.length
+?
+names.map(
+(name,index) =>
+`${index + 1}. ${name}`
+).join('<br>')
+:
+'No prediction'
+}
+
+</div>
+
+</div>
+
+`;
 
 }
 
 
 /* =========================================================
-   QUALIFYING LOCK
+   GP QUALIFYING VISIBILITY
 ========================================================= */
 
-function hasQualifyingStarted(race) {
+function hasQualifyingStarted(
+race
+) {
 
-  if (
-    !race ||
-    !race.qualifyingStart
-  ) {
+if (
+!race ||
+!race.qualifyingStart
+) {
 
-    return false;
-
-  }
-
-  return Date.now() >=
-    new Date(
-      race.qualifyingStart
-    ).getTime();
+return false;
 
 }
+
+
+return Date.now() >=
+new Date(
+race.qualifyingStart
+).getTime();
+
+}
+
+
+/* =========================================================
+   ADMIN
+========================================================= */
+
+async function loadAdmin() {
+
+const adminRaceSelect =
+document.getElementById(
+'adminRaceSelect'
+);
+
+
+adminRaceSelect.innerHTML =
+'';
+
+
+races.forEach(
+race => {
+
+const option =
+document.createElement(
+'option'
+);
+
+option.value =
+race.raceId;
+
+option.textContent =
+race.race;
+
+adminRaceSelect.appendChild(
+option
+);
+
+});
+
+
+currentAdminRace =
+races[0];
+
+
+renderAdminSessions();
+
+await refreshAdminResults();
+
+}
+
+
+function changeAdminRace() {
+
+const raceId =
+document.getElementById(
+'adminRaceSelect'
+).value;
+
+
+currentAdminRace =
+races.find(
+r =>
+r.raceId ===
+raceId
+);
+
+
+currentAdminSession =
+'qualifying';
+
+
+renderAdminSessions();
+
+refreshAdminResults();
+
+}
+
+
+function getAdminSessions() {
+
+if (
+currentAdminRace &&
+isTrue(
+currentAdminRace.sprint
+)
+) {
+
+return [
+
+{
+id:
+'qualifying',
+name:
+'Qualifying'
+},
+
+{
+id:
+'sprintQualifying',
+name:
+'Sprint Qualifying'
+},
+
+{
+id:
+'sprint',
+name:
+'Sprint'
+},
+
+{
+id:
+'race',
+name:
+'Race'
+}
+
+];
+
+}
+
+
+return [
+
+{
+id:
+'qualifying',
+name:
+'Qualifying'
+},
+
+{
+id:
+'race',
+name:
+'Race'
+}
+
+];
+
+}
+
+
+function renderAdminSessions() {
+
+const select =
+document.getElementById(
+'adminSessionSelect'
+);
+
+select.innerHTML =
+'';
+
+
+getAdminSessions()
+.forEach(
+session => {
+
+const option =
+document.createElement(
+'option'
+);
+
+option.value =
+session.id;
+
+option.textContent =
+session.name;
+
+select.appendChild(
+option
+);
+
+});
+
+
+select.value =
+currentAdminSession;
+
+
+renderAdminResultList();
+
+}
+
+
+function changeAdminSession() {
+
+currentAdminSession =
+document.getElementById(
+'adminSessionSelect'
+).value;
+
+
+renderAdminResultList();
+
+}
+
+
+/* =========================================================
+   ADMIN RESULTS
+========================================================= */
+
+async function refreshAdminResults() {
+
+try {
+
+const data =
+await apiCall(
+'results',
+{
+session:
+sessionToken
+}
+);
+
+results =
+data.results || [];
+
+
+renderAdminResultList();
+
+} catch(error) {
+
+console.error(error);
+
+}
+
+}
+
+
+function getResultField(
+session
+) {
+
+switch(session) {
+
+case 'qualifying':
+return 'qualifyingPosition';
+
+case 'sprintQualifying':
+return 'sprintQualifyingPosition';
+
+case 'sprint':
+return 'sprintPosition';
+
+case 'race':
+return 'racePosition';
+
+}
+
+}
+
+
+function getSavedResultOrder() {
+
+if (!currentAdminRace) {
+
+return [];
+
+}
+
+
+const field =
+getResultField(
+currentAdminSession
+);
+
+
+return results
+
+.filter(
+r =>
+r.raceId ===
+currentAdminRace.raceId
+)
+
+.map(
+r => ({
+
+driverId:
+r.driverId,
+
+position:
+r[field]
+
+})
+)
+
+.filter(
+r =>
+r.position !== '' &&
+r.position !== null &&
+r.position !== undefined
+)
+
+.sort(
+(a,b) =>
+Number(a.position) -
+Number(b.position)
+)
+
+.map(
+r =>
+drivers.find(
+d =>
+d.driverId ===
+r.driverId
+)
+)
+
+.filter(Boolean);
+
+}
+
+
+function renderAdminResultList() {
+
+if (!currentAdminRace)
+return;
+
+
+const list =
+document.getElementById(
+'resultList'
+);
+
+const available =
+document.getElementById(
+'resultAvailableList'
+);
+
+
+list.innerHTML = '';
+
+available.innerHTML = '';
+
+
+const saved =
+getSavedResultOrder();
+
+
+const ordered =
+saved.length
+? saved
+: [];
+
+
+const selectedIds =
+ordered.map(
+d =>
+d.driverId
+);
+
+
+ordered.forEach(
+driver =>
+list.appendChild(
+createDriverElement(
+driver
+)
+)
+);
+
+
+drivers
+.filter(
+d =>
+!selectedIds.includes(
+d.driverId
+)
+)
+.forEach(
+driver =>
+available.appendChild(
+createDriverElement(
+driver
+)
+)
+);
+
+
+setupDragDrop(list);
+
+setupDragDrop(available);
+
+updatePositions();
+
+
+const status =
+document.getElementById(
+'adminResultStatus'
+);
+
+
+if (
+saved.length ===
+drivers.length
+) {
+
+status.className =
+'result-status complete';
+
+status.textContent =
+'✓ Results entered for this session.';
+
+} else {
+
+status.className =
+'result-status';
+
+status.textContent =
+saved.length
+? `${saved.length} of ${drivers.length} positions entered.`
+: 'No results entered yet.';
+
+}
+
+}
+
+
+/* =========================================================
+   SAVE ADMIN RESULTS
+========================================================= */
+
+async function saveResults() {
+
+const list =
+document.querySelectorAll(
+'#resultList .driver'
+);
+
+
+if (
+list.length !==
+drivers.length
+) {
+
+showMessage(
+'You must place every active driver into the result order.',
+'error'
+);
+
+return;
+
+}
+
+
+const button =
+document.getElementById(
+'saveResultsButton'
+);
+
+button.disabled =
+true;
+
+button.textContent =
+'Saving...';
+
+
+const resultsPayload =
+[...list].map(
+(el,index) => {
+
+const result = {
+
+driverId:
+el.dataset.driverId
+
+};
+
+
+const field =
+getResultField(
+currentAdminSession
+);
+
+
+result[field] =
+index + 1;
+
+
+return result;
+
+});
+
+
+try {
+
+const data =
+await apiCall(
+'saveResults',
+{
+
+session:
+sessionToken,
+
+raceId:
+currentAdminRace.raceId,
+
+sessionType:
+currentAdminSession,
+
+results:
+JSON.stringify(
+resultsPayload
+)
+
+}
+);
+
+
+showMessage(
+data.message ||
+'Results saved.',
+'success'
+);
+
+
+await refreshAdminResults();
+
+
+} catch(error) {
+
+console.error(error);
+
+showMessage(
+error.message,
+'error'
+);
+
+} finally {
+
+button.disabled =
+false;
+
+button.textContent =
+'Save Results';
+
+}
+
+}
+
 
 /* =========================================================
    HELPERS
@@ -1812,182 +3562,145 @@ function hasQualifyingStarted(race) {
 
 function isTrue(value) {
 
-  return value === true ||
-         value === 'TRUE' ||
-         value === 'true' ||
-         value === 1 ||
-         value === '1';
-
-}
-
-
-function showMessage(text, type) {
-
-  const el =
-    document.getElementById('message');
-
-  el.textContent =
-    text;
-
-  el.className =
-    'message ' + (type || '');
-
-  el.style.display =
-    'block';
-
-  setTimeout(() => {
-
-    el.style.display =
-      'none';
-
-  }, 5000);
+return (
+value === true ||
+value === 'TRUE' ||
+value === 'true' ||
+value === 1 ||
+value === '1'
+);
 
 }
 
 
 function escapeHtml(value) {
 
-  if (value === null ||
-      value === undefined) {
+if (
+value === null ||
+value === undefined
+) {
 
-    return '';
+return '';
 
-  }
+}
 
-  return String(value)
 
-    .replace(/&/g, '&amp;')
+return String(value)
 
-    .replace(/</g, '&lt;')
+.replace(
+/&/g,
+'&amp;'
+)
 
-    .replace(/>/g, '&gt;')
+.replace(
+/</g,
+'&lt;'
+)
 
-    .replace(/"/g, '&quot;')
+.replace(
+/>/g,
+'&gt;'
+)
 
-    .replace(/'/g, '&#039;');
+.replace(
+/"/g,
+'&quot;'
+)
+
+.replace(
+/'/g,
+'&#039;'
+);
+
+}
+
+
+function showMessage(
+text,
+type
+) {
+
+const el =
+document.getElementById(
+'message'
+);
+
+el.textContent =
+text;
+
+el.className =
+'message ' +
+(type || '');
+
+el.style.display =
+'block';
+
+
+setTimeout(
+() => {
+
+el.style.display =
+'none';
+
+},
+5000
+);
 
 }
 
 
 function logout() {
 
-  sessionToken = null;
-  currentUser = null;
+sessionToken =
+null;
 
-  document
-    .getElementById('app')
-    .classList.add('hidden');
+currentUser =
+null;
 
-  document
-    .getElementById('loginScreen')
-    .classList.remove('hidden');
-
-  document
-    .getElementById('userBox')
-    .style.display = 'none';
-
-  google.accounts.id.disableAutoSelect();
-
-}
-
-function getPredictionLock(type) {
-
-  if (!currentRace) {
-
-    return {
-      locked: false
-    };
-
-  }
-
-  const now =
-    Date.now();
+isAdmin =
+false;
 
 
-  /*
-    Sprint Qualifying and Sprint
-    lock when Sprint Qualifying begins.
-  */
-
-  if (
-    currentRace.sprint &&
-    (
-      type === 'sprintQualifying' ||
-      type === 'sprint'
-    )
-  ) {
-
-    if (
-      currentRace.sprintQualifyingStart &&
-      now >=
-      new Date(
-        currentRace.sprintQualifyingStart
-      ).getTime()
-    ) {
-
-      return {
-
-        locked: true,
-
-        title:
-          type === 'sprint'
-            ? 'Sprint predictions are locked.'
-            : 'Sprint Qualifying predictions are locked.',
-
-        message:
-          'Sprint Qualifying has started.'
-
-      };
-
-    }
-
-  }
+document
+.getElementById(
+'app'
+)
+.classList
+.add('hidden');
 
 
-  /*
-    GP Qualifying and Race
-    lock when GP Qualifying begins.
-  */
-
-  if (
-    type === 'qualifying' ||
-    type === 'race'
-  ) {
-
-    if (
-      currentRace.qualifyingStart &&
-      now >=
-      new Date(
-        currentRace.qualifyingStart
-      ).getTime()
-    ) {
-
-      return {
-
-        locked: true,
-
-        title:
-          type === 'race'
-            ? 'Race predictions are locked.'
-            : 'Qualifying predictions are locked.',
-
-        message:
-          'GP Qualifying has started.'
-
-      };
-
-    }
-
-  }
+document
+.getElementById(
+'loginScreen'
+)
+.classList
+.remove('hidden');
 
 
-  return {
-    locked: false
-  };
+document
+.getElementById(
+'userBox'
+)
+.style
+.display =
+'none';
+
+
+document
+.getElementById(
+'adminSection'
+)
+.classList
+.add('hidden');
+
+
+google.accounts.id
+.disableAutoSelect();
 
 }
 
 </script>
 
 </body>
+
 </html>
