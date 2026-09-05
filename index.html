@@ -1009,38 +1009,59 @@ let isAdmin = false;
    GOOGLE
 ========================================================= */
 
-window.onload = function() {
+function initializeGoogleSignIn() {
 
-google.accounts.id.initialize({
+  if (
+    typeof google === 'undefined' ||
+    !google.accounts ||
+    !google.accounts.id
+  ) {
 
-client_id:
-CLIENT_ID,
+    setTimeout(
+      initializeGoogleSignIn,
+      250
+    );
 
-callback:
-handleGoogleLogin
+    return;
 
-});
+  }
 
-google.accounts.id.renderButton(
+  google.accounts.id.initialize({
 
-document.getElementById(
-'googleButton'
-),
+    client_id:
+      CLIENT_ID,
 
-{
+    callback:
+      handleGoogleLogin
 
-theme:
-'outline',
+  });
 
-size:
-'large',
 
-text:
-'signin_with'
+  google.accounts.id.renderButton(
+
+    document.getElementById(
+      'googleButton'
+    ),
+
+    {
+
+      theme:
+        'outline',
+
+      size:
+        'large',
+
+      text:
+        'signin_with'
+
+    }
+
+  );
 
 }
 
-};
+
+initializeGoogleSignIn();
 
 
 /* =========================================================
