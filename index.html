@@ -1319,34 +1319,47 @@ async function loadApp() {
 
   try {
 
-    const [
-      raceData,
-      driverData,
-      predictionData
-    ] = await Promise.all([
+    console.log('Loading F1 data...');
 
-      apiCall(
+    const raceData =
+      await apiCall(
         'races',
         {
           session: sessionToken
         }
-      ),
+      );
 
-      apiCall(
+    console.log(
+      'Race API response:',
+      raceData
+    );
+
+    const driverData =
+      await apiCall(
         'drivers',
         {
           session: sessionToken
         }
-      ),
+      );
 
-      apiCall(
+    console.log(
+      'Driver API response:',
+      driverData
+    );
+
+    const predictionData =
+      await apiCall(
         'predictions',
         {
           session: sessionToken
         }
-      )
+      );
 
-    ]);
+    console.log(
+      'Prediction API response:',
+      predictionData
+    );
+
 
     races =
       raceData.races || [];
@@ -1358,16 +1371,12 @@ async function loadApp() {
       predictionData.predictions || [];
 
 
-    console.log('F1 races loaded:', races);
-    console.log('F1 drivers loaded:', drivers);
-
-
     if (!races.length) {
 
       currentRace = null;
 
       showMessage(
-        'No active races are currently configured. Check the Races sheet and make sure at least one race has Active = TRUE.',
+        'No active races found. Check that China has Active = TRUE in column H of the Races sheet.',
         'error'
       );
 
@@ -1375,32 +1384,31 @@ async function loadApp() {
     }
 
 
-    populateRaceSelector();
-
     currentRace = races[0];
+
+    populateRaceSelector();
 
     currentTab = 'qualifying';
 
     renderRace();
 
+
   } catch (error) {
 
     console.error(
-      'Failed to load app:',
+      'LOAD APP ERROR:',
       error
     );
 
-    currentRace = null;
-
     showMessage(
-      'Unable to load the race data: ' +
+      'Could not load the F1 data: ' +
       error.message,
       'error'
     );
 
   }
-}
 
+}
 /* =========================================================
    PLAYER RACES
 ========================================================= */
@@ -2287,7 +2295,11 @@ index + 1;
 
 function getSavedOrder(type) {
 
-  if (!currentRace || !currentRace.raceId || !currentUser) {
+  if (!currentRace || !currentRace.raceId) {
+    return [];
+  }
+
+  if (!currentUser || !currentUser.playerId) {
     return [];
   }
 
