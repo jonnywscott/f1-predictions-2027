@@ -1084,16 +1084,13 @@ Math.random()
 .toString(36)
 .substring(2);
 
-
 const script =
 document.createElement(
 'script'
 );
 
-
 const query =
 new URLSearchParams();
-
 
 query.set(
 'action',
@@ -1105,7 +1102,6 @@ query.set(
 callbackName
 );
 
-
 Object.keys(params)
 .forEach(key => {
 
@@ -1116,9 +1112,19 @@ params[key]
 
 });
 
+let finished = false;
 
-window[callbackName] =
-function(data) {
+let timeout;
+
+const finish = function(
+callback
+) {
+
+if (finished) return;
+
+finished = true;
+
+clearTimeout(timeout);
 
 delete window[
 callbackName
@@ -1126,6 +1132,14 @@ callbackName
 
 script.remove();
 
+callback();
+
+};
+
+window[callbackName] =
+function(data) {
+
+finish(function() {
 
 if (
 data &&
@@ -1143,20 +1157,16 @@ return;
 
 }
 
-
 resolve(data);
 
-};
+});
 
+};
 
 script.onerror =
 function() {
 
-delete window[
-callbackName
-];
-
-script.remove();
+finish(function() {
 
 reject(
 new Error(
@@ -1164,14 +1174,34 @@ new Error(
 )
 );
 
+});
+
 };
 
+timeout =
+setTimeout(
+function() {
+
+finish(function() {
+
+reject(
+new Error(
+'The request timed out while loading "' +
+action +
+'". Please refresh and try again.'
+)
+);
+
+});
+
+},
+15000
+);
 
 script.src =
 API_URL +
 '?' +
 query.toString();
-
 
 document.body.appendChild(
 script
@@ -1194,6 +1224,17 @@ try {
 
 showLoginError('');
 
+if (
+!response ||
+!response.credential
+) {
+
+throw new Error(
+'Google sign-in did not return a valid credential.'
+);
+
+}
+
 const result =
 await apiCall(
 'login',
@@ -1203,12 +1244,108 @@ response.credential
 }
 );
 
+console.log(
+'LOGIN RESPONSE:',
+result
+);
+
+if (
+!result ||
+!result.sessionToken
+) {
+
+throw new Error(
+'The server accepted the login but did not return a session token.'
+);
+
+}
+
 sessionToken =
 result.sessionToken;
 
-currentUser =
-result.player;
 
+/*
+  The login endpoint should return the player.
+  If it does not, use the /me endpoint to retrieve
+  the player associated with the session.
+*/
+
+currentUser =
+result.player ||
+result.user ||
+null;
+
+if (!currentUser) {
+
+console.log(
+'No player in login response. Requesting /me...'
+);
+
+const me =
+await apiCall(
+'me',
+{
+session:
+sessionToken
+}
+);
+
+console.log(
+'ME RESPONSE:',
+me
+);
+
+currentUser =
+me &&
+(
+me.player ||
+me.user ||
+me.currentUser ||
+null
+);
+
+}
+
+if (
+!currentUser
+) {
+
+throw new Error(
+'Your Google account was authenticated, but your player account could not be loaded. Please check that your Google email exists in the Players sheet.'
+);
+
+}
+
+if (
+!currentUser.playerId
+) {
+
+throw new Error(
+'Your player account was found, but it is missing a Player ID.'
+);
+
+}
+
+
+/*
+  Display the player's name.
+*/
+
+document
+.getElementById(
+'userName'
+)
+.textContent =
+currentUser.name ||
+currentUser.playerName ||
+currentUser.email ||
+'Player';
+
+
+/*
+  Only show the application after
+  the player account has been loaded.
+*/
 
 document
 .getElementById(
@@ -1217,14 +1354,12 @@ document
 .classList
 .add('hidden');
 
-
 document
 .getElementById(
 'app'
 )
 .classList
 .remove('hidden');
-
 
 document
 .getElementById(
@@ -1235,13 +1370,9 @@ document
 'flex';
 
 
-document
-.getElementById(
-'userName'
-)
-.textContent =
-currentUser.name;
-
+/*
+  Load races, drivers and predictions.
+*/
 
 await loadApp();
 
@@ -1273,17 +1404,52 @@ await loadAdmin();
 
 } catch(error) {
 
+console.log(
+'User is not an admin.'
+);
+
 isAdmin = false;
 
 }
 
-
 } catch(error) {
 
-console.error(error);
+console.error(
+'=== GOOGLE LOGIN FAILED ===',
+error
+);
+
+sessionToken =
+null;
+
+currentUser =
+null;
+
+document
+.getElementById(
+'app'
+)
+.classList
+.add('hidden');
+
+document
+.getElementById(
+'userBox'
+)
+.style
+.display =
+'none';
+
+document
+.getElementById(
+'loginScreen'
+)
+.classList
+.remove('hidden');
 
 showLoginError(
-error.message
+error.message ||
+'Sign-in failed. Please try again.'
 );
 
 }
