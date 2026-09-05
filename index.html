@@ -1317,69 +1317,89 @@ message
 
 async function loadApp() {
 
-const [raceData,
-driverData,
-predictionData] =
-await Promise.all([
+  try {
 
-apiCall(
-'races',
-{
-session:
-sessionToken
+    const [
+      raceData,
+      driverData,
+      predictionData
+    ] = await Promise.all([
+
+      apiCall(
+        'races',
+        {
+          session: sessionToken
+        }
+      ),
+
+      apiCall(
+        'drivers',
+        {
+          session: sessionToken
+        }
+      ),
+
+      apiCall(
+        'predictions',
+        {
+          session: sessionToken
+        }
+      )
+
+    ]);
+
+    races =
+      raceData.races || [];
+
+    drivers =
+      driverData.drivers || [];
+
+    predictions =
+      predictionData.predictions || [];
+
+
+    console.log('F1 races loaded:', races);
+    console.log('F1 drivers loaded:', drivers);
+
+
+    if (!races.length) {
+
+      currentRace = null;
+
+      showMessage(
+        'No active races are currently configured. Check the Races sheet and make sure at least one race has Active = TRUE.',
+        'error'
+      );
+
+      return;
+    }
+
+
+    populateRaceSelector();
+
+    currentRace = races[0];
+
+    currentTab = 'qualifying';
+
+    renderRace();
+
+  } catch (error) {
+
+    console.error(
+      'Failed to load app:',
+      error
+    );
+
+    currentRace = null;
+
+    showMessage(
+      'Unable to load the race data: ' +
+      error.message,
+      'error'
+    );
+
+  }
 }
-),
-
-apiCall(
-'drivers',
-{
-session:
-sessionToken
-}
-),
-
-apiCall(
-'predictions',
-{
-session:
-sessionToken
-}
-)
-
-]);
-
-
-races =
-raceData.races || [];
-
-drivers =
-driverData.drivers || [];
-
-predictions =
-predictionData.predictions || [];
-
-
-if (!races.length) {
-
-showMessage(
-'No active races configured.',
-'error'
-);
-
-return;
-
-}
-
-
-populateRaceSelector();
-
-currentRace =
-races[0];
-
-renderRace();
-
-}
-
 
 /* =========================================================
    PLAYER RACES
@@ -2265,89 +2285,70 @@ index + 1;
    SAVED PREDICTIONS
 ========================================================= */
 
-function getSavedOrder(
-type
-) {
+function getSavedOrder(type) {
 
-const racePredictions =
-predictions.filter(
-p =>
-p.raceId ===
-currentRace.raceId &&
-p.playerId ===
-currentUser.playerId
-);
+  if (!currentRace || !currentRace.raceId || !currentUser) {
+    return [];
+  }
 
+  const racePredictions =
+    predictions.filter(
+      p =>
+        p.raceId === currentRace.raceId &&
+        p.playerId === currentUser.playerId
+    );
 
-return racePredictions
+  return racePredictions
+    .map(p => {
 
-.map(p => {
+      let position;
 
-let position;
+      switch (type) {
+        case 'qualifying':
+          position = p.qualifyingPosition;
+          break;
 
+        case 'sprintQualifying':
+          position = p.sprintQualifyingPosition;
+          break;
 
-switch(type) {
+        case 'sprint':
+          position = p.sprintPosition;
+          break;
 
-case 'qualifying':
-position =
-p.qualifyingPosition;
-break;
+        case 'race':
+          position = p.racePosition;
+          break;
+      }
 
-case 'sprintQualifying':
-position =
-p.sprintQualifyingPosition;
-break;
+      return {
+        driverId: p.driverId,
+        position: position
+      };
 
-case 'sprint':
-position =
-p.sprintPosition;
-break;
-
-case 'race':
-position =
-p.racePosition;
-break;
-
+    })
+    .filter(
+      p =>
+        p.position !== '' &&
+        p.position !== null &&
+        p.position !== undefined
+    )
+    .sort(
+      (a, b) =>
+        Number(a.position) -
+        Number(b.position)
+    )
+    .map(
+      p =>
+        drivers.find(
+          d =>
+            d.driverId === p.driverId
+        )
+    )
+    .filter(Boolean);
 }
 
 
-return {
-
-driverId:
-p.driverId,
-
-position:
-position
-
-};
-
-})
-
-.filter(
-p =>
-p.position !== '' &&
-p.position !== null &&
-p.position !== undefined
-)
-
-.sort(
-(a,b) =>
-Number(a.position) -
-Number(b.position)
-)
-
-.map(
-p =>
-drivers.find(
-d =>
-d.driverId ===
-p.driverId
-)
-)
-
-.filter(Boolean);
-
-}
 
 
 /* =========================================================
@@ -2674,30 +2675,31 @@ list
 
 function renderOtherPlayers() {
 
-const card =
-document.getElementById(
-'otherPlayersCard'
-);
+  const card =
+    document.getElementById(
+      'otherPlayersCard'
+    );
 
-const container =
-document.getElementById(
-'otherPlayers'
-);
+  const container =
+    document.getElementById(
+      'otherPlayers'
+    );
 
+  if (!currentRace || !currentRace.raceId) {
+    card.classList.add('hidden');
+    return;
+  }
 
-if (
-!hasQualifyingStarted(
-currentRace
-)
-) {
-
-card.classList.add(
-'hidden'
-);
-
-return;
-
-}
+  if (
+    !hasQualifyingStarted(
+      currentRace
+    )
+  ) {
+    card.classList.add(
+      'hidden'
+    );
+    return;
+  }
 
 
 const others =
