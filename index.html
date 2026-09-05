@@ -1317,74 +1317,81 @@ message
 
 async function loadApp() {
 
+  console.log('=== F1 APP LOAD START ===');
+  console.log('Session token:', !!sessionToken);
+  console.log('Current user:', currentUser);
+
   try {
 
-    console.log('Loading F1 data...');
+    console.log('1. Loading races...');
 
-    const raceData =
-      await apiCall(
-        'races',
-        {
-          session: sessionToken
-        }
-      );
-
-    console.log(
-      'Race API response:',
-      raceData
+    const raceData = await apiCall(
+      'races',
+      {
+        session: sessionToken
+      }
     );
 
-    const driverData =
-      await apiCall(
-        'drivers',
-        {
-          session: sessionToken
-        }
-      );
+    console.log('RACES RESPONSE:', raceData);
 
-    console.log(
-      'Driver API response:',
-      driverData
+    races = raceData.races || [];
+
+    if (!races.length) {
+      throw new Error(
+        'The API returned zero active races. Check the Races sheet: Active must be TRUE.'
+      );
+    }
+
+    console.log('2. Loading drivers...');
+
+    const driverData = await apiCall(
+      'drivers',
+      {
+        session: sessionToken
+      }
     );
 
-    const predictionData =
-      await apiCall(
-        'predictions',
-        {
-          session: sessionToken
-        }
+    console.log('DRIVERS RESPONSE:', driverData);
+
+    drivers = driverData.drivers || [];
+
+    if (!drivers.length) {
+      throw new Error(
+        'The API returned zero active drivers. Check the Drivers sheet.'
       );
+    }
+
+    console.log('3. Loading predictions...');
+
+    const predictionData = await apiCall(
+      'predictions',
+      {
+        session: sessionToken
+      }
+    );
 
     console.log(
-      'Prediction API response:',
+      'PREDICTIONS RESPONSE:',
       predictionData
     );
-
-
-    races =
-      raceData.races || [];
-
-    drivers =
-      driverData.drivers || [];
 
     predictions =
       predictionData.predictions || [];
 
-
-    if (!races.length) {
-
-      currentRace = null;
-
-      showMessage(
-        'No active races found. Check that China has Active = TRUE in column H of the Races sheet.',
-        'error'
-      );
-
-      return;
-    }
-
+    console.log('4. Setting current race...');
 
     currentRace = races[0];
+
+    if (!currentRace || !currentRace.raceId) {
+      throw new Error(
+        'Race data was returned but no valid race was found.'
+      );
+    }
+
+    console.log(
+      'CURRENT RACE:',
+      currentRace
+    );
 
     populateRaceSelector();
 
@@ -1392,11 +1399,12 @@ async function loadApp() {
 
     renderRace();
 
+    console.log('=== F1 APP LOAD COMPLETE ===');
 
   } catch (error) {
 
     console.error(
-      'LOAD APP ERROR:',
+      '=== F1 APP LOAD FAILED ===',
       error
     );
 
@@ -1407,8 +1415,8 @@ async function loadApp() {
     );
 
   }
-
 }
+
 /* =========================================================
    PLAYER RACES
 ========================================================= */
@@ -2293,13 +2301,11 @@ index + 1;
    SAVED PREDICTIONS
 ========================================================= */
 
-function getSavedOrder(type) {
+function getSavedOrder(
+type
+) {
 
-  if (!currentRace || !currentRace.raceId) {
-    return [];
-  }
-
-  if (!currentUser || !currentUser.playerId) {
+  if (!currentRace || !currentUser) {
     return [];
   }
 
