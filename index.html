@@ -1251,64 +1251,34 @@ result
 
 if (
 !result ||
-!result.sessionToken
+!result.session
 ) {
 
 throw new Error(
-'The server accepted the login but did not return a session token.'
+'The server accepted the login but did not return a session.'
 );
 
 }
 
+
+/*
+  The backend returns the session as "session".
+*/
+
 sessionToken =
-result.sessionToken;
+result.session;
 
 
 /*
-  The login endpoint should return the player.
-  If it does not, use the /me endpoint to retrieve
-  the player associated with the session.
+  The backend also returns the player directly.
 */
 
 currentUser =
 result.player ||
-result.user ||
 null;
 
+
 if (!currentUser) {
-
-console.log(
-'No player in login response. Requesting /me...'
-);
-
-const me =
-await apiCall(
-'me',
-{
-session:
-sessionToken
-}
-);
-
-console.log(
-'ME RESPONSE:',
-me
-);
-
-currentUser =
-me &&
-(
-me.player ||
-me.user ||
-me.currentUser ||
-null
-);
-
-}
-
-if (
-!currentUser
-) {
 
 throw new Error(
 'Your Google account was authenticated, but your player account could not be loaded. Please check that your Google email exists in the Players sheet.'
@@ -1316,9 +1286,8 @@ throw new Error(
 
 }
 
-if (
-!currentUser.playerId
-) {
+
+if (!currentUser.playerId) {
 
 throw new Error(
 'Your player account was found, but it is missing a Player ID.'
@@ -1337,14 +1306,12 @@ document
 )
 .textContent =
 currentUser.name ||
-currentUser.playerName ||
 currentUser.email ||
 'Player';
 
 
 /*
-  Only show the application after
-  the player account has been loaded.
+  Show the application.
 */
 
 document
@@ -1455,7 +1422,6 @@ error.message ||
 }
 
 }
-
 
 function showLoginError(
 message
