@@ -668,6 +668,250 @@ select {
 
 }
 
+
+
+/* =========================================================
+   2027 UI REDESIGN
+========================================================= */
+
+:root {
+  --ink: #101114;
+  --muted: #72757d;
+  --line: #e7e8eb;
+  --surface: #ffffff;
+  --soft: #f4f5f7;
+  --accent: #e10600;
+  --accent-dark: #b80500;
+  --green: #138a4b;
+  --shadow: 0 12px 40px rgba(16,17,20,.08);
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(225,6,0,.07), transparent 34%),
+    #f4f5f7;
+  color: var(--ink);
+}
+
+header {
+  background: rgba(12,13,15,.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 12px 20px;
+}
+
+.header-inner {
+  max-width: 1180px;
+  min-height: 56px;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: white;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  border-radius: 10px;
+  font-size: 19px;
+  box-shadow: 0 5px 18px rgba(225,6,0,.25);
+}
+
+.logo { font-size: 19px; letter-spacing: -.3px; }
+.season { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.nav-link {
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,.68);
+  padding: 9px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.nav-link:hover { color: white; background: rgba(255,255,255,.07); }
+.nav-link.active { color: white; background: rgba(255,255,255,.12); }
+.nav-link.admin-nav { color: #ffb5b2; }
+
+.user-box {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255,255,255,.12);
+}
+
+.user-box button {
+  border: 1px solid rgba(255,255,255,.13);
+  background: rgba(255,255,255,.07);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 11px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.menu-toggle { display: none; }
+
+main { max-width: 1180px; margin: 30px auto 60px; padding: 0 18px; }
+.card { border: 1px solid var(--line); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); }
+
+.app-page { animation: pageIn .22s ease; }
+@keyframes pageIn { from { opacity: .3; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+.eyebrow, .section-kicker {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.page-heading { margin: 6px 0 24px; }
+.page-heading h1 { font-size: clamp(30px, 4vw, 44px); margin: 7px 0 8px; letter-spacing: -1.5px; }
+.page-heading p { margin: 0; color: var(--muted); max-width: 620px; line-height: 1.55; }
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  padding: clamp(30px, 6vw, 62px);
+  border-radius: 24px;
+  color: white;
+  background: linear-gradient(118deg, #0d0e10 0%, #181a1e 60%, #090a0c 100%);
+  box-shadow: 0 20px 60px rgba(16,17,20,.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  isolation: isolate;
+}
+
+.hero-card:after {
+  content: '';
+  position: absolute;
+  inset: auto -10% -48% 34%;
+  height: 360px;
+  background: radial-gradient(circle, rgba(225,6,0,.55), transparent 68%);
+  z-index: -1;
+}
+
+.hero-copy { max-width: 650px; }
+.hero-copy h1 { font-size: clamp(42px, 6vw, 74px); line-height: .94; letter-spacing: -3px; margin: 12px 0 18px; }
+.hero-copy h1 span { color: #ff4a45; }
+.hero-copy p { color: rgba(255,255,255,.68); font-size: 16px; line-height: 1.55; margin: 0 0 25px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-visual { text-align: right; min-width: 240px; opacity: .92; }
+.hero-number { font-size: clamp(70px, 12vw, 150px); line-height: .8; font-weight: 900; letter-spacing: -8px; color: rgba(255,255,255,.08); }
+.hero-line { height: 5px; width: 210px; margin: 24px 0 12px auto; background: linear-gradient(90deg, transparent, var(--accent)); transform: skewX(-25deg); }
+.hero-caption { font-size: 10px; font-weight: 900; letter-spacing: .18em; color: rgba(255,255,255,.45); }
+
+.primary-button { background: var(--accent); box-shadow: 0 7px 20px rgba(225,6,0,.24); padding: 13px 19px; border-radius: 10px; }
+.primary-button:hover { background: var(--accent-dark); }
+.secondary-button { border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.07); color: white; padding: 13px 19px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+
+.dashboard-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 16px; margin-top: 16px; }
+.next-race-card, .my-standing-card { min-height: 225px; }
+.dashboard-race-name { font-size: 30px; font-weight: 900; letter-spacing: -.8px; margin: 9px 0 3px; }
+.muted { color: var(--muted); font-size: 14px; }
+.race-timeline { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 22px 0 12px; }
+.race-timeline div { background: var(--soft); border-radius: 11px; padding: 11px 12px; }
+.race-timeline span { display: block; font-size: 9px; color: var(--muted); font-weight: 900; letter-spacing: .12em; }
+.race-timeline strong { display: block; margin-top: 5px; font-size: 13px; }
+
+.standing-main { display: flex; align-items: baseline; gap: 10px; margin: 12px 0 4px; }
+.standing-position { font-size: 42px; font-weight: 900; }
+.standing-points { font-size: 21px; font-weight: 800; }
+.standing-label { color: var(--muted); font-size: 13px; }
+.standing-empty { color: var(--muted); padding: 18px 0; }
+
+.text-button { border: 0; padding: 0; background: transparent; color: var(--ink); font-weight: 900; cursor: pointer; font-size: 13px; }
+.text-button:hover { color: var(--accent); }
+
+.section-heading-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin-bottom: 16px; }
+.section-heading-row h2 { margin: 4px 0 0; font-size: 22px; }
+.leaderboard-list { display: grid; gap: 6px; }
+.leaderboard-row { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 12px; padding: 13px 12px; border-radius: 11px; }
+.leaderboard-row:hover { background: var(--soft); }
+.leaderboard-row.me { background: #fff2f1; }
+.rank-badge { font-weight: 900; font-size: 14px; }
+.player-cell { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+.player-dot { width: 8px; height: 8px; border-radius: 50%; background: #bfc2c8; }
+.player-dot.me { background: var(--accent); }
+.points-cell { font-weight: 900; font-size: 16px; }
+
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.data-table th { text-align: left; color: var(--muted); font-size: 10px; letter-spacing: .11em; text-transform: uppercase; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+.data-table td { padding: 14px 12px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.data-table tr:last-child td { border-bottom: 0; }
+.data-table .number { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table .current-row { background: #fff6f5; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+.stat-card { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+.stat-label { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+.stat-value { margin-top: 9px; font-size: 30px; font-weight: 900; letter-spacing: -1px; }
+.stat-sub { margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+.loading-row { color: var(--muted); padding: 18px 5px; text-align: center; }
+
+.login-card { max-width: 520px; margin: 80px auto; text-align: center; padding: 42px; }
+.login-badge { width: 62px; height: 62px; display: grid; place-items: center; border-radius: 18px; background: #fff0ef; margin: 0 auto 20px; font-size: 28px; }
+.login-card h1 { font-size: 38px; letter-spacing: -1.5px; margin: 8px 0; }
+.login-card p { color: var(--muted); line-height: 1.6; }
+
+/* Keep the existing prediction/admin controls but give them the new visual language. */
+#predictionsPage .card, #adminPage .card { box-shadow: 0 8px 28px rgba(16,17,20,.055); }
+#predictionsPage .race-name { font-size: 29px; letter-spacing: -.7px; }
+#predictionsPage .tab.active { background: var(--accent); }
+#predictionsPage .driver { background: #fff; border-color: var(--line); }
+#predictionsPage .driver:hover { border-color: #cfd1d6; box-shadow: 0 4px 14px rgba(16,17,20,.06); }
+#predictionsPage .driver-list.drag-over, #adminPage .driver-list.drag-over { border-color: var(--accent); background: #fff7f6; }
+#predictionsPage .private-notice { background: #fff7f5; border-color: #ffd2cf; color: #7b2520; }
+#adminPage .admin-badge { background: var(--accent); }
+
+@media(max-width: 900px) {
+  .main-nav { order: 5; width: 100%; display: none; flex-direction: column; align-items: stretch; padding: 10px 0 2px; border-top: 1px solid rgba(255,255,255,.08); }
+  .main-nav.open { display: flex; }
+  .header-inner { flex-wrap: wrap; }
+  .menu-toggle { display: block; margin-left: auto; border: 0; background: rgba(255,255,255,.08); color: white; width: 40px; height: 40px; border-radius: 9px; font-size: 19px; }
+  .user-box { margin-left: 0; border-left: 0; padding-left: 0; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+}
+
+@media(max-width: 650px) {
+  main { margin-top: 18px; padding: 0 12px; }
+  .hero-card { min-height: auto; padding: 30px 24px; }
+  .hero-copy h1 { font-size: 45px; letter-spacing: -2px; }
+  .dashboard-grid, .stat-grid { grid-template-columns: 1fr; }
+  .card { padding: 18px; border-radius: 15px; }
+  .page-heading h1 { font-size: 34px; }
+  .race-timeline { grid-template-columns: 1fr; }
+  .login-card { margin: 35px auto; padding: 30px 20px; }
+}
+
 </style>
 
 </head>
@@ -675,80 +919,98 @@ select {
 
 <body>
 
-
 <header>
+  <div class="header-inner">
+    <a class="brand" href="#home" onclick="showPage('home'); return false;">
+      <div class="brand-mark">🏁</div>
+      <div>
+        <div class="logo">F1 Predictions</div>
+        <div class="season">2027 Season</div>
+      </div>
+    </a>
 
-<div class="header-inner">
+    <button id="menuToggle" class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
 
-<div>
+    <nav id="mainNav" class="main-nav">
+      <button class="nav-link active" data-page="home" onclick="showPage('home')">Home</button>
+      <button class="nav-link" data-page="predictions" onclick="showPage('predictions')">Predictions</button>
+      <button class="nav-link" data-page="leaderboard" onclick="showPage('leaderboard')">Leaderboard</button>
+      <button class="nav-link" data-page="stats" onclick="showPage('stats')">Stats</button>
+      <button id="adminNav" class="nav-link admin-nav hidden" data-page="admin" onclick="showPage('admin')">Admin</button>
+    </nav>
 
-<div class="logo">
-🏁 F1 Predictions
-</div>
-
-<div class="season">
-2027 Season
-</div>
-
-</div>
-
-<div id="userBox">
-
-<span id="userName"></span>
-
-<button onclick="logout()">
-Sign out
-</button>
-
-</div>
-
-</div>
-
+    <div id="userBox" class="user-box">
+      <span id="userName"></span>
+      <button onclick="logout()">Sign out</button>
+    </div>
+  </div>
 </header>
 
-
 <main>
+  <div id="loginScreen" class="login-card card">
+    <div class="login-badge">🏎️</div>
+    <div class="eyebrow">2027 SEASON</div>
+    <h1>F1 Predictions 2027</h1>
+    <p>Predict every qualifying session, sprint and Grand Prix — then see how you stack up against the others.</p>
+    <div id="googleButton"></div>
+    <div id="loginError" class="message error"></div>
+  </div>
 
+  <div id="app" class="hidden">
+    <div id="message" class="message"></div>
 
-<div
-  id="loginScreen"
-  class="card"
->
+    <section id="homePage" class="app-page">
+      <div id="homeHero" class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">WELCOME TO THE 2027 SEASON</div>
+          <h1>Make your call.<br><span>Beat the grid.</span></h1>
+          <p>Predict the order. Earn points for accuracy. Climb the championship.</p>
+          <div class="hero-actions">
+            <button class="primary-button" onclick="showPage('predictions')">Make Predictions <span>→</span></button>
+            <button class="secondary-button" onclick="showPage('leaderboard')">View Leaderboard</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-number">2027</div>
+          <div class="hero-line"></div>
+          <div class="hero-caption">PREDICT · COMPETE · WIN</div>
+        </div>
+      </div>
 
-<h1>
-F1 Predictions 2027
-</h1>
+      <div class="dashboard-grid">
+        <div class="card next-race-card">
+          <div class="section-kicker">NEXT RACE</div>
+          <div id="homeRaceName" class="dashboard-race-name">Loading...</div>
+          <div id="homeRaceInfo" class="muted">Loading race calendar...</div>
+          <div class="race-timeline">
+            <div><span>QUALIFYING</span><strong id="homeQualifyingDate">—</strong></div>
+            <div><span>RACE</span><strong id="homeRaceDate">—</strong></div>
+          </div>
+          <button class="text-button" onclick="showPage('predictions')">Open predictions →</button>
+        </div>
 
-<p>
-Make your predictions for qualifying,
-the sprint and the race.
-</p>
+        <div class="card my-standing-card">
+          <div class="section-kicker">YOUR CHAMPIONSHIP</div>
+          <div id="homeMyStanding" class="standing-empty">Loading...</div>
+          <button class="text-button" onclick="showPage('stats')">View your stats →</button>
+        </div>
+      </div>
 
-<div id="googleButton"></div>
+      <div class="card leaderboard-preview-card">
+        <div class="section-heading-row">
+          <div><div class="section-kicker">CHAMPIONSHIP</div><h2>Leaderboard</h2></div>
+          <button class="text-button" onclick="showPage('leaderboard')">Full leaderboard →</button>
+        </div>
+        <div id="homeLeaderboard" class="leaderboard-list"><div class="loading-row">Loading leaderboard...</div></div>
+      </div>
+    </section>
 
-<div
-  id="loginError"
-  class="message error"
-></div>
-
-</div>
-
-
-<div
-  id="app"
-  class="hidden"
->
-
-
-<div
-  id="message"
-  class="message"
-></div>
-
-
-<!-- PLAYER SECTION -->
-
-<div id="playerSection">
+    <section id="predictionsPage" class="app-page hidden">
+      <div class="page-heading">
+        <div><div class="eyebrow">PREDICTIONS</div><h1>Make your predictions</h1><p>Choose a Grand Prix and drag the drivers into your predicted finishing order.</p></div>
+      </div>
+      <div id="playerSection">
+        <div id="playerSection">
 
 
 <div class="card">
@@ -834,17 +1096,30 @@ Other Players
 
 
 </div>
+      </div>
+    </section>
 
+    <section id="leaderboardPage" class="app-page hidden">
+      <div class="page-heading"><div><div class="eyebrow">CHAMPIONSHIP</div><h1>Leaderboard</h1><p>Every point counts. See who's leading the 2027 prediction championship.</p></div></div>
+      <div class="card leaderboard-card">
+        <div id="leaderboardTable" class="table-wrap"><div class="loading-row">Loading leaderboard...</div></div>
+      </div>
+      <div class="card race-scores-card">
+        <div class="section-heading-row"><div><div class="section-kicker">RACE BY RACE</div><h2>Race scores</h2></div></div>
+        <div id="raceScoresTable" class="table-wrap"><div class="loading-row">Loading race scores...</div></div>
+      </div>
+    </section>
 
-<!-- ADMIN SECTION -->
+    <section id="statsPage" class="app-page hidden">
+      <div class="page-heading"><div><div class="eyebrow">ANALYSIS</div><h1>Season stats</h1><p>Track accuracy, points and consistency across the season.</p></div></div>
+      <div id="statsContent">
+        <div class="card"><div class="loading-row">Loading stats...</div></div>
+      </div>
+    </section>
 
-<div
-  id="adminSection"
-  class="hidden"
->
-
-
-<div class="card">
+    <section id="adminPage" class="app-page hidden">
+      <div id="adminSection" class="hidden">
+        <div class="card">
 
 <div class="admin-header">
 
@@ -963,9 +1238,11 @@ Save Results
 
 
 </div>
-
-
+      </div>
+    </section>
+  </div>
 </main>
+
 
 
 <script>
@@ -1003,6 +1280,11 @@ let currentAdminSession =
 let draggedElement = null;
 
 let isAdmin = false;
+
+let currentPage = 'home';
+let scores = [];
+let scoresLoaded = false;
+let scoresLoading = false;
 
 
 /* =========================================================
@@ -1372,6 +1654,11 @@ isAdmin = true;
 
 document
 .getElementById(
+'adminNav'
+).classList.remove('hidden');
+
+document
+.getElementById(
 'adminSection'
 )
 .classList
@@ -1384,6 +1671,8 @@ await loadAdmin();
 isAdmin = false;
 
 }
+
+showPage('home');
 
 } catch(error) {
 
@@ -2529,12 +2818,9 @@ function buildPredictionPayload() {
 
         orders[tab.id] =
           [...list].map(
-            (element, index) => ({
-              driverId:
-                element.dataset.driverId,
-
-              position:
-                index + 1
+            (el, index) => ({
+              driverId: el.dataset.driverId,
+              position: index + 1
             })
           );
 
@@ -2544,18 +2830,15 @@ function buildPredictionPayload() {
           getSavedOrder(tab.id);
 
         /*
-         * Only reuse a saved prediction if the
-         * complete order has been submitted.
+         * Only reuse a saved order if it is complete.
+         * Partial/old data is treated as unsubmitted.
          */
         orders[tab.id] =
           saved.length === drivers.length
             ? saved.map(
                 (driver, index) => ({
-                  driverId:
-                    driver.driverId,
-
-                  position:
-                    index + 1
+                  driverId: driver.driverId,
+                  position: index + 1
                 })
               )
             : [];
@@ -2564,75 +2847,62 @@ function buildPredictionPayload() {
 
     });
 
-
   return drivers.map(
     driver => {
 
       const q =
         orders.qualifying &&
         orders.qualifying.find(
-          item =>
-            item.driverId ===
-            driver.driverId
+          x =>
+            x.driverId === driver.driverId
         );
 
       const sq =
         orders.sprintQualifying &&
         orders.sprintQualifying.find(
-          item =>
-            item.driverId ===
-            driver.driverId
+          x =>
+            x.driverId === driver.driverId
         );
 
       const s =
         orders.sprint &&
         orders.sprint.find(
-          item =>
-            item.driverId ===
-            driver.driverId
+          x =>
+            x.driverId === driver.driverId
         );
 
       const r =
         orders.race &&
         orders.race.find(
-          item =>
-            item.driverId ===
-            driver.driverId
+          x =>
+            x.driverId === driver.driverId
         );
 
-
-      /*
-       * IMPORTANT:
-       * Don't send empty strings for sessions
-       * that haven't been submitted yet.
-       */
-
       const result = {
-        driverId:
-          driver.driverId
+        driverId: driver.driverId
       };
 
-
+      /*
+       * Do NOT send '' for an unsubmitted session.
+       * Apps Script Number('') becomes 0, which is then
+       * rejected as an invalid position by the backend.
+       * Omitting the property means the backend ignores it.
+       */
       if (q) {
-        result.qualifyingPosition =
-          q.position;
+        result.qualifyingPosition = q.position;
       }
 
       if (sq) {
-        result.sprintQualifyingPosition =
-          sq.position;
+        result.sprintQualifyingPosition = sq.position;
       }
 
       if (s) {
-        result.sprintPosition =
-          s.position;
+        result.sprintPosition = s.position;
       }
 
       if (r) {
-        result.racePosition =
-          r.position;
+        result.racePosition = r.position;
       }
-
 
       return result;
 
@@ -3738,6 +4008,262 @@ button.textContent =
 
 }
 
+
+
+/* =========================================================
+   NAVIGATION + DASHBOARD
+========================================================= */
+
+function toggleMenu() {
+  const nav = document.getElementById('mainNav');
+  if (nav) nav.classList.toggle('open');
+}
+
+function showPage(page) {
+  if (page === 'admin' && !isAdmin) return;
+
+  currentPage = page;
+
+  document.querySelectorAll('.app-page').forEach(section => {
+    section.classList.toggle('hidden', section.id !== page + 'Page');
+  });
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.toggle('active', link.dataset.page === page);
+  });
+
+  const nav = document.getElementById('mainNav');
+  if (nav) nav.classList.remove('open');
+
+  if (page === 'home') {
+    renderHome();
+    ensureScoresLoaded();
+  }
+
+  if (page === 'leaderboard') {
+    ensureScoresLoaded().then(renderLeaderboardPage);
+  }
+
+  if (page === 'stats') {
+    ensureScoresLoaded().then(renderStatsPage);
+  }
+}
+
+function getNextRace() {
+  if (!races.length) return null;
+  const now = Date.now();
+  const upcoming = races.find(r => {
+    const t = r.raceStart || r.qualifyingStart || r.sprintStart || r.sprintQualifyingStart;
+    return t && new Date(t).getTime() >= now;
+  });
+  return upcoming || races[races.length - 1];
+}
+
+function formatDate(value, includeTime = false) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    ...(includeTime ? { hour: '2-digit', minute: '2-digit' } : {})
+  }).format(date);
+}
+
+function renderHome() {
+  const race = getNextRace();
+  if (!race) return;
+
+  const raceName = document.getElementById('homeRaceName');
+  const raceInfo = document.getElementById('homeRaceInfo');
+  const quali = document.getElementById('homeQualifyingDate');
+  const raceDate = document.getElementById('homeRaceDate');
+
+  if (raceName) raceName.textContent = race.race || 'Next Grand Prix';
+  if (raceInfo) raceInfo.textContent = isTrue(race.sprint) ? 'Sprint weekend' : 'Grand Prix weekend';
+  if (quali) quali.textContent = formatDate(race.qualifyingStart, true);
+  if (raceDate) raceDate.textContent = formatDate(race.raceStart, true);
+
+  renderHomeStanding();
+  if (scoresLoaded) renderHomeLeaderboard();
+}
+
+async function ensureScoresLoaded() {
+  if (scoresLoaded) return scores;
+  if (scoresLoading) {
+    while (scoresLoading) await new Promise(resolve => setTimeout(resolve, 100));
+    return scores;
+  }
+
+  scoresLoading = true;
+  try {
+    const data = await apiCall('scores', { session: sessionToken });
+    scores = data.scores || [];
+    scoresLoaded = true;
+  } catch (error) {
+    console.error('Could not load scores:', error);
+    scores = [];
+    scoresLoaded = true;
+  } finally {
+    scoresLoading = false;
+  }
+
+  return scores;
+}
+
+function getLeaderboardRows() {
+  const map = {};
+  scores.forEach(score => {
+    if (!map[score.playerId]) {
+      map[score.playerId] = {
+        playerId: score.playerId,
+        playerName: score.playerName || score.playerId,
+        points: 0,
+        rounds: 0,
+        penalties: 0,
+        podiumBonus: 0
+      };
+    }
+    const row = map[score.playerId];
+    row.points += Number(score.totalPoints) || 0;
+    row.rounds += 1;
+    row.penalties += Number(score.penalty) || 0;
+    row.podiumBonus += Number(score.podiumBonus) || 0;
+  });
+
+  return Object.values(map).sort((a, b) => b.points - a.points || a.playerName.localeCompare(b.playerName));
+}
+
+function renderHomeStanding() {
+  const el = document.getElementById('homeMyStanding');
+  if (!el) return;
+
+  const rows = getLeaderboardRows();
+  const index = rows.findIndex(r => currentUser && r.playerId === currentUser.playerId);
+
+  if (index === -1) {
+    el.innerHTML = '<div class="standing-empty">No scored races yet.</div>';
+    return;
+  }
+
+  const row = rows[index];
+  el.innerHTML = `
+    <div class="standing-main">
+      <span class="standing-position">#${index + 1}</span>
+      <span class="standing-points">${row.points}</span>
+      <span class="standing-label">points</span>
+    </div>
+    <div class="muted">${row.rounds} scored ${row.rounds === 1 ? 'round' : 'rounds'} this season</div>
+  `;
+}
+
+function renderHomeLeaderboard() {
+  const el = document.getElementById('homeLeaderboard');
+  if (!el) return;
+  const rows = getLeaderboardRows();
+
+  if (!rows.length) {
+    el.innerHTML = '<div class="loading-row">No scores have been recorded yet.</div>';
+    return;
+  }
+
+  el.innerHTML = rows.slice(0, 5).map((row, index) => `
+    <div class="leaderboard-row ${currentUser && row.playerId === currentUser.playerId ? 'me' : ''}">
+      <div class="rank-badge">${index < 3 ? ['🥇','🥈','🥉'][index] : '#' + (index + 1)}</div>
+      <div class="player-cell"><span class="player-dot ${currentUser && row.playerId === currentUser.playerId ? 'me' : ''}"></span>${escapeHtml(row.playerName)}</div>
+      <div class="points-cell">${row.points} pts</div>
+    </div>
+  `).join('');
+}
+
+function renderLeaderboardPage() {
+  if (currentPage !== 'leaderboard') return;
+  const table = document.getElementById('leaderboardTable');
+  const raceTable = document.getElementById('raceScoresTable');
+  const rows = getLeaderboardRows();
+
+  if (!rows.length) {
+    table.innerHTML = '<div class="loading-row">No scores have been recorded yet.</div>';
+    raceTable.innerHTML = '<div class="loading-row">Race scores will appear here once results are scored.</div>';
+    return;
+  }
+
+  table.innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>Pos</th><th>Player</th><th class="number">Points</th><th class="number">Rounds</th><th class="number">Podium bonus</th><th class="number">Penalties</th></tr></thead>
+      <tbody>
+        ${rows.map((row, index) => `
+          <tr class="${currentUser && row.playerId === currentUser.playerId ? 'current-row' : ''}">
+            <td><strong>${index + 1}</strong></td>
+            <td><strong>${escapeHtml(row.playerName)}</strong>${currentUser && row.playerId === currentUser.playerId ? ' <span class="section-kicker">YOU</span>' : ''}</td>
+            <td class="number"><strong>${row.points}</strong></td>
+            <td class="number">${row.rounds}</td>
+            <td class="number">+${row.podiumBonus}</td>
+            <td class="number">${row.penalties}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  const raceMap = {};
+  scores.forEach(score => {
+    if (!raceMap[score.raceId]) raceMap[score.raceId] = {};
+    raceMap[score.raceId][score.playerId] = Number(score.totalPoints) || 0;
+  });
+
+  const scoredRaces = races.filter(r => raceMap[r.raceId]);
+  raceTable.innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>Race</th>${rows.map(r => `<th class="number">${escapeHtml(r.playerName)}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${scoredRaces.map(race => `
+          <tr><td><strong>${escapeHtml(race.race)}</strong></td>${rows.map(row => `<td class="number">${raceMap[race.raceId][row.playerId] ?? '—'}</td>`).join('')}</tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderStatsPage() {
+  if (currentPage !== 'stats') return;
+  const container = document.getElementById('statsContent');
+  const rows = getLeaderboardRows();
+  const mine = rows.find(r => currentUser && r.playerId === currentUser.playerId);
+
+  if (!mine) {
+    container.innerHTML = '<div class="card"><div class="loading-row">Your stats will appear after the first scored race.</div></div>';
+    return;
+  }
+
+  const myScores = scores.filter(s => currentUser && s.playerId === currentUser.playerId);
+  const best = [...myScores].sort((a,b) => (Number(b.totalPoints)||0) - (Number(a.totalPoints)||0))[0];
+  const average = myScores.length ? (mine.points / myScores.length).toFixed(1) : '0.0';
+
+  container.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Championship points</div><div class="stat-value">${mine.points}</div><div class="stat-sub">Position #${rows.indexOf(mine) + 1}</div></div>
+      <div class="stat-card"><div class="stat-label">Average round</div><div class="stat-value">${average}</div><div class="stat-sub">points per scored race</div></div>
+      <div class="stat-card"><div class="stat-label">Best round</div><div class="stat-value">${best ? Number(best.totalPoints) || 0 : 0}</div><div class="stat-sub">${best ? escapeHtml((races.find(r => r.raceId === best.raceId) || {}).race || best.raceId) : '—'}</div></div>
+      <div class="stat-card"><div class="stat-label">Podium bonus</div><div class="stat-value">+${mine.podiumBonus}</div><div class="stat-sub">bonus points earned</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-heading-row"><div><div class="section-kicker">YOUR SEASON</div><h2>Race performance</h2></div></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Race</th><th class="number">Qualifying</th><th class="number">Sprint Q</th><th class="number">Sprint</th><th class="number">Race</th><th class="number">Total</th></tr></thead>
+          <tbody>
+            ${myScores.map(score => {
+              const race = races.find(r => r.raceId === score.raceId);
+              return `<tr><td><strong>${escapeHtml(race ? race.race : score.raceId)}</strong></td><td class="number">${score.qualifyingPoints ?? 0}</td><td class="number">${score.sprintQualifyingPoints ?? 0}</td><td class="number">${score.sprintPoints ?? 0}</td><td class="number">${score.racePoints ?? 0}</td><td class="number"><strong>${score.totalPoints ?? 0}</strong></td></tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
 
 /* =========================================================
    HELPERS
