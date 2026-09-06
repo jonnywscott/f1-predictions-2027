@@ -2370,16 +2370,16 @@ function getSavedOrder(
       }
     )
 
-    .filter(
-  prediction => {
-    const position = Number(prediction.position);
+  .filter(
+      prediction => {
+        const position = Number(prediction.position);
 
-    return (
-      Number.isInteger(position) &&
-      position >= 1
-    );
-  }
-)
+      return (
+        Number.isInteger(position) &&
+        position >= 1
+      );
+      }
+  )
     
 
     .sort(
