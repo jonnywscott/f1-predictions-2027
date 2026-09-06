@@ -1338,6 +1338,26 @@ main{
   gap:18px;
 }
 
+.home-top-grid{grid-template-columns:1.45fr .75fr;}
+.home-sprint-badge{padding:7px 10px;border-radius:999px;background:#fff0ef;color:var(--f1-red);font-size:9px;font-weight:950;letter-spacing:.14em;}
+.countdown-panel{margin:24px 0 18px;padding:20px 22px;border-radius:14px;background:#101114;color:#fff;display:flex;align-items:flex-end;justify-content:space-between;gap:18px;}
+.countdown-label,.status-label{display:block;color:#8f949d;font-size:9px;font-weight:900;letter-spacing:.15em;}
+.countdown-panel strong{display:block;margin-top:5px;font-size:31px;line-height:1;letter-spacing:-.045em;}
+.countdown-date{color:#b8bcc3;font-size:12px;text-align:right;}
+.dashboard-cta{width:100%;display:flex;justify-content:space-between;align-items:center;}
+.home-status-divider{height:1px;background:var(--line);margin:22px 0;}
+.home-prediction-status{display:flex;align-items:center;justify-content:space-between;gap:15px;}
+.home-prediction-status strong{display:block;margin-top:5px;font-size:18px;letter-spacing:-.02em;}
+.status-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#f1f2f4;color:#6d727a;font-size:20px;font-weight:900;}
+.upcoming-card{margin-top:18px;}
+.upcoming-races{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.upcoming-race{padding:15px 16px;border:1px solid var(--line);border-radius:13px;background:#fafafa;}
+.upcoming-race-index{color:#9a9da3;font-size:9px;font-weight:900;letter-spacing:.14em;}
+.upcoming-race-name{margin:7px 0 4px;font-size:16px;font-weight:900;}
+.upcoming-race-date{color:#747981;font-size:11px;}
+.upcoming-race-sprint{display:inline-block;margin-top:9px;color:var(--f1-red);font-size:8px;font-weight:950;letter-spacing:.13em;}
+@media (max-width:800px){.upcoming-races{grid-template-columns:1fr;}.countdown-panel{align-items:flex-start;flex-direction:column;}.countdown-date{text-align:left;}}
+
 .next-race-card{
   position:relative;
   overflow:hidden;
@@ -1750,22 +1770,54 @@ main{
         </div>
       </div>
 
-      <div class="dashboard-grid">
+      <div class="dashboard-grid home-top-grid">
         <div class="card next-race-card">
-          <div class="section-kicker">NEXT RACE</div>
-          <div id="homeRaceName" class="dashboard-race-name">Loading...</div>
-          <div id="homeRaceInfo" class="muted">Loading race calendar...</div>
+          <div class="section-heading-row">
+            <div>
+              <div class="section-kicker">NEXT GRAND PRIX</div>
+              <div id="homeRaceName" class="dashboard-race-name">Loading...</div>
+              <div id="homeRaceInfo" class="muted">Loading race calendar...</div>
+            </div>
+            <div id="homeSprintBadge" class="home-sprint-badge hidden">SPRINT</div>
+          </div>
+          <div class="countdown-panel">
+            <div>
+              <span class="countdown-label">RACE STARTS IN</span>
+              <strong id="homeCountdown">—</strong>
+            </div>
+            <div id="homeCountdownLabel" class="countdown-date">—</div>
+          </div>
           <div class="race-timeline">
             <div><span>QUALIFYING</span><strong id="homeQualifyingDate">—</strong></div>
             <div><span>RACE</span><strong id="homeRaceDate">—</strong></div>
           </div>
-          <button class="text-button" onclick="showPage('predictions')">Open predictions →</button>
+          <button class="primary-button dashboard-cta" onclick="showPage('predictions')">
+            <span>Make / edit predictions</span><span>→</span>
+          </button>
         </div>
 
         <div class="card my-standing-card">
           <div class="section-kicker">YOUR CHAMPIONSHIP</div>
           <div id="homeMyStanding" class="standing-empty">Loading...</div>
+          <div class="home-status-divider"></div>
+          <div class="home-prediction-status">
+            <div>
+              <span class="status-label">NEXT RACE</span>
+              <strong id="homePredictionStatus">Checking...</strong>
+            </div>
+            <div id="homePredictionIcon" class="status-icon">•</div>
+          </div>
           <button class="text-button" onclick="showPage('stats')">View your stats →</button>
+        </div>
+      </div>
+
+      <div class="card upcoming-card">
+        <div class="section-heading-row">
+          <div><div class="section-kicker">2027 CALENDAR</div><h2>Coming up</h2></div>
+          <button class="text-button" onclick="showPage('predictions')">View predictions →</button>
+        </div>
+        <div id="homeUpcomingRaces" class="upcoming-races">
+          <div class="loading-row">Loading calendar...</div>
         </div>
       </div>
 
@@ -4843,9 +4895,14 @@ function formatDate(value, includeTime = false) {
   }).format(date);
 }
 
+let homeCountdownTimer = null;
+
 function renderHome() {
   const race = getNextRace();
   if (!race) return;
+
+  renderHomeCountdown(race);
+  renderHomeUpcomingRaces(race);
 
   const raceName = document.getElementById('homeRaceName');
   const raceInfo = document.getElementById('homeRaceInfo');
@@ -4857,8 +4914,105 @@ function renderHome() {
   if (quali) quali.textContent = formatDate(race.qualifyingStart, true);
   if (raceDate) raceDate.textContent = formatDate(race.raceStart, true);
 
+  const sprintBadge = document.getElementById('homeSprintBadge');
+  if (sprintBadge) sprintBadge.classList.toggle('hidden', !isTrue(race.sprint));
+
+  renderHomePredictionStatus(race);
   renderHomeStanding();
   if (scoresLoaded) renderHomeLeaderboard();
+}
+
+function renderHomeCountdown(race) {
+  const targetValue = race.raceStart || race.qualifyingStart || race.sprintStart || race.sprintQualifyingStart;
+  const countdown = document.getElementById('homeCountdown');
+  const label = document.getElementById('homeCountdownLabel');
+
+  if (homeCountdownTimer) clearInterval(homeCountdownTimer);
+  homeCountdownTimer = null;
+  if (!targetValue || !countdown) return;
+
+  const target = new Date(targetValue).getTime();
+  if (!Number.isFinite(target)) return;
+
+  const tick = () => {
+    const remaining = target - Date.now();
+    if (remaining <= 0) {
+      countdown.textContent = 'STARTING';
+      if (label) label.textContent = 'The event has started';
+      clearInterval(homeCountdownTimer);
+      homeCountdownTimer = null;
+      return;
+    }
+
+    const totalSeconds = Math.floor(remaining / 1000);
+    const days = Math.floor(totalSeconds / 86400);
+    const hours = Math.floor((totalSeconds % 86400) / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+
+    countdown.textContent = days > 0
+      ? `${days}d ${String(hours).padStart(2,'0')}h ${String(minutes).padStart(2,'0')}m`
+      : `${String(hours).padStart(2,'0')}h ${String(minutes).padStart(2,'0')}m ${String(seconds).padStart(2,'0')}s`;
+
+    if (label) label.textContent = formatDate(targetValue, true);
+  };
+
+  tick();
+  homeCountdownTimer = setInterval(tick, 1000);
+}
+
+function renderHomePredictionStatus(race) {
+  const status = document.getElementById('homePredictionStatus');
+  const icon = document.getElementById('homePredictionIcon');
+  if (!status || !icon) return;
+
+  const racePredictions = predictions.filter(
+    p => p.raceId === race.raceId && p.playerId === currentUser?.playerId
+  );
+
+  const required = isTrue(race.sprint)
+    ? ['sprintQualifyingPosition', 'sprintPosition', 'qualifyingPosition', 'racePosition']
+    : ['qualifyingPosition', 'racePosition'];
+
+  const complete = required.every(field =>
+    racePredictions.some(p => Number(p[field]) >= 1)
+  );
+
+  if (hasQualifyingStarted(race)) {
+    status.textContent = 'Predictions locked';
+    icon.textContent = '🔒';
+  } else if (complete) {
+    status.textContent = 'Predictions submitted';
+    icon.textContent = '✓';
+  } else if (racePredictions.length) {
+    status.textContent = 'Prediction in progress';
+    icon.textContent = '!';
+  } else {
+    status.textContent = 'Not submitted yet';
+    icon.textContent = '→';
+  }
+}
+
+function renderHomeUpcomingRaces(current) {
+  const el = document.getElementById('homeUpcomingRaces');
+  if (!el) return;
+
+  const currentIndex = races.findIndex(r => r.raceId === current.raceId);
+  const upcoming = races.slice(Math.max(0, currentIndex + 1), currentIndex + 4);
+
+  if (!upcoming.length) {
+    el.innerHTML = '<div class="loading-row">You have reached the end of the 2027 calendar.</div>';
+    return;
+  }
+
+  el.innerHTML = upcoming.map((race, index) => `
+    <div class="upcoming-race">
+      <div class="upcoming-race-index">ROUND ${currentIndex + index + 2}</div>
+      <div class="upcoming-race-name">${escapeHtml(race.race || 'Grand Prix')}</div>
+      <div class="upcoming-race-date">${formatDate(race.raceStart, false)}</div>
+      ${isTrue(race.sprint) ? '<div class="upcoming-race-sprint">SPRINT WEEKEND</div>' : ''}
+    </div>
+  `).join('');
 }
 
 async function ensureScoresLoaded() {
