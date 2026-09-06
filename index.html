@@ -2371,10 +2371,15 @@ function getSavedOrder(
     )
 
     .filter(
-      prediction =>
-        prediction.position !== '' &&
-        prediction.position !== null &&
-        prediction.position !== undefined
+  prediction => {
+    const position = Number(prediction.position);
+
+    return (
+      Number.isInteger(position) &&
+      position >= 1
+    );
+  }
+)
     )
 
     .sort(
