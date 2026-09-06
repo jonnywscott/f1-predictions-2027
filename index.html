@@ -2529,9 +2529,12 @@ function buildPredictionPayload() {
 
         orders[tab.id] =
           [...list].map(
-            (el, index) => ({
-              driverId: el.dataset.driverId,
-              position: index + 1
+            (element, index) => ({
+              driverId:
+                element.dataset.driverId,
+
+              position:
+                index + 1
             })
           );
 
@@ -2541,15 +2544,18 @@ function buildPredictionPayload() {
           getSavedOrder(tab.id);
 
         /*
-         * Only reuse a saved order if it is complete.
-         * Partial/old data is treated as unsubmitted.
+         * Only reuse a saved prediction if the
+         * complete order has been submitted.
          */
         orders[tab.id] =
           saved.length === drivers.length
             ? saved.map(
                 (driver, index) => ({
-                  driverId: driver.driverId,
-                  position: index + 1
+                  driverId:
+                    driver.driverId,
+
+                  position:
+                    index + 1
                 })
               )
             : [];
@@ -2558,62 +2564,75 @@ function buildPredictionPayload() {
 
     });
 
+
   return drivers.map(
     driver => {
 
       const q =
         orders.qualifying &&
         orders.qualifying.find(
-          x =>
-            x.driverId === driver.driverId
+          item =>
+            item.driverId ===
+            driver.driverId
         );
 
       const sq =
         orders.sprintQualifying &&
         orders.sprintQualifying.find(
-          x =>
-            x.driverId === driver.driverId
+          item =>
+            item.driverId ===
+            driver.driverId
         );
 
       const s =
         orders.sprint &&
         orders.sprint.find(
-          x =>
-            x.driverId === driver.driverId
+          item =>
+            item.driverId ===
+            driver.driverId
         );
 
       const r =
         orders.race &&
         orders.race.find(
-          x =>
-            x.driverId === driver.driverId
+          item =>
+            item.driverId ===
+            driver.driverId
         );
 
-      const result = {
-        driverId: driver.driverId
-      };
 
       /*
-       * Do NOT send '' for an unsubmitted session.
-       * Apps Script Number('') becomes 0, which is then
-       * rejected as an invalid position by the backend.
-       * Omitting the property means the backend ignores it.
+       * IMPORTANT:
+       * Don't send empty strings for sessions
+       * that haven't been submitted yet.
        */
+
+      const result = {
+        driverId:
+          driver.driverId
+      };
+
+
       if (q) {
-        result.qualifyingPosition = q.position;
+        result.qualifyingPosition =
+          q.position;
       }
 
       if (sq) {
-        result.sprintQualifyingPosition = sq.position;
+        result.sprintQualifyingPosition =
+          sq.position;
       }
 
       if (s) {
-        result.sprintPosition = s.position;
+        result.sprintPosition =
+          s.position;
       }
 
       if (r) {
-        result.racePosition = r.position;
+        result.racePosition =
+          r.position;
       }
+
 
       return result;
 
