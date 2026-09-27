@@ -1705,6 +1705,24 @@ main{
   .race-timeline{grid-template-columns:1fr}
 }
 
+
+/* Leaderboard 2.0 */
+.lb-podium{display:grid;grid-template-columns:1fr 1.15fr 1fr;align-items:end;gap:14px;margin-bottom:18px}
+.lb-podium-card{min-height:165px;padding:24px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 10px 28px rgba(0,0,0,.04);text-align:center}
+.lb-podium-card.first{min-height:195px;background:#101114;color:#fff;border-color:#101114}
+.lb-medal{font-size:28px;line-height:1;margin-bottom:12px}.lb-podium-position{font-size:9px;font-weight:950;letter-spacing:.16em;color:#999da5}
+.lb-podium-name{margin:8px 0 2px;font-size:22px;font-weight:950;letter-spacing:-.04em}.lb-podium-points{font-size:34px;font-weight:950;letter-spacing:-.05em}
+.lb-podium-points span{display:block;margin-top:1px;font-size:9px;font-weight:800;letter-spacing:.13em;color:#999da5}
+.lb-races-card,.lb-latest-card{margin-top:18px}.table-wrap{overflow-x:auto}
+.lb-table{width:100%;border-collapse:collapse;min-width:560px}
+.lb-table th{padding:11px 12px;text-align:left;font-size:8px;letter-spacing:.14em;color:#969aa2;font-weight:950;border-bottom:1px solid var(--line)}
+.lb-table td{padding:15px 12px;border-bottom:1px solid #eeeef0;font-size:13px;font-weight:750}
+.lb-player-cell{display:flex;align-items:center;gap:11px}.lb-avatar{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:#15161a;color:#fff;font-size:10px;font-weight:950}
+.lb-points-cell{font-size:17px!important;font-weight:950!important}.lb-change-up{color:#18854b}.lb-change-down{color:var(--f1-red)}.lb-change-same{color:#969aa2}
+.race-grid-table{width:100%;border-collapse:collapse;min-width:560px}.race-grid-table th{padding:11px 12px;text-align:center;font-size:8px;letter-spacing:.12em;color:#969aa2;border-bottom:1px solid var(--line)}.race-grid-table th:first-child{text-align:left}.race-grid-table td{padding:14px 12px;text-align:center;border-bottom:1px solid #eeeef0;font-size:12px;font-weight:750}.race-grid-table td:first-child{text-align:left}.lb-grid-player{font-weight:950!important;white-space:nowrap}.lb-grid-total{font-weight:950!important;background:#fafafa}
+.lb-race-head{display:block;font-size:10px;font-weight:950;color:#25272b}.lb-race-sub{display:block;margin-top:3px;font-size:8px;color:#999da5;font-weight:700}
+.latest-score-list{display:grid;gap:8px}.latest-score-row{display:grid;grid-template-columns:42px 1fr auto;align-items:center;gap:12px;padding:14px;border:1px solid var(--line);border-radius:12px}.latest-score-pos{font-size:10px;font-weight:950;color:#999da5}.latest-score-name{font-weight:900}.latest-score-points{font-size:18px;font-weight:950}.latest-score-points span{font-size:9px;color:#999da5;font-weight:800;margin-left:4px}
+@media(max-width:800px){.lb-podium{grid-template-columns:1fr;align-items:stretch}.lb-podium-card,.lb-podium-card.first{min-height:0}.lb-podium-card.first{order:-1}.lb-table,.race-grid-table{min-width:500px}}
 </style>
 
 </head>
@@ -1925,15 +1943,47 @@ Other Players
     </section>
 
     <section id="leaderboardPage" class="app-page hidden">
-      <div class="page-heading"><div><div class="eyebrow">CHAMPIONSHIP</div><h1>Leaderboard</h1><p>Every point counts. See who's leading the 2027 prediction championship.</p></div></div>
-      <div class="card leaderboard-card">
-        <div id="leaderboardTable" class="table-wrap"><div class="loading-row">Loading leaderboard...</div></div>
-      </div>
-      <div class="card race-scores-card">
-        <div class="section-heading-row"><div><div class="section-kicker">RACE BY RACE</div><h2>Race scores</h2></div></div>
-        <div id="raceScoresTable" class="table-wrap"><div class="loading-row">Loading race scores...</div></div>
-      </div>
-    </section>
+  <div class="page-header">
+    <div>
+      <div class="section-kicker">CHAMPIONSHIP</div>
+      <h1>Leaderboard</h1>
+      <p>Track the 2027 championship and see how every race is shaping up.</p>
+    </div>
+  </div>
+
+  <div id="leaderboardPodium" class="lb-podium">
+    <div class="loading-row">Loading championship...</div>
+  </div>
+
+  <div class="card leaderboard-card">
+    <div class="section-heading-row">
+      <div><div class="section-kicker">SEASON STANDINGS</div><h2>Championship</h2></div>
+      <div id="leaderboardUpdated" class="muted">—</div>
+    </div>
+    <div id="leaderboardTable" class="table-wrap">
+      <div class="loading-row">Loading leaderboard...</div>
+    </div>
+  </div>
+
+  <div class="card lb-races-card">
+    <div class="section-heading-row">
+      <div><div class="section-kicker">RACE BY RACE</div><h2>Championship progress</h2></div>
+    </div>
+    <div class="table-wrap">
+      <table class="race-grid-table">
+        <thead id="raceGridHead"></thead>
+        <tbody id="raceGridBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card lb-latest-card">
+    <div class="section-heading-row">
+      <div><div class="section-kicker">LATEST RESULT</div><h2 id="latestRaceTitle">Latest Grand Prix</h2></div>
+    </div>
+    <div id="latestRaceScores" class="latest-score-list"><div class="loading-row">Loading...</div></div>
+  </div>
+</section>
 
     <section id="statsPage" class="app-page hidden">
       <div class="page-heading"><div><div class="eyebrow">ANALYSIS</div><h1>Season stats</h1><p>Track accuracy, points and consistency across the season.</p></div></div>
@@ -5103,54 +5153,159 @@ function renderHomeLeaderboard() {
   `).join('');
 }
 
+
 function renderLeaderboardPage() {
-  if (currentPage !== 'leaderboard') return;
-  const table = document.getElementById('leaderboardTable');
-  const raceTable = document.getElementById('raceScoresTable');
   const rows = getLeaderboardRows();
+  const podium = document.getElementById('leaderboardPodium');
+  const table = document.getElementById('leaderboardTable');
 
   if (!rows.length) {
-    table.innerHTML = '<div class="loading-row">No scores have been recorded yet.</div>';
-    raceTable.innerHTML = '<div class="loading-row">Race scores will appear here once results are scored.</div>';
+    if (podium) podium.innerHTML = '<div class="loading-row">No championship scores available yet.</div>';
+    if (table) table.innerHTML = '<div class="loading-row">No scores available yet.</div>';
     return;
   }
 
-  table.innerHTML = `
-    <table class="data-table">
-      <thead><tr><th>Pos</th><th>Player</th><th class="number">Points</th><th class="number">Rounds</th><th class="number">Podium bonus</th><th class="number">Penalties</th></tr></thead>
-      <tbody>
-        ${rows.map((row, index) => `
-          <tr class="${currentUser && row.playerId === currentUser.playerId ? 'current-row' : ''}">
-            <td><strong>${index + 1}</strong></td>
-            <td><strong>${escapeHtml(row.playerName)}</strong>${currentUser && row.playerId === currentUser.playerId ? ' <span class="section-kicker">YOU</span>' : ''}</td>
-            <td class="number"><strong>${row.points}</strong></td>
-            <td class="number">${row.rounds}</td>
-            <td class="number">+${row.podiumBonus}</td>
-            <td class="number">${row.penalties}</td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
+  renderLeaderboardPodium(rows);
+  renderLeaderboardStandings(rows);
+  renderLeaderboardRaceGrid(rows);
+  renderLeaderboardLatestRace();
 
-  const raceMap = {};
-  scores.forEach(score => {
-    if (!raceMap[score.raceId]) raceMap[score.raceId] = {};
-    raceMap[score.raceId][score.playerId] = Number(score.totalPoints) || 0;
+  const updated = document.getElementById('leaderboardUpdated');
+  if (updated) updated.textContent = `${rows.length} players`;
+}
+
+function renderLeaderboardPodium(rows) {
+  const el = document.getElementById('leaderboardPodium');
+  if (!el) return;
+  const top = rows.slice(0, 3);
+  const order = top.length === 3 ? [1, 0, 2] : top.map((_, i) => i);
+
+  el.innerHTML = order.map(i => {
+    const row = top[i];
+    if (!row) return '';
+    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
+    return `<div class="lb-podium-card ${i === 0 ? 'first' : ''}">
+      <div class="lb-medal">${medal}</div>
+      <div class="lb-podium-position">P${i + 1}</div>
+      <div class="lb-podium-name">${escapeHtml(row.playerName || row.name || 'Player')}</div>
+      <div class="lb-podium-points">${Number(row.totalPoints || 0)}<span>POINTS</span></div>
+    </div>`;
+  }).join('');
+}
+
+function renderLeaderboardStandings(rows) {
+  const el = document.getElementById('leaderboardTable');
+  if (!el) return;
+
+  el.innerHTML = `<table class="lb-table">
+    <thead><tr><th>POS</th><th>PLAYER</th><th>PTS</th><th>LAST GP</th><th>CHANGE</th></tr></thead>
+    <tbody>
+      ${rows.map((row, index) => {
+        const position = index + 1;
+        const last = getLeaderboardLatestPoints(row.playerId);
+        const previous = getLeaderboardPreviousPosition(row.playerId);
+        let movement = '—', cls = 'lb-change-same';
+        if (previous && previous !== position) {
+          const delta = previous - position;
+          movement = delta > 0 ? `↑ ${delta}` : `↓ ${Math.abs(delta)}`;
+          cls = delta > 0 ? 'lb-change-up' : 'lb-change-down';
+        }
+        const initial = String(row.playerName || row.name || '?').trim().charAt(0).toUpperCase();
+        return `<tr>
+          <td><strong>${position}</strong></td>
+          <td><div class="lb-player-cell"><div class="lb-avatar">${escapeHtml(initial)}</div><span>${escapeHtml(row.playerName || row.name || 'Player')}</span></div></td>
+          <td class="lb-points-cell">${Number(row.totalPoints || 0)}</td>
+          <td>${last === null ? '—' : `+${last}`}</td>
+          <td class="${cls}"><strong>${movement}</strong></td>
+        </tr>`;
+      }).join('')}
+    </tbody>
+  </table>`;
+}
+
+function getLeaderboardCompletedRaceIds() {
+  return races.map(r => r.raceId).filter(id => scores.some(s => s.raceId === id));
+}
+
+function getLeaderboardLatestPoints(playerId) {
+  const ids = getLeaderboardCompletedRaceIds();
+  if (!ids.length) return null;
+  const id = ids[ids.length - 1];
+  const score = scores.find(s => s.playerId === playerId && s.raceId === id);
+  return score ? Number(score.totalPoints || 0) : null;
+}
+
+function getLeaderboardPreviousPosition(playerId) {
+  const ids = getLeaderboardCompletedRaceIds();
+  if (ids.length < 2) return null;
+
+  const cumulative = {};
+  ids.slice(0, -1).forEach(raceId => {
+    scores.filter(s => s.raceId === raceId).forEach(s => {
+      cumulative[s.playerId] = (cumulative[s.playerId] || 0) + Number(s.totalPoints || 0);
+    });
   });
 
-  const scoredRaces = races.filter(r => raceMap[r.raceId]);
-  raceTable.innerHTML = `
-    <table class="data-table">
-      <thead><tr><th>Race</th>${rows.map(r => `<th class="number">${escapeHtml(r.playerName)}</th>`).join('')}</tr></thead>
-      <tbody>
-        ${scoredRaces.map(race => `
-          <tr><td><strong>${escapeHtml(race.race)}</strong></td>${rows.map(row => `<td class="number">${raceMap[race.raceId][row.playerId] ?? '—'}</td>`).join('')}</tr>
-        `).join('')}
-      </tbody>
-    </table>
-  `;
+  const ordered = Object.entries(cumulative).sort((a,b) => b[1] - a[1]).map(x => x[0]);
+  const index = ordered.indexOf(playerId);
+  return index < 0 ? null : index + 1;
 }
+
+function renderLeaderboardRaceGrid(rows) {
+  const head = document.getElementById('raceGridHead');
+  const body = document.getElementById('raceGridBody');
+  if (!head || !body) return;
+
+  const ids = getLeaderboardCompletedRaceIds();
+  const list = races.filter(r => ids.includes(r.raceId));
+
+  if (!list.length) {
+    head.innerHTML = '';
+    body.innerHTML = '<tr><td class="loading-row">Race scores will appear here once the first race is scored.</td></tr>';
+    return;
+  }
+
+  head.innerHTML = `<tr><th>PLAYER</th>${list.map(r => `<th><span class="lb-race-head">${escapeHtml(shortLeaderboardRaceName(r.race))}</span><span class="lb-race-sub">PTS</span></th>`).join('')}<th>TOTAL</th></tr>`;
+
+  body.innerHTML = rows.map(row => `<tr>
+    <td class="lb-grid-player">${escapeHtml(row.playerName || row.name || 'Player')}</td>
+    ${list.map(r => {
+      const s = scores.find(x => x.raceId === r.raceId && x.playerId === row.playerId);
+      return `<td>${s ? Number(s.totalPoints || 0) : '—'}</td>`;
+    }).join('')}
+    <td class="lb-grid-total">${Number(row.totalPoints || 0)}</td>
+  </tr>`).join('');
+}
+
+function shortLeaderboardRaceName(name) {
+  if (!name) return 'GP';
+  return String(name).replace(/Grand Prix/ig, 'GP').replace(/\s+/g, ' ').trim().split(' ').slice(0, 2).join(' ');
+}
+
+function renderLeaderboardLatestRace() {
+  const title = document.getElementById('latestRaceTitle');
+  const list = document.getElementById('latestRaceScores');
+  if (!title || !list) return;
+
+  const ids = getLeaderboardCompletedRaceIds();
+  if (!ids.length) {
+    list.innerHTML = '<div class="loading-row">Race scores will appear here after the first race.</div>';
+    return;
+  }
+
+  const raceId = ids[ids.length - 1];
+  const race = races.find(r => r.raceId === raceId);
+  const result = scores.filter(s => s.raceId === raceId)
+    .sort((a,b) => Number(b.totalPoints || 0) - Number(a.totalPoints || 0));
+
+  title.textContent = race ? (race.race || 'Latest Grand Prix') : 'Latest Grand Prix';
+  list.innerHTML = result.map((s, i) => `<div class="latest-score-row">
+    <div class="latest-score-pos">P${i + 1}</div>
+    <div class="latest-score-name">${escapeHtml(s.playerName || 'Player')}</div>
+    <div class="latest-score-points">${Number(s.totalPoints || 0)}<span>PTS</span></div>
+  </div>`).join('');
+}
+
 
 function renderStatsPage() {
   if (currentPage !== 'stats') return;
