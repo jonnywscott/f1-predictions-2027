@@ -16,42 +16,7 @@
   src="https://accounts.google.com/gsi/client"
   async
   defer
->
-
-async function loadProfile() {
-  const response = await apiCall('profile');
-  if (!response || !response.ok || !response.profile) {
-    throw new Error('Could not load profile.');
-  }
-  const profile = response.profile;
-  window.currentProfile = profile;
-  const username = profile.username || profile.name || 'Player';
-  const usernameEl = document.getElementById('profileUsername');
-  const realNameEl = document.getElementById('profileRealName');
-  const emailEl = document.getElementById('profileEmail');
-  if (usernameEl) usernameEl.textContent = username;
-  if (realNameEl) realNameEl.textContent = profile.name || '';
-  if (emailEl) emailEl.textContent = profile.email || '';
-  const avatar = document.getElementById('profileAvatar');
-  const fallback = document.getElementById('profileAvatarFallback');
-  if (avatar && fallback) {
-    if (profile.profilePicture) {
-      avatar.src = profile.profilePicture;
-      avatar.style.display = 'block';
-      fallback.style.display = 'none';
-    } else {
-      avatar.style.display = 'none';
-      fallback.style.display = 'flex';
-      fallback.textContent = username.charAt(0).toUpperCase();
-    }
-  }
-}
-
-function openProfileSettings() {
-  alert('Personalisation settings will be added in the next step.');
-}
-
-</script>
+></script>
 
 <style>
 
@@ -1838,7 +1803,7 @@ main{
 
     <section id="predictionsPage" class="app-page hidden">
       <div class="page-heading">
-        <div><div class="eyebrow">PREDICTIONS</div><h1>Make your predictions</h1><p>Choose a Grand Prix and drag the drivers into your predicted finishing order.</p></div>
+        <div><div class="eyebrow">PREDICTIONS</div><h1>Make your predictions</h1><p>Choose a Grand Prix and set your qualifying prediction. Your qualifying order is also used for the race; on sprint weekends, your sprint qualifying order is also used for the sprint.</p></div>
       </div>
       <div id="playerSection">
 
@@ -1953,7 +1918,7 @@ Other Players
           </div>
           <div class="setting-row">
             <div><strong>Prediction input</strong><p>Choose how you want to enter your predictions.</p></div>
-            <button id="profileSettingsButton" class="primary-button" onclick="openProfileSettings()">Settings</button>
+            <button id="profileSettingsButton" class="primary-button" onclick="openProfileSettings()">Personalisation</button>
           </div>
         </div>
 
@@ -2162,6 +2127,55 @@ let currentPage = 'home';
 let scores = [];
 let scoresLoaded = false;
 let scoresLoading = false;
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+async function loadProfile() {
+
+  const response =
+    await apiCall('profile', {
+      session: sessionToken
+    });
+
+  if (!response || !response.ok || !response.profile) {
+    throw new Error('Could not load profile.');
+  }
+
+  const profile = response.profile;
+  window.currentProfile = profile;
+
+  const username = profile.username || profile.name || 'Player';
+
+  const usernameEl = document.getElementById('profileUsername');
+  const realNameEl = document.getElementById('profileRealName');
+  const emailEl = document.getElementById('profileEmail');
+
+  if (usernameEl) usernameEl.textContent = username;
+  if (realNameEl) realNameEl.textContent = profile.name || '';
+  if (emailEl) emailEl.textContent = profile.email || '';
+
+  const avatar = document.getElementById('profileAvatar');
+  const fallback = document.getElementById('profileAvatarFallback');
+
+  if (avatar && fallback) {
+    if (profile.profilePicture) {
+      avatar.src = profile.profilePicture;
+      avatar.style.display = 'block';
+      fallback.style.display = 'none';
+    } else {
+      avatar.style.display = 'none';
+      fallback.style.display = 'flex';
+      fallback.textContent = username.charAt(0).toUpperCase();
+    }
+  }
+}
+
+function openProfileSettings() {
+  showMessage('Personalisation settings will be added next.', 'success');
+}
 
 
 /* =========================================================
@@ -2831,67 +2845,23 @@ renderOtherPlayers();
 
 function getTabsForRace() {
 
-if (
-currentRace &&
-isTrue(
-currentRace.sprint
-)
-) {
+  const tabs = [
+    {
+      id: 'qualifying',
+      name: 'Qualifying + Race'
+    }
+  ];
 
-return [
+  if (currentRace && isTrue(currentRace.sprint)) {
+    tabs.push({
+      id: 'sprintQualifying',
+      name: 'Sprint Qualifying + Sprint'
+    });
+  }
 
-{
-id:
-'qualifying',
-name:
-'Qualifying'
-},
-
-{
-id:
-'sprintQualifying',
-name:
-'Sprint Qualifying'
-},
-
-{
-id:
-'sprint',
-name:
-'Sprint'
-},
-
-{
-id:
-'race',
-name:
-'Race'
+  return tabs;
 }
 
-];
-
-}
-
-
-return [
-
-{
-id:
-'qualifying',
-name:
-'Qualifying'
-},
-
-{
-id:
-'race',
-name:
-'Race'
-}
-
-];
-
-}
 
 
 function renderTabs() {
@@ -3683,109 +3653,54 @@ function buildPredictionPayload() {
 
   const orders = {};
 
-  getTabsForRace()
-    .forEach(tab => {
+  getTabsForRace().forEach(tab => {
 
-      if (tab.id === currentTab) {
+    if (tab.id === currentTab) {
 
-        const list =
-          document.querySelectorAll(
-            '#predictionList .driver'
-          );
+      const list = document.querySelectorAll('#predictionList .driver');
 
-        orders[tab.id] =
-          [...list].map(
-            (el, index) => ({
-              driverId: el.dataset.driverId,
-              position: index + 1
-            })
-          );
+      orders[tab.id] = [...list].map((element, index) => ({
+        driverId: element.dataset.driverId,
+        position: index + 1
+      }));
 
-      } else {
+    } else {
 
-        const saved =
-          getSavedOrder(tab.id);
+      const saved = getSavedOrder(tab.id);
 
-        /*
-         * Only reuse a saved order if it is complete.
-         * Partial/old data is treated as unsubmitted.
-         */
-        orders[tab.id] =
-          saved.length === drivers.length
-            ? saved.map(
-                (driver, index) => ({
-                  driverId: driver.driverId,
-                  position: index + 1
-                })
-              )
-            : [];
-
-      }
-
-    });
-
-  return drivers.map(
-    driver => {
-
-      const q =
-        orders.qualifying &&
-        orders.qualifying.find(
-          x =>
-            x.driverId === driver.driverId
-        );
-
-      const sq =
-        orders.sprintQualifying &&
-        orders.sprintQualifying.find(
-          x =>
-            x.driverId === driver.driverId
-        );
-
-      const s =
-        orders.sprint &&
-        orders.sprint.find(
-          x =>
-            x.driverId === driver.driverId
-        );
-
-      const r =
-        orders.race &&
-        orders.race.find(
-          x =>
-            x.driverId === driver.driverId
-        );
-
-      const result = {
-        driverId: driver.driverId
-      };
-
-      /*
-       * Do NOT send '' for an unsubmitted session.
-       * Apps Script Number('') becomes 0, which is then
-       * rejected as an invalid position by the backend.
-       * Omitting the property means the backend ignores it.
-       */
-      if (q) {
-        result.qualifyingPosition = q.position;
-      }
-
-      if (sq) {
-        result.sprintQualifyingPosition = sq.position;
-      }
-
-      if (s) {
-        result.sprintPosition = s.position;
-      }
-
-      if (r) {
-        result.racePosition = r.position;
-      }
-
-      return result;
-
+      orders[tab.id] = saved.length === drivers.length
+        ? saved.map((driver, index) => ({
+            driverId: driver.driverId,
+            position: index + 1
+          }))
+        : [];
     }
-  );
+  });
 
+  return drivers.map(driver => {
+
+    const result = {
+      driverId: driver.driverId
+    };
+
+    const qualifying = orders.qualifying && orders.qualifying.find(
+      x => x.driverId === driver.driverId
+    );
+
+    const sprintQualifying = orders.sprintQualifying && orders.sprintQualifying.find(
+      x => x.driverId === driver.driverId
+    );
+
+    if (qualifying) {
+      result.qualifyingPosition = qualifying.position;
+    }
+
+    if (sprintQualifying) {
+      result.sprintQualifyingPosition = sprintQualifying.position;
+    }
+
+    return result;
+  });
 }
 
 
@@ -4107,7 +4022,7 @@ player.name
 <div class="other-grid">
 
 ${renderOtherSection(
-'Qualifying',
+'Qualifying + Race',
 byType.qualifying
 )}
 
