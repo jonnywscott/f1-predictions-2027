@@ -1707,6 +1707,26 @@ main{
 .empty-state{padding:20px;border-radius:12px;background:var(--soft,#f4f5f7);color:var(--muted,#72757d)}
 @media(max-width:800px){.profile-grid{grid-template-columns:1fr}.profile-stats-card,.profile-achievements-card{grid-column:auto}.stats-grid{grid-template-columns:1fr 1fr}.achievements-grid{grid-template-columns:1fr}}
 
+
+.admin-management-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.admin-section-title{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:18px}
+.admin-section-title h2{margin:4px 0 0}
+.admin-management-list{display:flex;flex-direction:column;gap:8px}
+.admin-management-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafafa}
+.admin-management-row strong{display:block}.admin-management-row small{display:block;color:var(--muted);margin-top:4px}
+.admin-row-actions{display:flex;gap:8px;flex-wrap:wrap}.admin-row-actions button{border:1px solid var(--line);background:white;border-radius:8px;padding:8px 10px;cursor:pointer;font-weight:700}.admin-row-actions button:hover{border-color:#bbb}
+.admin-editor{padding:16px;margin-bottom:16px;border:1px solid #ddd;border-radius:12px;background:#f8f8f9}
+.admin-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-field{display:flex;flex-direction:column;gap:6px}.admin-field.full{grid-column:1/-1}.admin-field label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.admin-field input,.admin-field select{width:100%;padding:10px 11px;border:1px solid #d7d8dc;border-radius:8px;background:white}.admin-checkbox{display:flex;align-items:center;gap:8px;margin-top:8px}.admin-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+@media(max-width:850px){.admin-management-grid{grid-template-columns:1fr}.admin-editor-grid{grid-template-columns:1fr}.admin-field.full{grid-column:auto}}
+
+
+/* Admin management controls */
+.admin-quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 4px}
+.admin-quick-button{border:1px solid #ddd;background:#fff;color:#222;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer}
+.admin-quick-button:hover,.admin-quick-button.active{background:#111;color:#fff;border-color:#111}
+.admin-management-grid{scroll-margin-top:30px}
+#adminResultsArea{scroll-margin-top:30px}
+.admin-management-card{min-height:180px}
 </style>
 
 </head>
@@ -1968,11 +1988,11 @@ Other Players
 <div>
 
 <h2>
-⚙️ Admin Results
+⚙️ Admin Panel
 </h2>
 
 <div class="race-info">
-Enter the actual session results.
+Manage races, drivers and enter official session results.
 </div>
 
 </div>
@@ -1983,8 +2003,13 @@ ADMIN
 
 </div>
 
+<div class="admin-quick-actions">
+  <button class="admin-quick-button" onclick="document.getElementById('adminRacesTable').scrollIntoView({behavior:'smooth',block:'start'})">🏁 Race Management</button>
+  <button class="admin-quick-button" onclick="document.getElementById('adminDriversTable').scrollIntoView({behavior:'smooth',block:'start'})">🏎️ Driver Management</button>
+  <button class="admin-quick-button active" onclick="document.getElementById('adminResultsArea').scrollIntoView({behavior:'smooth',block:'start'})">📋 Results</button>
+</div>
 
-<div class="race-header">
+<div id="adminResultsArea" class="race-header">
 
 <select
   id="adminRaceSelect"
@@ -2080,6 +2105,21 @@ Save Results
 
 
 </div>
+
+        <div id="adminManagementArea" class="admin-management-grid">
+          <div class="card admin-management-card">
+            <div class="admin-section-title"><div><div class="eyebrow">RACE MANAGEMENT</div><h2>Races</h2></div><button class="primary-button" onclick="newAdminRace()">+ Add Race</button></div>
+            <div id="adminRaceEditor" class="admin-editor hidden"></div>
+            <div id="adminRacesTable" class="admin-management-list"><div class="loading-row">Loading races...</div></div>
+          </div>
+
+          <div class="card admin-management-card">
+            <div class="admin-section-title"><div><div class="eyebrow">DRIVER MANAGEMENT</div><h2>Drivers</h2></div><button class="primary-button" onclick="newAdminDriver()">+ Add Driver</button></div>
+            <div id="adminDriverEditor" class="admin-editor hidden"></div>
+            <div id="adminDriversTable" class="admin-management-list"><div class="loading-row">Loading drivers...</div></div>
+          </div>
+        </div>
+
       </div>
     </section>
   </div>
@@ -2628,6 +2668,18 @@ message
 ? 'block'
 : 'none';
 
+}
+
+
+async function refreshActiveData(){
+  const [raceData,driverData]=await Promise.all([
+    apiCall('races',{session:sessionToken}),
+    apiCall('drivers',{session:sessionToken})
+  ]);
+  races=raceData.races||[];
+  drivers=driverData.drivers||[];
+  if(currentRace){currentRace=races.find(r=>r.raceId===currentRace.raceId)||races[0]||null;}
+  if(currentAdminRace){currentAdminRace=races.find(r=>r.raceId===currentAdminRace.raceId)||races[0]||null;}
 }
 
 
@@ -4305,6 +4357,7 @@ races[0];
 renderAdminSessions();
 
 await refreshAdminResults();
+await loadAdminManagement();
 
 }
 
@@ -4801,6 +4854,86 @@ button.textContent =
 }
 
 
+
+
+/* =========================================================
+   ADMIN RACE + DRIVER MANAGEMENT
+========================================================= */
+
+async function loadAdminManagement(){
+  try {
+    const [raceData,driverData]=await Promise.all([
+      apiCall('adminRaces',{session:sessionToken}),
+      apiCall('adminDrivers',{session:sessionToken})
+    ]);
+    window.adminRaces = raceData.races || [];
+    window.adminDrivers = driverData.drivers || [];
+    renderAdminRaces();
+    renderAdminDrivers();
+  } catch(error) {
+    console.error('Admin management failed:', error);
+    const raceEl=document.getElementById('adminRacesTable');
+    const driverEl=document.getElementById('adminDriversTable');
+    if(raceEl) raceEl.innerHTML='<div class="loading-row">Could not load race management. '+escapeHtml(error.message||'Unknown error')+'</div>';
+    if(driverEl) driverEl.innerHTML='<div class="loading-row">Could not load driver management. '+escapeHtml(error.message||'Unknown error')+'</div>';
+  }
+}
+
+function escapeAttr(value){
+  return String(value ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function toDateTimeLocal(value){
+  if(!value) return '';
+  const d=new Date(value); if(Number.isNaN(d.getTime())) return '';
+  const pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function renderAdminRaces(){
+  const el=document.getElementById('adminRacesTable'); if(!el) return;
+  if(!window.adminRaces?.length){el.innerHTML='<div class="loading-row">No races configured.</div>';return;}
+  el.innerHTML=window.adminRaces.map(r=>`<div class="admin-management-row">
+    <div><strong>${escapeHtml(r.race)}</strong><small>${escapeHtml(r.location||'No location')} · ${r.sprint?'Sprint weekend':'Grand Prix weekend'} · ${r.active?'Active':'Inactive'}</small></div>
+    <div class="admin-row-actions"><button onclick="editAdminRace('${escapeAttr(r.raceId)}')">Edit</button><button onclick="toggleAdminRace('${escapeAttr(r.raceId)}')">${r.active?'Deactivate':'Activate'}</button></div>
+  </div>`).join('');
+}
+
+function renderAdminDrivers(){
+  const el=document.getElementById('adminDriversTable'); if(!el) return;
+  if(!window.adminDrivers?.length){el.innerHTML='<div class="loading-row">No drivers configured.</div>';return;}
+  el.innerHTML=window.adminDrivers.map(d=>`<div class="admin-management-row">
+    <div><strong>${escapeHtml(d.driver)}</strong><small>${escapeHtml(d.team||'No team')} · ID: ${escapeHtml(d.driverId)} · ${d.active?'Active':'Inactive'}</small></div>
+    <div class="admin-row-actions"><button onclick="editAdminDriver('${escapeAttr(d.driverId)}')">Edit</button><button onclick="toggleAdminDriver('${escapeAttr(d.driverId)}')">${d.active?'Deactivate':'Activate'}</button></div>
+  </div>`).join('');
+}
+
+function raceEditorHtml(r={}){
+  return `<div class="admin-editor-grid">
+    <div class="admin-field"><label>Race ID</label><input id="editRaceId" value="${escapeAttr(r.raceId||'')}" ${r.raceId?'readonly':''}></div>
+    <div class="admin-field"><label>Race Name</label><input id="editRaceName" value="${escapeAttr(r.race||'')}"></div>
+    <div class="admin-field"><label>Location</label><input id="editRaceLocation" value="${escapeAttr(r.location||'')}"></div>
+    <div class="admin-field"><label>Qualifying Start</label><input type="datetime-local" id="editRaceQualifying" value="${toDateTimeLocal(r.qualifyingStart)}"></div>
+    <div class="admin-field"><label>Race Start</label><input type="datetime-local" id="editRaceStart" value="${toDateTimeLocal(r.raceStart)}"></div>
+    <div class="admin-field"><label>Sprint Qualifying Start</label><input type="datetime-local" id="editRaceSprintQualifying" value="${toDateTimeLocal(r.sprintQualifyingStart)}"></div>
+    <div class="admin-field"><label>Sprint Start</label><input type="datetime-local" id="editRaceSprint" value="${toDateTimeLocal(r.sprintStart)}"></div>
+    <div class="admin-field"><label>Options</label><label class="admin-checkbox"><input type="checkbox" id="editRaceIsSprint" ${r.sprint?'checked':''}> Sprint weekend</label><label class="admin-checkbox"><input type="checkbox" id="editRaceActive" ${r.active!==false?'checked':''}> Active</label></div>
+  </div><div class="admin-editor-actions"><button class="secondary-button" onclick="closeRaceEditor()">Cancel</button><button class="primary-button" onclick="saveAdminRace()">Save Race</button></div>`;
+}
+function newAdminRace(){const e=document.getElementById('adminRaceEditor');e.classList.remove('hidden');e.innerHTML=raceEditorHtml();e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function editAdminRace(id){const r=window.adminRaces.find(x=>x.raceId===id);if(!r)return;const e=document.getElementById('adminRaceEditor');e.classList.remove('hidden');e.innerHTML=raceEditorHtml(r);e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function closeRaceEditor(){const e=document.getElementById('adminRaceEditor');e.classList.add('hidden');e.innerHTML='';}
+async function saveAdminRace(){
+  const p={session:sessionToken,raceId:document.getElementById('editRaceId').value,race:document.getElementById('editRaceName').value,location:document.getElementById('editRaceLocation').value,qualifyingStart:document.getElementById('editRaceQualifying').value,raceStart:document.getElementById('editRaceStart').value,sprintQualifyingStart:document.getElementById('editRaceSprintQualifying').value,sprintStart:document.getElementById('editRaceSprint').value,sprint:document.getElementById('editRaceIsSprint').checked,active:document.getElementById('editRaceActive').checked};
+  try{await apiCall('adminSaveRace',p);showMessage('Race saved successfully.','success');closeRaceEditor();await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}
+}
+async function toggleAdminRace(id){const r=window.adminRaces.find(x=>x.raceId===id);if(!r)return;try{await apiCall('adminSaveRace',{session:sessionToken,raceId:r.raceId,race:r.race,location:r.location,qualifyingStart:r.qualifyingStart,raceStart:r.raceStart,sprintQualifyingStart:r.sprintQualifyingStart,sprintStart:r.sprintStart,sprint:r.sprint,active:!r.active});showMessage('Race status updated.','success');await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}}
+
+function driverEditorHtml(d={}){return `<div class="admin-editor-grid"><div class="admin-field"><label>Driver ID</label><input id="editDriverId" value="${escapeAttr(d.driverId||'')}"></div><div class="admin-field"><label>Driver Name</label><input id="editDriverName" value="${escapeAttr(d.driver||'')}"></div><div class="admin-field"><label>Team</label><input id="editDriverTeam" value="${escapeAttr(d.team||'')}"></div><div class="admin-field"><label>Options</label><label class="admin-checkbox"><input type="checkbox" id="editDriverActive" ${d.active!==false?'checked':''}> Active</label></div></div><div class="admin-editor-actions"><button class="secondary-button" onclick="closeDriverEditor()">Cancel</button><button class="primary-button" onclick="saveAdminDriver()">Save Driver</button></div>`;}
+function newAdminDriver(){const e=document.getElementById('adminDriverEditor');e.classList.remove('hidden');e.innerHTML=driverEditorHtml();e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function editAdminDriver(id){const d=window.adminDrivers.find(x=>x.driverId===id);if(!d)return;const e=document.getElementById('adminDriverEditor');e.classList.remove('hidden');e.innerHTML=driverEditorHtml(d);e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function closeDriverEditor(){const e=document.getElementById('adminDriverEditor');e.classList.add('hidden');e.innerHTML='';}
+async function saveAdminDriver(){const p={session:sessionToken,driverId:document.getElementById('editDriverId').value,driver:document.getElementById('editDriverName').value,team:document.getElementById('editDriverTeam').value,active:document.getElementById('editDriverActive').checked};try{await apiCall('adminSaveDriver',p);showMessage('Driver saved successfully.','success');closeDriverEditor();await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}}
+async function toggleAdminDriver(id){const d=window.adminDrivers.find(x=>x.driverId===id);if(!d)return;try{await apiCall('adminSaveDriver',{session:sessionToken,driverId:d.driverId,driver:d.driver,team:d.team,active:!d.active});showMessage('Driver status updated.','success');await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}}
 
 /* =========================================================
    NAVIGATION + DASHBOARD
