@@ -1727,6 +1727,36 @@ main{
 .admin-management-grid{scroll-margin-top:30px}
 #adminResultsArea{scroll-margin-top:30px}
 .admin-management-card{min-height:180px}
+
+
+/* ----- Season calendar / race detail UX ----- */
+.race-calendar-button{
+  display:inline-flex;align-items:center;gap:12px;padding:12px 16px;border:1px solid rgba(255,255,255,.14);
+  border-radius:12px;background:#1b1d22;color:#fff;font-weight:850;cursor:pointer;transition:.18s ease;
+}
+.race-calendar-button:hover{background:#24272d;transform:translateY(-1px)}
+.season-calendar{display:grid;gap:12px}
+.calendar-race-card{
+  width:100%;display:grid;grid-template-columns:58px 1fr auto;gap:18px;align-items:center;text-align:left;
+  padding:18px 20px;border:1px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;
+  box-shadow:0 5px 20px rgba(16,17,20,.045);transition:.18s ease;color:var(--ink);
+}
+.calendar-race-card:hover{transform:translateY(-2px);border-color:#cfd1d6;box-shadow:0 10px 28px rgba(16,17,20,.08)}
+.calendar-race-card.completed{opacity:.82}
+.calendar-round{font-size:13px;font-weight:950;color:#a0a3aa;letter-spacing:.08em}
+.calendar-topline{display:flex;gap:7px;align-items:center;margin-bottom:6px}
+.calendar-status,.calendar-sprint{font-size:10px;font-weight:950;letter-spacing:.09em;text-transform:uppercase;padding:5px 8px;border-radius:999px;background:#f0f1f3;color:#6d7178}
+.calendar-status.live{background:#fff0ef;color:#c21d17}
+.calendar-status.completed{background:#f1f2f4;color:#70747b}
+.calendar-sprint{background:#111318;color:#fff}
+.calendar-name{font-size:19px;font-weight:900;letter-spacing:-.3px}
+.calendar-meta{margin-top:5px;color:#7a7e86;font-size:13px}.calendar-meta span{padding:0 5px;color:#c0c2c6}
+.calendar-action{display:flex;flex-direction:column;align-items:flex-end;gap:5px;font-size:13px}.calendar-action strong{white-space:nowrap}.calendar-complete-note{color:#898d94;font-size:11px}
+.race-detail-hero{display:flex;justify-content:space-between;gap:20px;align-items:center;background:#111318;color:#fff;border-color:#202228}
+.race-detail-hero h2{margin:5px 0 7px;font-size:30px}.race-detail-hero p{margin:0;color:#9da1a9}.race-detail-score{min-width:100px;text-align:center;padding:15px;border:1px solid rgba(255,255,255,.12);border-radius:14px;background:#1b1d22}.race-detail-score span{display:block;color:#a5a8af;font-size:11px;text-transform:uppercase;letter-spacing:.08em}.race-detail-score strong{display:block;font-size:30px;margin-top:2px}
+.race-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.race-detail-list{display:grid;gap:6px}.race-detail-row{display:grid;grid-template-columns:38px 1fr;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:#f5f6f7}.race-detail-position{font-weight:950;color:#858990;text-align:center}.race-detail-row strong{display:block;font-size:14px}.race-detail-row small{display:block;color:#8b8f96;margin-top:2px}
+@media(max-width:700px){.calendar-race-card{grid-template-columns:38px 1fr}.calendar-action{grid-column:2;align-items:flex-start}.race-detail-grid{grid-template-columns:1fr}.race-detail-hero{align-items:flex-start;flex-direction:column}.race-calendar-button{width:100%;justify-content:space-between}}
+
 </style>
 
 </head>
@@ -1749,6 +1779,7 @@ main{
     <nav id="mainNav" class="main-nav">
       <button class="nav-link active" data-page="home" onclick="showPage('home')">Home</button>
       <button class="nav-link" data-page="predictions" onclick="showPage('predictions')">Predictions</button>
+      <button class="nav-link" data-page="calendar" onclick="showPage('calendar')">Season Calendar</button>
   <button class="nav-link" data-page="profile" onclick="showPage('profile')">Profile</button>
       <button class="nav-link" data-page="leaderboard" onclick="showPage('leaderboard')">Leaderboard</button>
       <button class="nav-link" data-page="stats" onclick="showPage('stats')">Stats</button>
@@ -1848,10 +1879,10 @@ Loading...
 
 </div>
 
-<select
-  id="raceSelect"
-  onchange="changeRace()"
-></select>
+<button class="race-calendar-button" onclick="showPage('calendar')">
+  <span>Season Calendar</span>
+  <span aria-hidden="true">→</span>
+</button>
 
 </div>
 
@@ -1912,6 +1943,25 @@ Other Players
 
 </div>
       </div>
+    </section>
+
+    <section id="calendarPage" class="app-page hidden">
+      <div class="page-heading">
+        <div>
+          <div class="eyebrow">2027 SEASON</div>
+          <h1>Season Calendar</h1>
+          <p>Explore every Grand Prix weekend. Upcoming races are available for predictions; completed races open a read-only breakdown of your predictions and the official results.</p>
+        </div>
+      </div>
+      <div id="seasonCalendar" class="season-calendar"></div>
+    </section>
+
+    <section id="raceDetailPage" class="app-page hidden">
+      <div class="page-heading">
+        <div><div class="eyebrow">RACE WEEKEND</div><h1 id="raceDetailTitle">Race Weekend</h1><p id="raceDetailSubtitle"></p></div>
+        <button class="secondary-button" onclick="showPage('calendar')">← Season Calendar</button>
+      </div>
+      <div id="raceDetailContent"></div>
     </section>
 
     <section id="profilePage" class="app-page hidden">
@@ -2149,6 +2199,7 @@ let drivers = [];
 let predictions = [];
 
 let results = [];
+let raceResults = [];
 
 let currentRace = null;
 
@@ -2678,7 +2729,7 @@ async function refreshActiveData(){
   ]);
   races=raceData.races||[];
   drivers=driverData.drivers||[];
-  if(currentRace){currentRace=races.find(r=>r.raceId===currentRace.raceId)||races[0]||null;}
+  if(currentRace){currentRace=races.find(r=>r.raceId===currentRace.raceId)||getNextPredictionRace()||races[0]||null;} else { currentRace=getNextPredictionRace()||races[0]||null; }
   if(currentAdminRace){currentAdminRace=races.find(r=>r.raceId===currentAdminRace.raceId)||races[0]||null;}
 }
 
@@ -2750,9 +2801,20 @@ async function loadApp() {
     predictions =
       predictionData.predictions || [];
 
-    console.log('4. Setting current race...');
+    console.log('4. Loading official results...');
 
-    currentRace = races[0];
+    const resultsData = await apiCall(
+      'results',
+      {
+        session: sessionToken
+      }
+    );
+
+    raceResults = resultsData.races || [];
+
+    console.log('5. Setting current race...');
+
+    currentRace = getNextPredictionRace() || races[0];
 
     if (!currentRace || !currentRace.raceId) {
       throw new Error(
@@ -2793,54 +2855,105 @@ async function loadApp() {
    PLAYER RACES
 ========================================================= */
 
-function populateRaceSelector() {
-
-const select =
-document.getElementById(
-'raceSelect'
-);
-
-select.innerHTML = '';
-
-races.forEach(race => {
-
-const option =
-document.createElement(
-'option'
-);
-
-option.value =
-race.raceId;
-
-option.textContent =
-race.race;
-
-select.appendChild(
-option
-);
-
-});
-
+function isRaceOccurred(race) {
+  if (!race || !race.raceStart) return false;
+  const time = new Date(race.raceStart).getTime();
+  return Number.isFinite(time) && time <= Date.now();
 }
 
+function getNextPredictionRace() {
+  return races.find(race => !isRaceOccurred(race)) || null;
+}
+
+function getRaceStatus(race) {
+  if (isRaceOccurred(race)) return 'completed';
+  const now = Date.now();
+  const qualifying = race.qualifyingStart ? new Date(race.qualifyingStart).getTime() : Infinity;
+  const raceStart = race.raceStart ? new Date(race.raceStart).getTime() : Infinity;
+  if (Number.isFinite(qualifying) && now >= qualifying && now < raceStart) return 'live';
+  return 'upcoming';
+}
+
+function getRaceResult(raceId) {
+  return raceResults.find(item => item.raceId === raceId) || null;
+}
+
+function populateRaceSelector() {
+  renderSeasonCalendar();
+}
 
 function changeRace() {
+  // Kept for compatibility with older links/scripts. Past races are never opened in the prediction editor.
+  const select = document.getElementById('raceSelect');
+  if (!select) return;
+  const race = races.find(r => r.raceId === select.value);
+  if (race) openRace(race.raceId);
+}
 
-const raceId =
-document.getElementById(
-'raceSelect'
-).value;
+function openRace(raceId) {
+  const race = races.find(r => r.raceId === raceId);
+  if (!race) return;
 
+  if (isRaceOccurred(race)) {
+    renderRaceDetail(race);
+    showPage('raceDetail');
+    return;
+  }
 
-currentRace =
-races.find(
-r =>
-r.raceId === raceId
-);
+  currentRace = race;
+  currentTab = 'qualifying';
+  showPage('predictions');
+  renderRace();
+}
 
+function renderSeasonCalendar() {
+  const container = document.getElementById('seasonCalendar');
+  if (!container) return;
 
-renderRace();
+  if (!races.length) {
+    container.innerHTML = '<div class="card"><div class="loading-row">No races configured.</div></div>';
+    return;
+  }
 
+  container.innerHTML = races.map((race, index) => {
+    const status = getRaceStatus(race);
+    const result = getRaceResult(race.raceId);
+    const points = scores.find(s => s.raceId === race.raceId);
+    const action = status === 'completed' ? 'View weekend →' : 'Make predictions →';
+    const round = String(index + 1).padStart(2, '0');
+    const date = formatRaceRange(race);
+    const location = race.location || 'Location TBC';
+    const hasResult = !!(result && result.results && result.results.length);
+    const hasScore = !!points;
+
+    return `
+      <button class="calendar-race-card ${status}" onclick="openRace('${escapeAttr(race.raceId)}')">
+        <div class="calendar-round">${round}</div>
+        <div class="calendar-main">
+          <div class="calendar-topline">
+            <span class="calendar-status ${status}">${status === 'completed' ? 'Completed' : status === 'live' ? 'This weekend' : 'Upcoming'}</span>
+            ${isTrue(race.sprint) ? '<span class="calendar-sprint">SPRINT</span>' : ''}
+          </div>
+          <div class="calendar-name">${escapeHtml(race.race)}</div>
+          <div class="calendar-meta">${escapeHtml(date)} <span>•</span> ${escapeHtml(location)}</div>
+        </div>
+        <div class="calendar-action">
+          ${status === 'completed' ? `<span class="calendar-complete-note">${hasResult ? 'Results available' : hasScore ? 'Score available' : 'Weekend complete'}</span>` : ''}
+          <strong>${action}</strong>
+        </div>
+      </button>`;
+  }).join('');
+}
+
+function formatRaceRange(race) {
+  const values = [race.sprintQualifyingStart, race.sprintStart, race.qualifyingStart, race.raceStart]
+    .filter(Boolean).map(v => new Date(v)).filter(d => !Number.isNaN(d.getTime()));
+  if (!values.length) return 'Date TBC';
+  const start = new Date(Math.min(...values.map(d => d.getTime())));
+  const end = new Date(Math.max(...values.map(d => d.getTime())));
+  const fmtDay = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short' });
+  if (start.toDateString() === end.toDateString()) return fmtDay.format(start);
+  return `${fmtDay.format(start)} – ${fmtDay.format(end)}`;
 }
 
 
@@ -4999,9 +5112,84 @@ function toggleMenu() {
   if (nav) nav.classList.toggle('open');
 }
 
+function renderRaceDetail(race) {
+  const title = document.getElementById('raceDetailTitle');
+  const subtitle = document.getElementById('raceDetailSubtitle');
+  const content = document.getElementById('raceDetailContent');
+  if (!title || !subtitle || !content || !race) return;
+
+  const result = getRaceResult(race.raceId);
+  const raceScore = scores.find(s => s.raceId === race.raceId);
+  const qualifyingPrediction = getSavedOrderForRace(race.raceId, 'qualifying');
+  const sprintPrediction = getSavedOrderForRace(race.raceId, 'sprintQualifying');
+  const officialRace = result && result.results ? result.results.filter(r => Number.isInteger(Number(r.racePosition)) && Number(r.racePosition) > 0).sort((a,b) => Number(a.racePosition)-Number(b.racePosition)) : [];
+  const officialQuali = result && result.results ? result.results.filter(r => Number.isInteger(Number(r.qualifyingPosition)) && Number(r.qualifyingPosition) > 0).sort((a,b) => Number(a.qualifyingPosition)-Number(b.qualifyingPosition)) : [];
+
+  title.textContent = race.race || 'Race Weekend';
+  subtitle.textContent = `${formatRaceRange(race)} · ${race.location || 'Location TBC'}${isTrue(race.sprint) ? ' · Sprint weekend' : ''}`;
+
+  const scoreValue = raceScore ? Number(raceScore.totalPoints || 0) : 0;
+  const predictionList = qualifyingPrediction.length ? qualifyingPrediction : [];
+
+  content.innerHTML = `
+    <div class="race-detail-hero card">
+      <div>
+        <div class="eyebrow">YOUR WEEKEND</div>
+        <h2>${escapeHtml(race.race)}</h2>
+        <p>${isRaceOccurred(race) ? 'This race has finished. Your predictions and the official results are shown below.' : 'This race is not yet complete.'}</p>
+      </div>
+      <div class="race-detail-score"><span>Points</span><strong>${scoreValue}</strong></div>
+    </div>
+
+    <div class="race-detail-grid">
+      <div class="card">
+        <div class="section-heading-row"><div><div class="section-kicker">YOUR PREDICTION</div><h2>Qualifying + Race</h2></div></div>
+        ${renderRaceDetailList(predictionList, 'No qualifying prediction submitted.')}
+      </div>
+      ${isTrue(race.sprint) ? `<div class="card"><div class="section-heading-row"><div><div class="section-kicker">YOUR PREDICTION</div><h2>Sprint Qualifying + Sprint</h2></div></div>${renderRaceDetailList(sprintPrediction, 'No sprint prediction submitted.')}</div>` : ''}
+    </div>
+
+    <div class="race-detail-grid">
+      <div class="card">
+        <div class="section-heading-row"><div><div class="section-kicker">OFFICIAL RESULT</div><h2>Qualifying</h2></div></div>
+        ${renderRaceDetailList(officialQuali, officialQuali.length ? '' : 'Official qualifying results have not been added yet.', 'qualifyingPosition')}
+      </div>
+      <div class="card">
+        <div class="section-heading-row"><div><div class="section-kicker">OFFICIAL RESULT</div><h2>Race</h2></div></div>
+        ${renderRaceDetailList(officialRace, officialRace.length ? '' : 'Official race results have not been added yet.', 'racePosition')}
+      </div>
+    </div>`;
+}
+
+function getSavedOrderForRace(raceId, type) {
+  if (!currentUser) return [];
+  return predictions
+    .filter(p => p.raceId === raceId && p.playerId === currentUser.playerId)
+    .map(p => {
+      const raw = type === 'sprintQualifying' ? p.sprintQualifyingPosition : p.qualifyingPosition;
+      const position = Number(raw);
+      return { driverId: p.driverId, position };
+    })
+    .filter(p => Number.isInteger(p.position) && p.position > 0)
+    .sort((a,b) => a.position - b.position)
+    .map(p => drivers.find(d => d.driverId === p.driverId))
+    .filter(Boolean);
+}
+
+function renderRaceDetailList(items, emptyText, positionField) {
+  if (!items || !items.length) return `<div class="empty-state">${escapeHtml(emptyText || 'No data available.')}</div>`;
+  return `<div class="race-detail-list">${items.map((driver, index) => {
+    const pos = positionField ? Number(driver[positionField]) : index + 1;
+    return `<div class="race-detail-row"><span class="race-detail-position">${pos}</span><div><strong>${escapeHtml(driver.driver || '')}</strong><small>${escapeHtml(driver.team || '')}</small></div></div>`;
+  }).join('')}</div>`;
+}
+
 function showPage(page) {
   if (page === 'profile') {
     loadProfile().catch(error => console.error('Profile load failed:', error));
+  }
+  if (page === 'calendar') {
+    renderSeasonCalendar();
   }
   if (page === 'admin' && !isAdmin) return;
 
@@ -5069,6 +5257,7 @@ function renderHome() {
 
   renderHomeStanding();
   if (scoresLoaded) renderHomeLeaderboard();
+  renderSeasonCalendar();
 }
 
 async function ensureScoresLoaded() {
