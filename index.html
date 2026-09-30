@@ -662,70 +662,1071 @@ select {
 
 }
 
-.leaderboard-table-wrap {
-  overflow-x: auto;
-  margin-top: 12px;
-}
-
-.leaderboard-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 520px;
-}
-
-.leaderboard-table th,
-.leaderboard-table td {
-  padding: 11px 10px;
-  border-bottom: 1px solid #eee;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.leaderboard-table th:first-child,
-.leaderboard-table td:first-child {
-  text-align: left;
-}
-
-.leaderboard-table th {
-  font-size: 12px;
-  color: #777;
-  text-transform: uppercase;
-}
-
-.leaderboard-table .rank {
-  width: 45px;
-  text-align: center !important;
-  color: #777;
-}
-
-.leaderboard-table .player-name {
-  font-weight: 800;
-}
-
-.leaderboard-table .total {
-  font-weight: 800;
-}
-
-.leaderboard-note {
-  color: #777;
-  font-size: 13px;
-  margin-top: 8px;
-}
-
-.leaderboard-section {
-  margin-top: 24px;
-}
-
-.leaderboard-section h3 {
-  margin-bottom: 8px;
-}
-
 .hidden {
 
   display: none !important;
 
 }
 
+
+
+/* =========================================================
+   2027 UI REDESIGN
+========================================================= */
+
+:root {
+  --ink: #101114;
+  --muted: #72757d;
+  --line: #e7e8eb;
+  --surface: #ffffff;
+  --soft: #f4f5f7;
+  --accent: #e10600;
+  --accent-dark: #b80500;
+  --green: #138a4b;
+  --shadow: 0 12px 40px rgba(16,17,20,.08);
+}
+
+body {
+  background:
+    radial-gradient(circle at 50% -10%, rgba(225,6,0,.07), transparent 34%),
+    #f4f5f7;
+  color: var(--ink);
+}
+
+header {
+  background: rgba(12,13,15,.96);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  padding: 12px 20px;
+}
+
+.header-inner {
+  max-width: 1180px;
+  min-height: 56px;
+  gap: 20px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  color: white;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.brand-mark {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  background: var(--accent);
+  border-radius: 10px;
+  font-size: 19px;
+  box-shadow: 0 5px 18px rgba(225,6,0,.25);
+}
+
+.logo { font-size: 19px; letter-spacing: -.3px; }
+.season { font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-left: auto;
+}
+
+.nav-link {
+  border: 0;
+  background: transparent;
+  color: rgba(255,255,255,.68);
+  padding: 9px 13px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: .18s ease;
+}
+
+.nav-link:hover { color: white; background: rgba(255,255,255,.07); }
+.nav-link.active { color: white; background: rgba(255,255,255,.12); }
+.nav-link.admin-nav { color: #ffb5b2; }
+
+.user-box {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  padding-left: 10px;
+  border-left: 1px solid rgba(255,255,255,.12);
+}
+
+.user-box button {
+  border: 1px solid rgba(255,255,255,.13);
+  background: rgba(255,255,255,.07);
+  color: white;
+  border-radius: 8px;
+  padding: 8px 11px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.menu-toggle { display: none; }
+
+main { max-width: 1180px; margin: 30px auto 60px; padding: 0 18px; }
+.card { border: 1px solid var(--line); border-radius: 18px; padding: 24px; box-shadow: var(--shadow); }
+
+.app-page { animation: pageIn .22s ease; }
+@keyframes pageIn { from { opacity: .3; transform: translateY(5px); } to { opacity: 1; transform: none; } }
+
+.eyebrow, .section-kicker {
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.page-heading { margin: 6px 0 24px; }
+.page-heading h1 { font-size: clamp(30px, 4vw, 44px); margin: 7px 0 8px; letter-spacing: -1.5px; }
+.page-heading p { margin: 0; color: var(--muted); max-width: 620px; line-height: 1.55; }
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 360px;
+  padding: clamp(30px, 6vw, 62px);
+  border-radius: 24px;
+  color: white;
+  background: linear-gradient(118deg, #0d0e10 0%, #181a1e 60%, #090a0c 100%);
+  box-shadow: 0 20px 60px rgba(16,17,20,.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  isolation: isolate;
+}
+
+.hero-card:after {
+  content: '';
+  position: absolute;
+  inset: auto -10% -48% 34%;
+  height: 360px;
+  background: radial-gradient(circle, rgba(225,6,0,.55), transparent 68%);
+  z-index: -1;
+}
+
+.hero-copy { max-width: 650px; }
+.hero-copy h1 { font-size: clamp(42px, 6vw, 74px); line-height: .94; letter-spacing: -3px; margin: 12px 0 18px; }
+.hero-copy h1 span { color: #ff4a45; }
+.hero-copy p { color: rgba(255,255,255,.68); font-size: 16px; line-height: 1.55; margin: 0 0 25px; }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.hero-visual { text-align: right; min-width: 240px; opacity: .92; }
+.hero-number { font-size: clamp(70px, 12vw, 150px); line-height: .8; font-weight: 900; letter-spacing: -8px; color: rgba(255,255,255,.08); }
+.hero-line { height: 5px; width: 210px; margin: 24px 0 12px auto; background: linear-gradient(90deg, transparent, var(--accent)); transform: skewX(-25deg); }
+.hero-caption { font-size: 10px; font-weight: 900; letter-spacing: .18em; color: rgba(255,255,255,.45); }
+
+.primary-button { background: var(--accent); box-shadow: 0 7px 20px rgba(225,6,0,.24); padding: 13px 19px; border-radius: 10px; }
+.primary-button:hover { background: var(--accent-dark); }
+.secondary-button { border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.07); color: white; padding: 13px 19px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+
+.dashboard-grid { display: grid; grid-template-columns: 1.35fr .65fr; gap: 16px; margin-top: 16px; }
+.next-race-card, .my-standing-card { min-height: 225px; }
+.dashboard-race-name { font-size: 30px; font-weight: 900; letter-spacing: -.8px; margin: 9px 0 3px; }
+.muted { color: var(--muted); font-size: 14px; }
+.race-timeline { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 22px 0 12px; }
+.race-timeline div { background: var(--soft); border-radius: 11px; padding: 11px 12px; }
+.race-timeline span { display: block; font-size: 9px; color: var(--muted); font-weight: 900; letter-spacing: .12em; }
+.race-timeline strong { display: block; margin-top: 5px; font-size: 13px; }
+
+.standing-main { display: flex; align-items: baseline; gap: 10px; margin: 12px 0 4px; }
+.standing-position { font-size: 42px; font-weight: 900; }
+.standing-points { font-size: 21px; font-weight: 800; }
+.standing-label { color: var(--muted); font-size: 13px; }
+.standing-empty { color: var(--muted); padding: 18px 0; }
+
+.text-button { border: 0; padding: 0; background: transparent; color: var(--ink); font-weight: 900; cursor: pointer; font-size: 13px; }
+.text-button:hover { color: var(--accent); }
+
+.section-heading-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 15px; margin-bottom: 16px; }
+.section-heading-row h2 { margin: 4px 0 0; font-size: 22px; }
+.leaderboard-list { display: grid; gap: 6px; }
+.leaderboard-row { display: grid; grid-template-columns: 48px 1fr auto; align-items: center; gap: 12px; padding: 13px 12px; border-radius: 11px; }
+.leaderboard-row:hover { background: var(--soft); }
+.leaderboard-row.me { background: #fff2f1; }
+.rank-badge { font-weight: 900; font-size: 14px; }
+.player-cell { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+.player-dot { width: 8px; height: 8px; border-radius: 50%; background: #bfc2c8; }
+.player-dot.me { background: var(--accent); }
+.points-cell { font-weight: 900; font-size: 16px; }
+
+.table-wrap { overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; min-width: 560px; }
+.data-table th { text-align: left; color: var(--muted); font-size: 10px; letter-spacing: .11em; text-transform: uppercase; padding: 11px 12px; border-bottom: 1px solid var(--line); }
+.data-table td { padding: 14px 12px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.data-table tr:last-child td { border-bottom: 0; }
+.data-table .number { text-align: right; font-variant-numeric: tabular-nums; }
+.data-table .current-row { background: #fff6f5; }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 16px; }
+.stat-card { background: white; border: 1px solid var(--line); border-radius: 16px; padding: 20px; box-shadow: var(--shadow); }
+.stat-label { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .11em; text-transform: uppercase; }
+.stat-value { margin-top: 9px; font-size: 30px; font-weight: 900; letter-spacing: -1px; }
+.stat-sub { margin-top: 4px; color: var(--muted); font-size: 12px; }
+
+.loading-row { color: var(--muted); padding: 18px 5px; text-align: center; }
+
+.login-card { max-width: 520px; margin: 80px auto; text-align: center; padding: 42px; }
+.login-badge { width: 62px; height: 62px; display: grid; place-items: center; border-radius: 18px; background: #fff0ef; margin: 0 auto 20px; font-size: 28px; }
+.login-card h1 { font-size: 38px; letter-spacing: -1.5px; margin: 8px 0; }
+.login-card p { color: var(--muted); line-height: 1.6; }
+
+/* Keep the existing prediction/admin controls but give them the new visual language. */
+#predictionsPage .card, #adminPage .card { box-shadow: 0 8px 28px rgba(16,17,20,.055); }
+#predictionsPage .race-name { font-size: 29px; letter-spacing: -.7px; }
+#predictionsPage .tab.active { background: var(--accent); }
+#predictionsPage .driver { background: #fff; border-color: var(--line); }
+#predictionsPage .driver:hover { border-color: #cfd1d6; box-shadow: 0 4px 14px rgba(16,17,20,.06); }
+#predictionsPage .driver-list.drag-over, #adminPage .driver-list.drag-over { border-color: var(--accent); background: #fff7f6; }
+#predictionsPage .private-notice { background: #fff7f5; border-color: #ffd2cf; color: #7b2520; }
+#adminPage .admin-badge { background: var(--accent); }
+
+@media(max-width: 900px) {
+  .main-nav { order: 5; width: 100%; display: none; flex-direction: column; align-items: stretch; padding: 10px 0 2px; border-top: 1px solid rgba(255,255,255,.08); }
+  .main-nav.open { display: flex; }
+  .header-inner { flex-wrap: wrap; }
+  .menu-toggle { display: block; margin-left: auto; border: 0; background: rgba(255,255,255,.08); color: white; width: 40px; height: 40px; border-radius: 9px; font-size: 19px; }
+  .user-box { margin-left: 0; border-left: 0; padding-left: 0; }
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .hero-visual { display: none; }
+}
+
+@media(max-width: 650px) {
+  main { margin-top: 18px; padding: 0 12px; }
+  .hero-card { min-height: auto; padding: 30px 24px; }
+  .hero-copy h1 { font-size: 45px; letter-spacing: -2px; }
+  .dashboard-grid, .stat-grid { grid-template-columns: 1fr; }
+  .card { padding: 18px; border-radius: 15px; }
+  .page-heading h1 { font-size: 34px; }
+  .race-timeline { grid-template-columns: 1fr; }
+  .login-card { margin: 35px auto; padding: 30px 20px; }
+}
+
+
+/* =========================================================
+   F1 PREDICTIONS 2027 — V2 VISUAL REDESIGN
+   Presentation-only layer. Existing IDs/JS are preserved.
+   ========================================================= */
+
+:root{
+  --f1-red:#e10600;
+  --f1-red-dark:#b80500;
+  --ink:#111214;
+  --muted:#74777d;
+  --line:#e4e5e8;
+  --paper:#ffffff;
+  --surface:#f2f3f5;
+  --dark:#0c0d0f;
+  --dark-2:#15171b;
+}
+
+html{scroll-behavior:smooth}
+
+body{
+  background:
+    radial-gradient(circle at 85% 0%, rgba(225,6,0,.07), transparent 28rem),
+    linear-gradient(135deg,#f4f5f7 0%,#eceef1 100%);
+  color:var(--ink);
+  font-family:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+}
+
+/* ----- Header becomes a proper app sidebar ----- */
+
+header{
+  position:fixed;
+  inset:0 auto 0 0;
+  width:258px;
+  height:100vh;
+  padding:0;
+  background:
+    linear-gradient(180deg,#0a0b0d 0%,#121418 100%);
+  border-right:1px solid rgba(255,255,255,.08);
+  z-index:100;
+  box-shadow:18px 0 45px rgba(0,0,0,.08);
+}
+
+.header-inner{
+  width:100%;
+  max-width:none;
+  height:100%;
+  margin:0;
+  padding:28px 18px 20px;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
+  gap:0;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:8px 10px 30px;
+  color:#fff;
+  text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.09);
+}
+
+.brand-mark{
+  width:40px;
+  height:40px;
+  display:grid;
+  place-items:center;
+  background:var(--f1-red);
+  border-radius:11px;
+  font-size:20px;
+  box-shadow:0 8px 22px rgba(225,6,0,.28);
+}
+
+.logo{
+  font-size:17px;
+  line-height:1.05;
+  letter-spacing:-.02em;
+  font-weight:900;
+}
+
+.season{
+  margin-top:5px;
+  color:#8f939a;
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+/* nav */
+.main-nav{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+  padding:26px 0;
+}
+
+.nav-link{
+  position:relative;
+  width:100%;
+  border:0;
+  background:transparent;
+  color:#9b9ea5;
+  text-align:left;
+  padding:13px 14px 13px 16px;
+  border-radius:10px;
+  font-size:14px;
+  font-weight:750;
+  cursor:pointer;
+  transition:.18s ease;
+}
+
+.nav-link:hover{
+  color:#fff;
+  background:rgba(255,255,255,.055);
+}
+
+.nav-link.active{
+  color:#fff;
+  background:linear-gradient(90deg,rgba(225,6,0,.22),rgba(225,6,0,.07));
+}
+
+.nav-link.active:before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:8px;
+  bottom:8px;
+  width:3px;
+  border-radius:4px;
+  background:var(--f1-red);
+}
+
+.admin-nav{
+  margin-top:12px;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-radius:0;
+  padding-top:20px;
+}
+
+.user-box{
+  margin-top:auto;
+  display:flex !important;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:13px;
+  color:#fff;
+  background:rgba(255,255,255,.055);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:12px;
+}
+
+#userName{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:800;
+}
+
+#userBox button{
+  flex:none;
+  border:1px solid rgba(255,255,255,.12);
+  background:#24272c;
+  color:#fff;
+  border-radius:7px;
+  padding:7px 9px;
+  font-size:11px;
+  font-weight:800;
+}
+
+/* Hide hamburger on desktop */
+.menu-toggle{display:none!important}
+
+/* ----- Main canvas ----- */
+
+main{
+  max-width:none;
+  margin:0;
+  margin-left:258px;
+  min-height:100vh;
+  padding:42px clamp(24px,5vw,72px) 70px;
+}
+
+#app{
+  max-width:1180px;
+  margin:0 auto;
+}
+
+#message{
+  position:fixed;
+  top:22px;
+  right:28px;
+  z-index:200;
+  width:min(420px,calc(100vw - 40px));
+  box-shadow:0 16px 45px rgba(0,0,0,.15);
+}
+
+/* ----- Login ----- */
+
+#loginScreen{
+  max-width:620px;
+  margin:12vh auto;
+  padding:54px;
+  border-radius:24px;
+  text-align:left;
+  border:1px solid var(--line);
+  box-shadow:0 28px 80px rgba(0,0,0,.12);
+  position:relative;
+  overflow:hidden;
+}
+
+#loginScreen:before{
+  content:"";
+  position:absolute;
+  left:0;right:0;top:0;
+  height:7px;
+  background:linear-gradient(90deg,var(--f1-red) 0 72%,#222 72%);
+}
+
+.login-badge{
+  width:54px;
+  height:54px;
+  display:grid;
+  place-items:center;
+  background:#111;
+  border-radius:14px;
+  color:#fff;
+  font-size:24px;
+  margin-bottom:28px;
+}
+
+#loginScreen h1{
+  font-size:48px;
+  letter-spacing:-.055em;
+  line-height:.98;
+  margin:8px 0 18px;
+}
+
+#loginScreen p{
+  max-width:500px;
+  color:#656970;
+  font-size:16px;
+  line-height:1.7;
+}
+
+#googleButton{justify-content:flex-start;margin-top:30px}
+
+/* ----- Shared page headings ----- */
+
+.app-page{
+  animation:pageIn .25s ease both;
+}
+
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(7px)}
+  to{opacity:1;transform:none}
+}
+
+.page-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  margin-bottom:28px;
+  padding-bottom:24px;
+  border-bottom:1px solid var(--line);
+}
+
+.page-heading h1{
+  font-size:42px;
+  letter-spacing:-.045em;
+  margin:4px 0 7px;
+}
+
+.page-heading p{
+  color:var(--muted);
+  margin:0;
+}
+
+.eyebrow,.section-kicker{
+  color:var(--f1-red);
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.17em;
+  text-transform:uppercase;
+}
+
+/* ----- Cards ----- */
+
+.card{
+  background:rgba(255,255,255,.94);
+  border:1px solid rgba(0,0,0,.055);
+  border-radius:18px;
+  padding:24px;
+  margin-bottom:18px;
+  box-shadow:0 10px 35px rgba(20,24,30,.055);
+}
+
+/* ----- Home ----- */
+
+.hero-card{
+  min-height:365px;
+  margin-bottom:18px;
+  padding:46px 48px;
+  border-radius:24px;
+  color:#fff;
+  background:
+    radial-gradient(circle at 86% 20%,rgba(225,6,0,.45),transparent 25%),
+    linear-gradient(115deg,#0a0b0d 0%,#15171b 58%,#0c0d0f 100%);
+  position:relative;
+  overflow:hidden;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  border:1px solid #24262a;
+  box-shadow:0 25px 70px rgba(0,0,0,.18);
+}
+
+.hero-card:after{
+  content:"";
+  position:absolute;
+  right:-80px;
+  bottom:-110px;
+  width:480px;
+  height:280px;
+  background:
+    repeating-linear-gradient(135deg,
+      rgba(255,255,255,.04) 0 14px,
+      transparent 14px 28px);
+  transform:skewX(-18deg);
+}
+
+.hero-copy{
+  position:relative;
+  z-index:2;
+  max-width:690px;
+}
+
+.hero-copy .eyebrow{color:#ff5a54}
+
+.hero-copy h1{
+  margin:13px 0 16px;
+  font-size:64px;
+  line-height:.91;
+  letter-spacing:-.065em;
+}
+
+.hero-copy h1 span{color:#fff}
+
+.hero-copy p{
+  max-width:560px;
+  margin:0 0 28px;
+  color:#b7bbc2;
+  font-size:16px;
+}
+
+.hero-actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.primary-button{
+  background:var(--f1-red);
+  border:0;
+  color:#fff;
+  padding:13px 20px;
+  border-radius:9px;
+  font-weight:900;
+  cursor:pointer;
+  box-shadow:0 10px 25px rgba(225,6,0,.22);
+}
+
+.primary-button:hover{background:#f20a03}
+
+.secondary-button{
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.07);
+  color:#fff;
+  padding:13px 20px;
+  border-radius:9px;
+  font-weight:850;
+  cursor:pointer;
+}
+
+.hero-visual{
+  display:flex!important;
+  flex-direction:column;
+  align-items:flex-end;
+  position:relative;
+  z-index:2;
+  opacity:1;
+}
+
+.hero-number{
+  font-size:150px;
+  line-height:.8;
+  font-weight:950;
+  letter-spacing:-.09em;
+  color:rgba(255,255,255,.075);
+}
+
+.hero-line{
+  width:210px;
+  height:5px;
+  margin:16px 0;
+  background:var(--f1-red);
+}
+
+.hero-caption{
+  color:#777b83;
+  font-size:10px;
+  letter-spacing:.25em;
+  font-weight:900;
+}
+
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.4fr .8fr;
+  gap:18px;
+}
+
+.next-race-card{
+  position:relative;
+  overflow:hidden;
+}
+
+.dashboard-race-name{
+  margin:8px 0 3px;
+  font-size:34px;
+  font-weight:950;
+  letter-spacing:-.045em;
+}
+
+.muted{color:var(--muted)}
+
+.race-timeline{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  margin:25px 0;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.race-timeline div{
+  background:#fafafa;
+  padding:16px;
+}
+
+.race-timeline span{
+  display:block;
+  color:#8b8e94;
+  font-size:9px;
+  letter-spacing:.14em;
+  font-weight:900;
+  margin-bottom:6px;
+}
+
+.race-timeline strong{font-size:14px}
+
+.standing-main{
+  display:flex;
+  align-items:baseline;
+  gap:9px;
+  margin:16px 0 4px;
+}
+
+.standing-position{
+  font-size:42px;
+  font-weight:950;
+  letter-spacing:-.06em;
+}
+
+.standing-points{
+  font-size:38px;
+  font-weight:950;
+  letter-spacing:-.05em;
+}
+
+.standing-label{
+  font-size:12px;
+  font-weight:800;
+  color:var(--muted);
+}
+
+/* ----- Leaderboard ----- */
+
+.leaderboard-row{
+  display:grid;
+  grid-template-columns:54px 1fr auto;
+  gap:14px;
+  align-items:center;
+  padding:14px 13px;
+  border-radius:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.leaderboard-row:last-child{border-bottom:0}
+
+.leaderboard-row.me{
+  background:#fff1f0;
+  border-left:3px solid var(--f1-red);
+}
+
+.rank-badge{font-weight:950;font-size:14px}
+
+.player-cell{font-weight:850}
+.player-dot{background:#c7c9cd}
+.player-dot.me{background:var(--f1-red)}
+.points-cell{font-weight:950}
+
+/* ----- Prediction page ----- */
+
+#predictionsPage .card:first-of-type{
+  background:#111318;
+  color:#fff;
+  border-color:#202228;
+}
+
+#predictionsPage .race-name{font-size:30px}
+#predictionsPage .race-info{color:#92969e}
+
+#predictionsPage select,
+#adminPage select{
+  min-width:180px;
+  background:#fff;
+  border:1px solid #d8dade;
+  border-radius:9px;
+}
+
+.tabs{
+  gap:6px;
+  padding:5px;
+  background:#eceef1;
+  border-radius:11px;
+}
+
+.tab{
+  background:transparent;
+  border-radius:8px;
+  color:#666a71;
+}
+
+.tab.active{
+  background:#111318;
+  color:#fff;
+  box-shadow:0 3px 9px rgba(0,0,0,.12);
+}
+
+.prediction-layout{
+  gap:18px;
+}
+
+.prediction-layout>div{
+  min-width:0;
+}
+
+.panel-title{
+  padding-bottom:12px;
+  border-bottom:1px solid var(--line);
+}
+
+.driver-list{
+  min-height:130px;
+  padding:10px;
+  border:1px dashed #d3d5d9;
+  border-radius:13px;
+  background:#f8f9fa;
+}
+
+.driver{
+  background:#fff;
+  border:1px solid #e1e3e6;
+  border-radius:10px;
+  padding:12px;
+  margin-bottom:7px;
+  box-shadow:0 2px 8px rgba(0,0,0,.035);
+}
+
+.driver:hover{
+  border-color:#c8cbd0;
+  transform:translateY(-1px);
+}
+
+.position{
+  width:32px;
+  color:#9a9da3;
+}
+
+.save-bar{
+  position:sticky;
+  bottom:18px;
+  padding-top:14px;
+  z-index:10;
+}
+
+.save-bar .primary-button{
+  min-width:150px;
+}
+
+/* ----- Tables ----- */
+
+.data-table th{
+  background:#f7f8f9;
+  padding:13px 12px;
+}
+
+.data-table td{
+  padding:15px 12px;
+}
+
+.data-table tbody tr:hover{background:#fafafa}
+.data-table .current-row{background:#fff1f0}
+
+/* ----- Stats ----- */
+
+.stat-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:14px;
+  margin-bottom:18px;
+}
+
+.stat-card{
+  padding:22px;
+  border-radius:16px;
+  background:#111318;
+  color:#fff;
+  border:1px solid #23252a;
+}
+
+.stat-label{
+  color:#92969d;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+
+.stat-value{
+  margin-top:15px;
+  font-size:38px;
+  font-weight:950;
+  letter-spacing:-.055em;
+}
+
+.stat-sub{
+  margin-top:4px;
+  color:#8e9299;
+  font-size:12px;
+}
+
+/* ----- Admin ----- */
+
+.admin-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
+}
+
+.admin-badge{
+  color:#fff;
+  background:var(--f1-red);
+  padding:7px 10px;
+  border-radius:6px;
+  font-size:10px;
+  font-weight:950;
+  letter-spacing:.12em;
+}
+
+.private-notice{
+  border:1px solid #ffd2cf;
+  background:#fff3f2;
+  color:#8d231e;
+  border-radius:10px;
+}
+
+/* ----- Mobile ----- */
+
+@media(max-width:900px){
+  header{
+    position:sticky;
+    width:100%;
+    height:auto;
+    inset:auto;
+  }
+
+  .header-inner{
+    height:auto;
+    padding:13px 16px;
+    flex-direction:row;
+    align-items:center;
+  }
+
+  .brand{
+    padding:0;
+    border:0;
+  }
+
+  .brand-mark{width:35px;height:35px}
+  .logo{font-size:15px}
+  .season{font-size:9px}
+
+  .menu-toggle{
+    display:block!important;
+    margin-left:auto;
+    border:1px solid rgba(255,255,255,.15);
+    background:#202328;
+    color:#fff;
+    border-radius:8px;
+    padding:9px 11px;
+    font-size:17px;
+  }
+
+  .main-nav{
+    display:none;
+    position:absolute;
+    top:100%;
+    left:0;right:0;
+    padding:10px;
+    background:#111318;
+    border-top:1px solid rgba(255,255,255,.08);
+    box-shadow:0 18px 30px rgba(0,0,0,.2);
+  }
+
+  .main-nav.open{display:flex}
+  .nav-link{text-align:left}
+  .admin-nav{margin-top:4px;border-top:0;padding-top:13px}
+
+  .user-box{
+    display:none!important;
+  }
+
+  main{
+    margin-left:0;
+    padding:24px 15px 55px;
+  }
+
+  .hero-card{
+    min-height:0;
+    padding:34px 25px;
+  }
+
+  .hero-copy h1{font-size:48px}
+  .hero-visual{display:none!important}
+
+  .dashboard-grid,
+  .stat-grid{
+    grid-template-columns:1fr;
+  }
+
+  .page-heading h1{font-size:34px}
+}
+
+@media(max-width:560px){
+  .hero-copy h1{font-size:39px}
+  .dashboard-race-name{font-size:27px}
+  .page-heading{align-items:flex-start}
+  .page-heading h1{font-size:31px}
+  .card{padding:18px}
+  #loginScreen{padding:34px 24px;margin:35px auto}
+  #loginScreen h1{font-size:38px}
+  .race-timeline{grid-template-columns:1fr}
+}
+
+
+
+/* Profile page */
+.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.profile-card{display:flex;align-items:center;gap:24px;min-height:180px}
+.profile-avatar-wrap{flex-shrink:0}
+.profile-avatar,.profile-avatar-fallback{width:96px;height:96px;border-radius:50%}
+.profile-avatar{object-fit:cover;display:none}
+.profile-avatar-fallback{display:flex;align-items:center;justify-content:center;font-size:34px;font-weight:800;background:var(--accent,#e10600);color:#fff}
+.profile-main h2{margin:0 0 6px}
+.profile-real-name,.profile-email{opacity:.65;margin-top:4px}
+.profile-stats-card,.profile-achievements-card{grid-column:1 / -1}
+.setting-row{display:flex;align-items:center;justify-content:space-between;gap:20px}
+.setting-row p{margin:5px 0 0;opacity:.65}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stat-box{padding:18px;border-radius:12px;background:rgba(16,17,20,.04)}
+.stat-box span{display:block;font-size:12px;opacity:.6;margin-bottom:8px}
+.stat-box strong{font-size:28px}
+.achievements-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.empty-state{padding:20px;border-radius:12px;background:var(--soft,#f4f5f7);color:var(--muted,#72757d)}
+@media(max-width:800px){.profile-grid{grid-template-columns:1fr}.profile-stats-card,.profile-achievements-card{grid-column:auto}.stats-grid{grid-template-columns:1fr 1fr}.achievements-grid{grid-template-columns:1fr}}
+
+
+.admin-management-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:20px}
+.admin-section-title{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:18px}
+.admin-section-title h2{margin:4px 0 0}
+.admin-management-list{display:flex;flex-direction:column;gap:8px}
+.admin-management-row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:14px;border:1px solid var(--line);border-radius:12px;background:#fafafa}
+.admin-management-row strong{display:block}.admin-management-row small{display:block;color:var(--muted);margin-top:4px}
+.admin-row-actions{display:flex;gap:8px;flex-wrap:wrap}.admin-row-actions button{border:1px solid var(--line);background:white;border-radius:8px;padding:8px 10px;cursor:pointer;font-weight:700}.admin-row-actions button:hover{border-color:#bbb}
+.admin-editor{padding:16px;margin-bottom:16px;border:1px solid #ddd;border-radius:12px;background:#f8f8f9}
+.admin-editor-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.admin-field{display:flex;flex-direction:column;gap:6px}.admin-field.full{grid-column:1/-1}.admin-field label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}.admin-field input,.admin-field select{width:100%;padding:10px 11px;border:1px solid #d7d8dc;border-radius:8px;background:white}.admin-checkbox{display:flex;align-items:center;gap:8px;margin-top:8px}.admin-editor-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+@media(max-width:850px){.admin-management-grid{grid-template-columns:1fr}.admin-editor-grid{grid-template-columns:1fr}.admin-field.full{grid-column:auto}}
+
+
+/* Admin management controls */
+.admin-quick-actions{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0 4px}
+.admin-quick-button{border:1px solid #ddd;background:#fff;color:#222;padding:10px 14px;border-radius:10px;font-weight:800;cursor:pointer}
+.admin-quick-button:hover,.admin-quick-button.active{background:#111;color:#fff;border-color:#111}
+.admin-management-grid{scroll-margin-top:30px}
+#adminResultsArea{scroll-margin-top:30px}
+.admin-management-card{min-height:180px}
 </style>
 
 </head>
@@ -733,80 +1734,98 @@ select {
 
 <body>
 
-
 <header>
+  <div class="header-inner">
+    <a class="brand" href="#home" onclick="showPage('home'); return false;">
+      <div class="brand-mark">🏁</div>
+      <div>
+        <div class="logo">F1 Predictions</div>
+        <div class="season">2027 Season</div>
+      </div>
+    </a>
 
-<div class="header-inner">
+    <button id="menuToggle" class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
 
-<div>
+    <nav id="mainNav" class="main-nav">
+      <button class="nav-link active" data-page="home" onclick="showPage('home')">Home</button>
+      <button class="nav-link" data-page="predictions" onclick="showPage('predictions')">Predictions</button>
+  <button class="nav-link" data-page="profile" onclick="showPage('profile')">Profile</button>
+      <button class="nav-link" data-page="leaderboard" onclick="showPage('leaderboard')">Leaderboard</button>
+      <button class="nav-link" data-page="stats" onclick="showPage('stats')">Stats</button>
+      <button id="adminNav" class="nav-link admin-nav hidden" data-page="admin" onclick="showPage('admin')">Admin</button>
+    </nav>
 
-<div class="logo">
-🏁 F1 Predictions
-</div>
-
-<div class="season">
-2027 Season
-</div>
-
-</div>
-
-<div id="userBox">
-
-<span id="userName"></span>
-
-<button onclick="logout()">
-Sign out
-</button>
-
-</div>
-
-</div>
-
+    <div id="userBox" class="user-box">
+      <span id="userName"></span>
+      <button onclick="logout()">Sign out</button>
+    </div>
+  </div>
 </header>
 
-
 <main>
+  <div id="loginScreen" class="login-card card">
+    <div class="login-badge">🏎️</div>
+    <div class="eyebrow">2027 SEASON</div>
+    <h1>F1 Predictions 2027</h1>
+    <p>Predict every qualifying session, sprint and Grand Prix — then see how you stack up against the others.</p>
+    <div id="googleButton"></div>
+    <div id="loginError" class="message error"></div>
+  </div>
 
+  <div id="app" class="hidden">
+    <div id="message" class="message"></div>
 
-<div
-  id="loginScreen"
-  class="card"
->
+    <section id="homePage" class="app-page">
+      <div id="homeHero" class="hero-card">
+        <div class="hero-copy">
+          <div class="eyebrow">WELCOME TO THE 2027 SEASON</div>
+          <h1>Make your call.<br><span>Beat the grid.</span></h1>
+          <p>Predict the order. Earn points for accuracy. Climb the championship.</p>
+          <div class="hero-actions">
+            <button class="primary-button" onclick="showPage('predictions')">Make Predictions <span>→</span></button>
+            <button class="secondary-button" onclick="showPage('leaderboard')">View Leaderboard</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-number">2027</div>
+          <div class="hero-line"></div>
+          <div class="hero-caption">PREDICT · COMPETE · WIN</div>
+        </div>
+      </div>
 
-<h1>
-F1 Predictions 2027
-</h1>
+      <div class="dashboard-grid">
+        <div class="card next-race-card">
+          <div class="section-kicker">NEXT RACE</div>
+          <div id="homeRaceName" class="dashboard-race-name">Loading...</div>
+          <div id="homeRaceInfo" class="muted">Loading race calendar...</div>
+          <div class="race-timeline">
+            <div><span>QUALIFYING</span><strong id="homeQualifyingDate">—</strong></div>
+            <div><span>RACE</span><strong id="homeRaceDate">—</strong></div>
+          </div>
+          <button class="text-button" onclick="showPage('predictions')">Open predictions →</button>
+        </div>
 
-<p>
-Make your predictions for qualifying,
-the sprint and the race.
-</p>
+        <div class="card my-standing-card">
+          <div class="section-kicker">YOUR CHAMPIONSHIP</div>
+          <div id="homeMyStanding" class="standing-empty">Loading...</div>
+          <button class="text-button" onclick="showPage('stats')">View your stats →</button>
+        </div>
+      </div>
 
-<div id="googleButton"></div>
+      <div class="card leaderboard-preview-card">
+        <div class="section-heading-row">
+          <div><div class="section-kicker">CHAMPIONSHIP</div><h2>Leaderboard</h2></div>
+          <button class="text-button" onclick="showPage('leaderboard')">Full leaderboard →</button>
+        </div>
+        <div id="homeLeaderboard" class="leaderboard-list"><div class="loading-row">Loading leaderboard...</div></div>
+      </div>
+    </section>
 
-<div
-  id="loginError"
-  class="message error"
-></div>
-
-</div>
-
-
-<div
-  id="app"
-  class="hidden"
->
-
-
-<div
-  id="message"
-  class="message"
-></div>
-
-
-<!-- PLAYER SECTION -->
-
-<div id="playerSection">
+    <section id="predictionsPage" class="app-page hidden">
+      <div class="page-heading">
+        <div><div class="eyebrow">PREDICTIONS</div><h1>Make your predictions</h1><p>Choose a Grand Prix and set your qualifying prediction. Your qualifying order is also used for the race; on sprint weekends, your sprint qualifying order is also used for the sprint.</p></div>
+      </div>
+      <div id="playerSection">
 
 
 <div class="card">
@@ -891,47 +1910,89 @@ Other Players
 </div>
 
 
-<div
-  id="leaderboardCard"
-  class="card"
->
-
-<h2>
-🏆 Leaderboard
-</h2>
-
-<div
-  id="leaderboardContent"
->
-Loading leaderboard...
 </div>
+      </div>
+    </section>
 
-</div>
+    <section id="profilePage" class="app-page hidden">
+      <div class="page-heading">
+        <div><div class="eyebrow">YOUR PROFILE</div><h1>Profile</h1><p>Manage your profile and view your F1 Predictions statistics.</p></div>
+      </div>
 
+      <div class="profile-grid">
+        <div class="card profile-card">
+          <div class="profile-avatar-wrap">
+            <img id="profileAvatar" class="profile-avatar" src="" alt="Profile picture">
+            <div id="profileAvatarFallback" class="profile-avatar-fallback">?</div>
+          </div>
+          <div class="profile-main">
+            <h2 id="profileUsername">Loading...</h2>
+            <div id="profileRealName" class="profile-real-name"></div>
+            <div id="profileEmail" class="profile-email"></div>
+          </div>
+        </div>
 
-</div>
+        <div class="card">
+          <div class="card-header">
+            <div><div class="eyebrow">SETTINGS</div><h2>Personalisation</h2></div>
+          </div>
+          <div class="setting-row">
+            <div><strong>Prediction input</strong><p>Choose how you want to enter your predictions.</p></div>
+            <button id="profileSettingsButton" class="primary-button" onclick="openProfileSettings()">Personalisation</button>
+          </div>
+        </div>
 
+        <div class="card profile-stats-card">
+          <div class="card-header">
+            <div><div class="eyebrow">2027 SEASON</div><h2>Your Statistics</h2></div>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-box"><span>Total Points</span><strong id="profileTotalPoints">—</strong></div>
+            <div class="stat-box"><span>Championship Position</span><strong id="profileChampionshipPosition">—</strong></div>
+            <div class="stat-box"><span>Race Wins</span><strong id="profileRaceWins">—</strong></div>
+            <div class="stat-box"><span>Exact Predictions</span><strong id="profileExactPredictions">—</strong></div>
+          </div>
+        </div>
 
-<!-- ADMIN SECTION -->
+        <div class="card profile-achievements-card">
+          <div class="card-header"><div><div class="eyebrow">ACHIEVEMENTS</div><h2>Your Achievements</h2></div></div>
+          <div id="profileAchievements" class="achievements-grid"><div class="empty-state">No achievements yet.</div></div>
+        </div>
+      </div>
+    </section>
 
-<div
-  id="adminSection"
-  class="hidden"
->
+    <section id="leaderboardPage" class="app-page hidden">
+      <div class="page-heading"><div><div class="eyebrow">CHAMPIONSHIP</div><h1>Leaderboard</h1><p>Every point counts. See who's leading the 2027 prediction championship.</p></div></div>
+      <div class="card leaderboard-card">
+        <div id="leaderboardTable" class="table-wrap"><div class="loading-row">Loading leaderboard...</div></div>
+      </div>
+      <div class="card race-scores-card">
+        <div class="section-heading-row"><div><div class="section-kicker">RACE BY RACE</div><h2>Race scores</h2></div></div>
+        <div id="raceScoresTable" class="table-wrap"><div class="loading-row">Loading race scores...</div></div>
+      </div>
+    </section>
 
+    <section id="statsPage" class="app-page hidden">
+      <div class="page-heading"><div><div class="eyebrow">ANALYSIS</div><h1>Season stats</h1><p>Track accuracy, points and consistency across the season.</p></div></div>
+      <div id="statsContent">
+        <div class="card"><div class="loading-row">Loading stats...</div></div>
+      </div>
+    </section>
 
-<div class="card">
+    <section id="adminPage" class="app-page hidden">
+      <div id="adminSection" class="hidden">
+        <div class="card">
 
 <div class="admin-header">
 
 <div>
 
 <h2>
-⚙️ Admin Results
+⚙️ Admin Panel
 </h2>
 
 <div class="race-info">
-Enter the actual session results.
+Manage races, drivers and enter official session results.
 </div>
 
 </div>
@@ -942,8 +2003,13 @@ ADMIN
 
 </div>
 
+<div class="admin-quick-actions">
+  <button class="admin-quick-button" onclick="document.getElementById('adminRacesTable').scrollIntoView({behavior:'smooth',block:'start'})">🏁 Race Management</button>
+  <button class="admin-quick-button" onclick="document.getElementById('adminDriversTable').scrollIntoView({behavior:'smooth',block:'start'})">🏎️ Driver Management</button>
+  <button class="admin-quick-button active" onclick="document.getElementById('adminResultsArea').scrollIntoView({behavior:'smooth',block:'start'})">📋 Results</button>
+</div>
 
-<div class="race-header">
+<div id="adminResultsArea" class="race-header">
 
 <select
   id="adminRaceSelect"
@@ -1040,8 +2106,25 @@ Save Results
 
 </div>
 
+        <div id="adminManagementArea" class="admin-management-grid">
+          <div class="card admin-management-card">
+            <div class="admin-section-title"><div><div class="eyebrow">RACE MANAGEMENT</div><h2>Races</h2></div><button class="primary-button" onclick="newAdminRace()">+ Add Race</button></div>
+            <div id="adminRaceEditor" class="admin-editor hidden"></div>
+            <div id="adminRacesTable" class="admin-management-list"><div class="loading-row">Loading races...</div></div>
+          </div>
 
+          <div class="card admin-management-card">
+            <div class="admin-section-title"><div><div class="eyebrow">DRIVER MANAGEMENT</div><h2>Drivers</h2></div><button class="primary-button" onclick="newAdminDriver()">+ Add Driver</button></div>
+            <div id="adminDriverEditor" class="admin-editor hidden"></div>
+            <div id="adminDriversTable" class="admin-management-list"><div class="loading-row">Loading drivers...</div></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
 </main>
+
 
 
 <script>
@@ -1067,8 +2150,6 @@ let predictions = [];
 
 let results = [];
 
-let scores = [];
-
 let currentRace = null;
 
 let currentTab = 'qualifying';
@@ -1081,6 +2162,60 @@ let currentAdminSession =
 let draggedElement = null;
 
 let isAdmin = false;
+
+let currentPage = 'home';
+let scores = [];
+let scoresLoaded = false;
+let scoresLoading = false;
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+async function loadProfile() {
+
+  const response =
+    await apiCall('profile', {
+      session: sessionToken
+    });
+
+  if (!response || !response.ok || !response.profile) {
+    throw new Error('Could not load profile.');
+  }
+
+  const profile = response.profile;
+  window.currentProfile = profile;
+
+  const username = profile.username || profile.name || 'Player';
+
+  const usernameEl = document.getElementById('profileUsername');
+  const realNameEl = document.getElementById('profileRealName');
+  const emailEl = document.getElementById('profileEmail');
+
+  if (usernameEl) usernameEl.textContent = username;
+  if (realNameEl) realNameEl.textContent = profile.name || '';
+  if (emailEl) emailEl.textContent = profile.email || '';
+
+  const avatar = document.getElementById('profileAvatar');
+  const fallback = document.getElementById('profileAvatarFallback');
+
+  if (avatar && fallback) {
+    if (profile.profilePicture) {
+      avatar.src = profile.profilePicture;
+      avatar.style.display = 'block';
+      fallback.style.display = 'none';
+    } else {
+      avatar.style.display = 'none';
+      fallback.style.display = 'flex';
+      fallback.textContent = username.charAt(0).toUpperCase();
+    }
+  }
+}
+
+function openProfileSettings() {
+  showMessage('Personalisation settings will be added next.', 'success');
+}
 
 
 /* =========================================================
@@ -1162,16 +2297,13 @@ Math.random()
 .toString(36)
 .substring(2);
 
-
 const script =
 document.createElement(
 'script'
 );
 
-
 const query =
 new URLSearchParams();
-
 
 query.set(
 'action',
@@ -1183,7 +2315,6 @@ query.set(
 callbackName
 );
 
-
 Object.keys(params)
 .forEach(key => {
 
@@ -1194,9 +2325,19 @@ params[key]
 
 });
 
+let finished = false;
 
-window[callbackName] =
-function(data) {
+let timeout;
+
+const finish = function(
+callback
+) {
+
+if (finished) return;
+
+finished = true;
+
+clearTimeout(timeout);
 
 delete window[
 callbackName
@@ -1204,6 +2345,14 @@ callbackName
 
 script.remove();
 
+callback();
+
+};
+
+window[callbackName] =
+function(data) {
+
+finish(function() {
 
 if (
 data &&
@@ -1221,20 +2370,16 @@ return;
 
 }
 
-
 resolve(data);
 
-};
+});
 
+};
 
 script.onerror =
 function() {
 
-delete window[
-callbackName
-];
-
-script.remove();
+finish(function() {
 
 reject(
 new Error(
@@ -1242,14 +2387,34 @@ new Error(
 )
 );
 
+});
+
 };
 
+timeout =
+setTimeout(
+function() {
+
+finish(function() {
+
+reject(
+new Error(
+'The request timed out while loading "' +
+action +
+'". Please refresh and try again.'
+)
+);
+
+});
+
+},
+60000
+);
 
 script.src =
 API_URL +
 '?' +
 query.toString();
-
 
 document.body.appendChild(
 script
@@ -1258,6 +2423,7 @@ script
 });
 
 }
+
 
 
 /* =========================================================
@@ -1272,6 +2438,17 @@ try {
 
 showLoginError('');
 
+if (
+!response ||
+!response.credential
+) {
+
+throw new Error(
+'Google sign-in did not return a valid credential.'
+);
+
+}
+
 const result =
 await apiCall(
 'login',
@@ -1281,12 +2458,89 @@ response.credential
 }
 );
 
+if (
+!result ||
+!result.sessionToken
+) {
+
+throw new Error(
+'The server accepted the login but did not return a session token.'
+);
+
+}
+
 sessionToken =
 result.sessionToken;
 
-currentUser =
-result.player;
 
+/*
+  The login endpoint normally returns the player
+  object. If the deployed backend is an older
+  version, recover it from the /me endpoint.
+*/
+
+currentUser =
+result.player ||
+result.user ||
+null;
+
+if (!currentUser) {
+
+const me =
+await apiCall(
+'me',
+{
+session:
+sessionToken
+}
+);
+
+currentUser =
+me &&
+(
+me.player ||
+me.user ||
+me.currentUser ||
+null
+);
+
+}
+
+if (
+!currentUser
+) {
+
+throw new Error(
+'Your Google account was authenticated, but your player account could not be loaded. Please check that your Google email exists in the Players sheet.'
+);
+
+}
+
+if (
+!currentUser.playerId
+) {
+
+throw new Error(
+'Your player account was found, but it is missing a Player ID.'
+);
+
+}
+
+
+/*
+  Only switch away from the login screen after
+  we have a valid player object.
+*/
+
+document
+.getElementById(
+'userName'
+)
+.textContent =
+currentUser.name ||
+currentUser.playerName ||
+currentUser.email ||
+'Player';
 
 document
 .getElementById(
@@ -1295,14 +2549,12 @@ document
 .classList
 .add('hidden');
 
-
 document
 .getElementById(
 'app'
 )
 .classList
 .remove('hidden');
-
 
 document
 .getElementById(
@@ -1311,15 +2563,6 @@ document
 .style
 .display =
 'flex';
-
-
-document
-.getElementById(
-'userName'
-)
-.textContent =
-currentUser.name;
-
 
 await loadApp();
 
@@ -1342,6 +2585,11 @@ isAdmin = true;
 
 document
 .getElementById(
+'adminNav'
+).classList.remove('hidden');
+
+document
+.getElementById(
 'adminSection'
 )
 .classList
@@ -1355,18 +2603,52 @@ isAdmin = false;
 
 }
 
+showPage('home');
 
 } catch(error) {
 
-console.error(error);
+console.error(
+'=== GOOGLE LOGIN FAILED ===',
+error
+);
+
+sessionToken =
+null;
+
+currentUser =
+null;
+
+document
+.getElementById(
+'app'
+)
+.classList
+.add('hidden');
+
+document
+.getElementById(
+'userBox'
+)
+.style
+.display =
+'none';
+
+document
+.getElementById(
+'loginScreen'
+)
+.classList
+.remove('hidden');
 
 showLoginError(
-error.message
+error.message ||
+'Sign-in failed. Please try again.'
 );
 
 }
 
 }
+
 
 
 function showLoginError(
@@ -1386,6 +2668,18 @@ message
 ? 'block'
 : 'none';
 
+}
+
+
+async function refreshActiveData(){
+  const [raceData,driverData]=await Promise.all([
+    apiCall('races',{session:sessionToken}),
+    apiCall('drivers',{session:sessionToken})
+  ]);
+  races=raceData.races||[];
+  drivers=driverData.drivers||[];
+  if(currentRace){currentRace=races.find(r=>r.raceId===currentRace.raceId)||races[0]||null;}
+  if(currentAdminRace){currentAdminRace=races.find(r=>r.raceId===currentAdminRace.raceId)||races[0]||null;}
 }
 
 
@@ -1456,37 +2750,7 @@ async function loadApp() {
     predictions =
       predictionData.predictions || [];
 
-    console.log('4. Loading scores...');
-
-    try {
-
-      const scoreData = await apiCall(
-        'scores',
-        {
-          session: sessionToken
-        }
-      );
-
-      console.log(
-        'SCORES RESPONSE:',
-        scoreData
-      );
-
-      scores =
-        scoreData.scores || [];
-
-    } catch (scoreError) {
-
-      console.error(
-        'Could not load scores:',
-        scoreError
-      );
-
-      scores = [];
-
-    }
-
-    console.log('5. Setting current race...');
+    console.log('4. Setting current race...');
 
     currentRace = races[0];
 
@@ -1506,8 +2770,6 @@ async function loadApp() {
     currentTab = 'qualifying';
 
     renderRace();
-
-    renderLeaderboard();
 
     console.log('=== F1 APP LOAD COMPLETE ===');
 
@@ -1626,8 +2888,6 @@ renderPredictionPanel();
 
 renderOtherPlayers();
 
-renderLeaderboard();
-
 }
 
 
@@ -1637,67 +2897,23 @@ renderLeaderboard();
 
 function getTabsForRace() {
 
-if (
-currentRace &&
-isTrue(
-currentRace.sprint
-)
-) {
+  const tabs = [
+    {
+      id: 'qualifying',
+      name: 'Qualifying + Race'
+    }
+  ];
 
-return [
+  if (currentRace && isTrue(currentRace.sprint)) {
+    tabs.push({
+      id: 'sprintQualifying',
+      name: 'Sprint Qualifying + Sprint'
+    });
+  }
 
-{
-id:
-'qualifying',
-name:
-'Qualifying'
-},
-
-{
-id:
-'sprintQualifying',
-name:
-'Sprint Qualifying'
-},
-
-{
-id:
-'sprint',
-name:
-'Sprint'
-},
-
-{
-id:
-'race',
-name:
-'Race'
+  return tabs;
 }
 
-];
-
-}
-
-
-return [
-
-{
-id:
-'qualifying',
-name:
-'Qualifying'
-},
-
-{
-id:
-'race',
-name:
-'Race'
-}
-
-];
-
-}
 
 
 function renderTabs() {
@@ -2431,25 +3647,27 @@ type
   return racePredictions
     .map(p => {
 
-      let position;
+      let rawPosition;
 
       switch (type) {
         case 'qualifying':
-          position = p.qualifyingPosition;
+          rawPosition = p.qualifyingPosition;
           break;
 
         case 'sprintQualifying':
-          position = p.sprintQualifyingPosition;
+          rawPosition = p.sprintQualifyingPosition;
           break;
 
         case 'sprint':
-          position = p.sprintPosition;
+          rawPosition = p.sprintPosition;
           break;
 
         case 'race':
-          position = p.racePosition;
+          rawPosition = p.racePosition;
           break;
       }
+
+      const position = Number(rawPosition);
 
       return {
         driverId: p.driverId,
@@ -2459,14 +3677,13 @@ type
     })
     .filter(
       p =>
-        p.position !== '' &&
-        p.position !== null &&
-        p.position !== undefined
+        Number.isInteger(p.position) &&
+        p.position >= 1 &&
+        p.position <= drivers.length
     )
     .sort(
       (a, b) =>
-        Number(a.position) -
-        Number(b.position)
+        a.position - b.position
     )
     .map(
       p =>
@@ -2480,137 +3697,64 @@ type
 
 
 
-
 /* =========================================================
    BUILD PREDICTIONS
 ========================================================= */
 
 function buildPredictionPayload() {
 
-const orders = {};
+  const orders = {};
 
+  getTabsForRace().forEach(tab => {
 
-getTabsForRace()
-.forEach(tab => {
+    if (tab.id === currentTab) {
 
-const saved =
-getSavedOrder(
-tab.id
-);
+      const list = document.querySelectorAll('#predictionList .driver');
 
+      orders[tab.id] = [...list].map((element, index) => ({
+        driverId: element.dataset.driverId,
+        position: index + 1
+      }));
 
-if (
-tab.id ===
-currentTab
-) {
+    } else {
 
-const list =
-document.querySelectorAll(
-'#predictionList .driver'
-);
+      const saved = getSavedOrder(tab.id);
 
+      orders[tab.id] = saved.length === drivers.length
+        ? saved.map((driver, index) => ({
+            driverId: driver.driverId,
+            position: index + 1
+          }))
+        : [];
+    }
+  });
 
-orders[tab.id] =
-[
-...list
-].map(
-(el,index) => ({
+  return drivers.map(driver => {
 
-driverId:
-el.dataset.driverId,
+    const result = {
+      driverId: driver.driverId
+    };
 
-position:
-index + 1
+    const qualifying = orders.qualifying && orders.qualifying.find(
+      x => x.driverId === driver.driverId
+    );
 
-})
-);
+    const sprintQualifying = orders.sprintQualifying && orders.sprintQualifying.find(
+      x => x.driverId === driver.driverId
+    );
 
-} else {
+    if (qualifying) {
+      result.qualifyingPosition = qualifying.position;
+    }
 
-orders[tab.id] =
-saved.map(
-(driver,index) => ({
+    if (sprintQualifying) {
+      result.sprintQualifyingPosition = sprintQualifying.position;
+    }
 
-driverId:
-driver.driverId,
-
-position:
-index + 1
-
-})
-);
-
+    return result;
+  });
 }
 
-});
-
-
-return drivers.map(
-driver => {
-
-const q =
-orders.qualifying
-?.find(
-x =>
-x.driverId ===
-driver.driverId
-);
-
-const sq =
-orders.sprintQualifying
-?.find(
-x =>
-x.driverId ===
-driver.driverId
-);
-
-const s =
-orders.sprint
-?.find(
-x =>
-x.driverId ===
-driver.driverId
-);
-
-const r =
-orders.race
-?.find(
-x =>
-x.driverId ===
-driver.driverId
-);
-
-
-return {
-
-driverId:
-driver.driverId,
-
-qualifyingPosition:
-q
-? q.position
-: '',
-
-sprintQualifyingPosition:
-sq
-? sq.position
-: '',
-
-sprintPosition:
-s
-? s.position
-: '',
-
-racePosition:
-r
-? r.position
-: ''
-
-};
-
-});
-
-}
 
 
 /* =========================================================
@@ -2930,7 +4074,7 @@ player.name
 <div class="other-grid">
 
 ${renderOtherSection(
-'Qualifying',
+'Qualifying + Race',
 byType.qualifying
 )}
 
@@ -3144,660 +4288,6 @@ names.map(
 
 
 /* =========================================================
-   LEADERBOARD
-========================================================= */
-
-function getScoreValue(score, field) {
-
-  if (!score) return 0;
-
-  const value =
-    score[field] !== undefined
-      ? score[field]
-      : score[field.replace(
-          /[A-Z]/g,
-          letter => '_' + letter.toLowerCase()
-        )];
-
-  if (
-    value === '' ||
-    value === null ||
-    value === undefined
-  ) {
-
-    return 0;
-
-  }
-
-  return Number(value) || 0;
-
-}
-
-
-function getScoreRaceId(score) {
-
-  return score
-    ? (
-        score.raceId ||
-        score.raceID ||
-        score.race_id ||
-        ''
-      )
-    : '';
-
-}
-
-
-function getScorePlayerId(score) {
-
-  return score
-    ? (
-        score.playerId ||
-        score.playerID ||
-        score.player_id ||
-        ''
-      )
-    : '';
-
-}
-
-
-function getScoreTotal(score) {
-
-  return getScoreValue(
-    score,
-    'totalPoints'
-  );
-
-}
-
-
-function getScoreForRacePlayer(
-  raceId,
-  playerId
-) {
-
-  return scores.find(
-    score =>
-      getScoreRaceId(score) === raceId &&
-      getScorePlayerId(score) === playerId
-  ) || null;
-
-}
-
-
-function getLeaderboardPlayers() {
-
-  const playerMap = {};
-
-  scores.forEach(
-    score => {
-
-      const playerId =
-        getScorePlayerId(score);
-
-      if (!playerId) return;
-
-      if (!playerMap[playerId]) {
-
-        playerMap[playerId] = {
-          playerId:
-            playerId,
-
-          name:
-            score.playerName ||
-            score.name ||
-            playerId,
-
-          total:
-            0
-
-        };
-
-      }
-
-      playerMap[playerId].total +=
-        getScoreTotal(score);
-
-    }
-  );
-
-  /*
-    Include the signed-in player even when
-    no scores have been calculated yet.
-  */
-
-  if (
-    currentUser &&
-    currentUser.playerId &&
-    !playerMap[currentUser.playerId]
-  ) {
-
-    playerMap[currentUser.playerId] = {
-      playerId:
-        currentUser.playerId,
-
-      name:
-        currentUser.name ||
-        currentUser.email ||
-        currentUser.playerId,
-
-      total:
-        0
-
-    };
-
-  }
-
-  return Object.values(
-    playerMap
-  ).sort(
-    (a,b) => {
-
-      if (b.total !== a.total) {
-
-        return b.total - a.total;
-
-      }
-
-      return a.name.localeCompare(
-        b.name
-      );
-
-    }
-  );
-
-}
-
-
-function getRaceScoresForPlayer(
-  playerId
-) {
-
-  return races.map(
-    race => {
-
-      const score =
-        getScoreForRacePlayer(
-          race.raceId,
-          playerId
-        );
-
-      return {
-        race:
-          race,
-
-        score:
-          score
-            ? getScoreTotal(score)
-            : null
-
-      };
-
-    }
-  );
-
-}
-
-
-function renderLeaderboard() {
-
-  const container =
-    document.getElementById(
-      'leaderboardContent'
-    );
-
-  if (!container) return;
-
-  if (!currentUser) {
-
-    container.innerHTML =
-      '<p>Sign in to view the leaderboard.</p>';
-
-    return;
-
-  }
-
-  const players =
-    getLeaderboardPlayers();
-
-  if (!players.length) {
-
-    container.innerHTML = `
-      <p>No scores have been calculated yet.</p>
-      <div class="leaderboard-note">
-        The leaderboard will populate automatically
-        when an admin enters complete race results.
-      </div>
-    `;
-
-    return;
-
-  }
-
-
-  /*
-    Overall championship table.
-  */
-
-  let overallRows = '';
-
-  players.forEach(
-    (player,index) => {
-
-      overallRows += `
-
-        <tr>
-
-          <td class="rank">
-            ${index + 1}
-          </td>
-
-          <td class="player-name">
-            ${escapeHtml(
-              player.name
-            )}
-          </td>
-
-          <td class="total">
-            ${player.total}
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-  );
-
-
-  /*
-    Race-by-race table.
-    Each cell is that player's total for
-    the individual race.
-  */
-
-  let raceHeaders = '';
-
-  races.forEach(
-    race => {
-
-      raceHeaders += `
-        <th>
-          ${escapeHtml(
-            race.race
-          )}
-        </th>
-      `;
-
-    }
-  );
-
-
-  let raceRows = '';
-
-  players.forEach(
-    player => {
-
-      const raceScores =
-        getRaceScoresForPlayer(
-          player.playerId
-        );
-
-      let cells = '';
-
-      raceScores.forEach(
-        item => {
-
-          cells += `
-            <td>
-              ${
-                item.score === null
-                  ? '—'
-                  : item.score
-              }
-            </td>
-          `;
-
-        }
-      );
-
-      raceRows += `
-
-        <tr>
-
-          <td class="player-name">
-            ${escapeHtml(
-              player.name
-            )}
-          </td>
-
-          ${cells}
-
-          <td class="total">
-            ${player.total}
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-  );
-
-
-  /*
-    Cumulative running total table.
-  */
-
-  let cumulativeHeaders = '';
-
-  races.forEach(
-    race => {
-
-      cumulativeHeaders += `
-        <th>
-          ${escapeHtml(
-            race.race
-          )}
-        </th>
-      `;
-
-    }
-  );
-
-
-  let cumulativeRows = '';
-
-  players.forEach(
-    player => {
-
-      const raceScores =
-        getRaceScoresForPlayer(
-          player.playerId
-        );
-
-      let running =
-        0;
-
-      let cells = '';
-
-      raceScores.forEach(
-        item => {
-
-          if (
-            item.score !== null
-          ) {
-
-            running +=
-              item.score;
-
-          }
-
-          cells += `
-            <td>
-              ${
-                item.score === null
-                  ? '—'
-                  : running
-              }
-            </td>
-          `;
-
-        }
-      );
-
-      cumulativeRows += `
-
-        <tr>
-
-          <td class="player-name">
-            ${escapeHtml(
-              player.name
-            )}
-          </td>
-
-          ${cells}
-
-          <td class="total">
-            ${player.total}
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-  );
-
-
-  /*
-    Vertical race-by-race view.
-    This mirrors the individual race totals
-    but is easier to read on mobile.
-  */
-
-  let verticalRows = '';
-
-  players.forEach(
-    player => {
-
-      const raceScores =
-        getRaceScoresForPlayer(
-          player.playerId
-        );
-
-      raceScores.forEach(
-        item => {
-
-          verticalRows += `
-
-            <tr>
-
-              <td>
-                ${escapeHtml(
-                  item.race.race
-                )}
-              </td>
-
-              <td class="player-name">
-                ${escapeHtml(
-                  player.name
-                )}
-              </td>
-
-              <td>
-                ${
-                  item.score === null
-                    ? '—'
-                    : item.score
-                }
-              </td>
-
-            </tr>
-
-          `;
-
-        }
-      );
-
-    }
-  );
-
-
-  container.innerHTML = `
-
-    <div class="leaderboard-section">
-
-      <h3>
-        Championship
-      </h3>
-
-      <div class="leaderboard-table-wrap">
-
-        <table class="leaderboard-table">
-
-          <thead>
-
-            <tr>
-
-              <th class="rank">
-                Pos
-              </th>
-
-              <th>
-                Player
-              </th>
-
-              <th>
-                Points
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-            ${overallRows}
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-    <div class="leaderboard-section">
-
-      <h3>
-        Race-by-Race
-      </h3>
-
-      <div class="leaderboard-table-wrap">
-
-        <table class="leaderboard-table">
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Player
-              </th>
-
-              ${raceHeaders}
-
-              <th>
-                Total
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-            ${raceRows}
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-    <div class="leaderboard-section">
-
-      <h3>
-        Cumulative Points
-      </h3>
-
-      <div class="leaderboard-table-wrap">
-
-        <table class="leaderboard-table">
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Player
-              </th>
-
-              ${cumulativeHeaders}
-
-              <th>
-                Total
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-            ${cumulativeRows}
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-    <div class="leaderboard-section">
-
-      <h3>
-        Individual Race Scores
-      </h3>
-
-      <div class="leaderboard-table-wrap">
-
-        <table class="leaderboard-table">
-
-          <thead>
-
-            <tr>
-
-              <th>
-                Race
-              </th>
-
-              <th>
-                Player
-              </th>
-
-              <th>
-                Points
-              </th>
-
-            </tr>
-
-          </thead>
-
-          <tbody>
-            ${verticalRows}
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </div>
-
-
-    <div class="leaderboard-note">
-      A dash means that scoring for that race
-      has not been calculated yet.
-    </div>
-
-  `;
-
-}
-
-
-/* =========================================================
    GP QUALIFYING VISIBILITY
 ========================================================= */
 
@@ -3867,6 +4357,7 @@ races[0];
 renderAdminSessions();
 
 await refreshAdminResults();
+await loadAdminManagement();
 
 }
 
@@ -4363,6 +4854,400 @@ button.textContent =
 }
 
 
+
+
+/* =========================================================
+   ADMIN RACE + DRIVER MANAGEMENT
+========================================================= */
+
+async function loadAdminManagement(){
+  try {
+    const [raceData,driverData]=await Promise.all([
+      apiCall('adminRaces',{session:sessionToken}),
+      apiCall('adminDrivers',{session:sessionToken})
+    ]);
+    window.adminRaces = raceData.races || [];
+    window.adminDrivers = driverData.drivers || [];
+    renderAdminRaces();
+    renderAdminDrivers();
+  } catch(error) {
+    console.error('Admin management failed:', error);
+    const raceEl=document.getElementById('adminRacesTable');
+    const driverEl=document.getElementById('adminDriversTable');
+    if(raceEl) raceEl.innerHTML='<div class="loading-row">Could not load race management. '+escapeHtml(error.message||'Unknown error')+'</div>';
+    if(driverEl) driverEl.innerHTML='<div class="loading-row">Could not load driver management. '+escapeHtml(error.message||'Unknown error')+'</div>';
+  }
+}
+
+function escapeAttr(value){
+  return String(value ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+function toDateTimeLocal(value){
+  if(!value) return '';
+  const d=new Date(value); if(Number.isNaN(d.getTime())) return '';
+  const pad=n=>String(n).padStart(2,'0');
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
+function renderAdminRaces(){
+  const el=document.getElementById('adminRacesTable'); if(!el) return;
+  if(!window.adminRaces?.length){el.innerHTML='<div class="loading-row">No races configured.</div>';return;}
+  el.innerHTML=window.adminRaces.map(r=>`<div class="admin-management-row">
+    <div><strong>${escapeHtml(r.race)}</strong><small>${escapeHtml(r.location||'No location')} · ${r.sprint?'Sprint weekend':'Grand Prix weekend'} · ${r.active?'Active':'Inactive'}</small></div>
+    <div class="admin-row-actions"><button onclick="editAdminRace('${escapeAttr(r.raceId)}')">Edit</button><button onclick="toggleAdminRace('${escapeAttr(r.raceId)}')">${r.active?'Deactivate':'Activate'}</button></div>
+  </div>`).join('');
+}
+
+function renderAdminDrivers(){
+  const el=document.getElementById('adminDriversTable'); if(!el) return;
+  if(!window.adminDrivers?.length){el.innerHTML='<div class="loading-row">No drivers configured.</div>';return;}
+  el.innerHTML=window.adminDrivers.map(d=>`<div class="admin-management-row">
+    <div><strong>${escapeHtml(d.driver)}</strong><small>${escapeHtml(d.team||'No team')} · ID: ${escapeHtml(d.driverId)} · ${d.active?'Active':'Inactive'}</small></div>
+    <div class="admin-row-actions"><button onclick="editAdminDriver('${escapeAttr(d.driverId)}')">Edit</button><button onclick="toggleAdminDriver('${escapeAttr(d.driverId)}')">${d.active?'Deactivate':'Activate'}</button></div>
+  </div>`).join('');
+}
+
+function raceEditorHtml(r={}){
+  return `<div class="admin-editor-grid">
+    <div class="admin-field"><label>Race ID</label><input id="editRaceId" value="${escapeAttr(r.raceId||'')}" ${r.raceId?'readonly':''}></div>
+    <div class="admin-field"><label>Race Name</label><input id="editRaceName" value="${escapeAttr(r.race||'')}"></div>
+    <div class="admin-field"><label>Location</label><input id="editRaceLocation" value="${escapeAttr(r.location||'')}"></div>
+    <div class="admin-field"><label>Qualifying Start</label><input type="datetime-local" id="editRaceQualifying" value="${toDateTimeLocal(r.qualifyingStart)}"></div>
+    <div class="admin-field"><label>Race Start</label><input type="datetime-local" id="editRaceStart" value="${toDateTimeLocal(r.raceStart)}"></div>
+    <div class="admin-field"><label>Sprint Qualifying Start</label><input type="datetime-local" id="editRaceSprintQualifying" value="${toDateTimeLocal(r.sprintQualifyingStart)}"></div>
+    <div class="admin-field"><label>Sprint Start</label><input type="datetime-local" id="editRaceSprint" value="${toDateTimeLocal(r.sprintStart)}"></div>
+    <div class="admin-field"><label>Options</label><label class="admin-checkbox"><input type="checkbox" id="editRaceIsSprint" ${r.sprint?'checked':''}> Sprint weekend</label><label class="admin-checkbox"><input type="checkbox" id="editRaceActive" ${r.active!==false?'checked':''}> Active</label></div>
+  </div><div class="admin-editor-actions"><button class="secondary-button" onclick="closeRaceEditor()">Cancel</button><button class="primary-button" onclick="saveAdminRace()">Save Race</button></div>`;
+}
+function newAdminRace(){const e=document.getElementById('adminRaceEditor');e.classList.remove('hidden');e.innerHTML=raceEditorHtml();e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function editAdminRace(id){const r=window.adminRaces.find(x=>x.raceId===id);if(!r)return;const e=document.getElementById('adminRaceEditor');e.classList.remove('hidden');e.innerHTML=raceEditorHtml(r);e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function closeRaceEditor(){const e=document.getElementById('adminRaceEditor');e.classList.add('hidden');e.innerHTML='';}
+async function saveAdminRace(){
+  const raceIdEl=document.getElementById('editRaceId');
+  const raceNameEl=document.getElementById('editRaceName');
+  const locationEl=document.getElementById('editRaceLocation');
+  const qualifyingEl=document.getElementById('editRaceQualifying');
+  const raceStartEl=document.getElementById('editRaceStart');
+  const sprintQualifyingEl=document.getElementById('editRaceSprintQualifying');
+  const sprintStartEl=document.getElementById('editRaceSprint');
+  const sprintEl=document.getElementById('editRaceIsSprint');
+  const activeEl=document.getElementById('editRaceActive');
+
+  if(!raceNameEl || !raceNameEl.value.trim()){
+    showMessage('Race name is required.','error');
+    return;
+  }
+
+  const existing=window.adminRaces.find(r=>r.raceId===raceIdEl.value);
+  const p={
+    session:sessionToken,
+    row:existing ? existing.row : '',
+    raceId:raceIdEl.value.trim(),
+    race:raceNameEl.value.trim(),
+    location:locationEl.value.trim(),
+    qualifyingStart:qualifyingEl.value,
+    raceStart:raceStartEl.value,
+    sprintQualifyingStart:sprintQualifyingEl.value,
+    sprintStart:sprintStartEl.value,
+    sprint:sprintEl.checked,
+    active:activeEl.checked
+  };
+
+  const button=document.querySelector('#adminRaceEditor .primary-button');
+  if(button){button.disabled=true;button.textContent='Saving to spreadsheet...';}
+
+  try{
+    const response=await apiCall('adminSaveRace',p);
+    if(!response || response.ok!==true){
+      throw new Error((response && response.error) || 'The race could not be saved.');
+    }
+
+    // Reload directly from the Apps Script endpoint. This makes the UI reflect
+    // the Races sheet rather than merely the values that were in the form.
+    await loadAdminManagement();
+    await refreshActiveData();
+
+    const saved=window.adminRaces.find(r=>r.raceId===response.raceId);
+    if(!saved){
+      throw new Error('The race was reported as saved, but could not be read back from the Races sheet.');
+    }
+
+    showMessage('Race saved to the Races spreadsheet (row '+saved.row+').','success');
+    closeRaceEditor();
+  }catch(e){
+    console.error('saveAdminRace failed:',e);
+    showMessage(e.message || 'Could not save race to the spreadsheet.','error');
+  }finally{
+    if(button){button.disabled=false;button.textContent='Save Race';}
+  }
+}
+async function toggleAdminRace(id){const r=window.adminRaces.find(x=>x.raceId===id);if(!r)return;try{await apiCall('adminSaveRace',{session:sessionToken,raceId:r.raceId,race:r.race,location:r.location,qualifyingStart:r.qualifyingStart,raceStart:r.raceStart,sprintQualifyingStart:r.sprintQualifyingStart,sprintStart:r.sprintStart,sprint:r.sprint,active:!r.active});showMessage('Race status updated.','success');await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}}
+
+function driverEditorHtml(d={}){return `<div class="admin-editor-grid"><div class="admin-field"><label>Driver ID</label><input id="editDriverId" value="${escapeAttr(d.driverId||'')}"></div><div class="admin-field"><label>Driver Name</label><input id="editDriverName" value="${escapeAttr(d.driver||'')}"></div><div class="admin-field"><label>Team</label><input id="editDriverTeam" value="${escapeAttr(d.team||'')}"></div><div class="admin-field"><label>Options</label><label class="admin-checkbox"><input type="checkbox" id="editDriverActive" ${d.active!==false?'checked':''}> Active</label></div></div><div class="admin-editor-actions"><button class="secondary-button" onclick="closeDriverEditor()">Cancel</button><button class="primary-button" onclick="saveAdminDriver()">Save Driver</button></div>`;}
+function newAdminDriver(){const e=document.getElementById('adminDriverEditor');e.classList.remove('hidden');e.innerHTML=driverEditorHtml();e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function editAdminDriver(id){const d=window.adminDrivers.find(x=>x.driverId===id);if(!d)return;const e=document.getElementById('adminDriverEditor');e.classList.remove('hidden');e.innerHTML=driverEditorHtml(d);e.scrollIntoView({behavior:'smooth',block:'nearest'});}
+function closeDriverEditor(){const e=document.getElementById('adminDriverEditor');e.classList.add('hidden');e.innerHTML='';}
+async function saveAdminDriver(){const p={session:sessionToken,driverId:document.getElementById('editDriverId').value,driver:document.getElementById('editDriverName').value,team:document.getElementById('editDriverTeam').value,active:document.getElementById('editDriverActive').checked};try{await apiCall('adminSaveDriver',p);showMessage('Driver saved successfully.','success');closeDriverEditor();await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}}
+async function toggleAdminDriver(id){const d=window.adminDrivers.find(x=>x.driverId===id);if(!d)return;try{await apiCall('adminSaveDriver',{session:sessionToken,driverId:d.driverId,driver:d.driver,team:d.team,active:!d.active});showMessage('Driver status updated.','success');await loadAdminManagement();await refreshActiveData();}catch(e){showMessage(e.message,'error');}}
+
+/* =========================================================
+   NAVIGATION + DASHBOARD
+========================================================= */
+
+function toggleMenu() {
+  const nav = document.getElementById('mainNav');
+  if (nav) nav.classList.toggle('open');
+}
+
+function showPage(page) {
+  if (page === 'profile') {
+    loadProfile().catch(error => console.error('Profile load failed:', error));
+  }
+  if (page === 'admin' && !isAdmin) return;
+
+  currentPage = page;
+
+  document.querySelectorAll('.app-page').forEach(section => {
+    section.classList.toggle('hidden', section.id !== page + 'Page');
+  });
+
+  document.querySelectorAll('.nav-link').forEach(link => {
+    link.classList.toggle('active', link.dataset.page === page);
+  });
+
+  const nav = document.getElementById('mainNav');
+  if (nav) nav.classList.remove('open');
+
+  if (page === 'home') {
+    renderHome();
+    ensureScoresLoaded();
+  }
+
+  if (page === 'leaderboard') {
+    ensureScoresLoaded().then(renderLeaderboardPage);
+  }
+
+  if (page === 'stats') {
+    ensureScoresLoaded().then(renderStatsPage);
+  }
+}
+
+function getNextRace() {
+  if (!races.length) return null;
+  const now = Date.now();
+  const upcoming = races.find(r => {
+    const t = r.raceStart || r.qualifyingStart || r.sprintStart || r.sprintQualifyingStart;
+    return t && new Date(t).getTime() >= now;
+  });
+  return upcoming || races[races.length - 1];
+}
+
+function formatDate(value, includeTime = false) {
+  if (!value) return '—';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return '—';
+  return new Intl.DateTimeFormat('en-GB', {
+    day: 'numeric',
+    month: 'short',
+    ...(includeTime ? { hour: '2-digit', minute: '2-digit' } : {})
+  }).format(date);
+}
+
+function renderHome() {
+  const race = getNextRace();
+  if (!race) return;
+
+  const raceName = document.getElementById('homeRaceName');
+  const raceInfo = document.getElementById('homeRaceInfo');
+  const quali = document.getElementById('homeQualifyingDate');
+  const raceDate = document.getElementById('homeRaceDate');
+
+  if (raceName) raceName.textContent = race.race || 'Next Grand Prix';
+  if (raceInfo) raceInfo.textContent = isTrue(race.sprint) ? 'Sprint weekend' : 'Grand Prix weekend';
+  if (quali) quali.textContent = formatDate(race.qualifyingStart, true);
+  if (raceDate) raceDate.textContent = formatDate(race.raceStart, true);
+
+  renderHomeStanding();
+  if (scoresLoaded) renderHomeLeaderboard();
+}
+
+async function ensureScoresLoaded() {
+  if (scoresLoaded) return scores;
+  if (scoresLoading) {
+    while (scoresLoading) await new Promise(resolve => setTimeout(resolve, 100));
+    return scores;
+  }
+
+  scoresLoading = true;
+  try {
+    const data = await apiCall('scores', { session: sessionToken });
+    scores = data.scores || [];
+    scoresLoaded = true;
+  } catch (error) {
+    console.error('Could not load scores:', error);
+    scores = [];
+    scoresLoaded = true;
+  } finally {
+    scoresLoading = false;
+  }
+
+  return scores;
+}
+
+function getLeaderboardRows() {
+  const map = {};
+  scores.forEach(score => {
+    if (!map[score.playerId]) {
+      map[score.playerId] = {
+        playerId: score.playerId,
+        playerName: score.playerName || score.playerId,
+        points: 0,
+        rounds: 0,
+        penalties: 0,
+        podiumBonus: 0
+      };
+    }
+    const row = map[score.playerId];
+    row.points += Number(score.totalPoints) || 0;
+    row.rounds += 1;
+    row.penalties += Number(score.penalty) || 0;
+    row.podiumBonus += Number(score.podiumBonus) || 0;
+  });
+
+  return Object.values(map).sort((a, b) => b.points - a.points || a.playerName.localeCompare(b.playerName));
+}
+
+function renderHomeStanding() {
+  const el = document.getElementById('homeMyStanding');
+  if (!el) return;
+
+  const rows = getLeaderboardRows();
+  const index = rows.findIndex(r => currentUser && r.playerId === currentUser.playerId);
+
+  if (index === -1) {
+    el.innerHTML = '<div class="standing-empty">No scored races yet.</div>';
+    return;
+  }
+
+  const row = rows[index];
+  el.innerHTML = `
+    <div class="standing-main">
+      <span class="standing-position">#${index + 1}</span>
+      <span class="standing-points">${row.points}</span>
+      <span class="standing-label">points</span>
+    </div>
+    <div class="muted">${row.rounds} scored ${row.rounds === 1 ? 'round' : 'rounds'} this season</div>
+  `;
+}
+
+function renderHomeLeaderboard() {
+  const el = document.getElementById('homeLeaderboard');
+  if (!el) return;
+  const rows = getLeaderboardRows();
+
+  if (!rows.length) {
+    el.innerHTML = '<div class="loading-row">No scores have been recorded yet.</div>';
+    return;
+  }
+
+  el.innerHTML = rows.slice(0, 5).map((row, index) => `
+    <div class="leaderboard-row ${currentUser && row.playerId === currentUser.playerId ? 'me' : ''}">
+      <div class="rank-badge">${index < 3 ? ['🥇','🥈','🥉'][index] : '#' + (index + 1)}</div>
+      <div class="player-cell"><span class="player-dot ${currentUser && row.playerId === currentUser.playerId ? 'me' : ''}"></span>${escapeHtml(row.playerName)}</div>
+      <div class="points-cell">${row.points} pts</div>
+    </div>
+  `).join('');
+}
+
+function renderLeaderboardPage() {
+  if (currentPage !== 'leaderboard') return;
+  const table = document.getElementById('leaderboardTable');
+  const raceTable = document.getElementById('raceScoresTable');
+  const rows = getLeaderboardRows();
+
+  if (!rows.length) {
+    table.innerHTML = '<div class="loading-row">No scores have been recorded yet.</div>';
+    raceTable.innerHTML = '<div class="loading-row">Race scores will appear here once results are scored.</div>';
+    return;
+  }
+
+  table.innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>Pos</th><th>Player</th><th class="number">Points</th><th class="number">Rounds</th><th class="number">Podium bonus</th><th class="number">Penalties</th></tr></thead>
+      <tbody>
+        ${rows.map((row, index) => `
+          <tr class="${currentUser && row.playerId === currentUser.playerId ? 'current-row' : ''}">
+            <td><strong>${index + 1}</strong></td>
+            <td><strong>${escapeHtml(row.playerName)}</strong>${currentUser && row.playerId === currentUser.playerId ? ' <span class="section-kicker">YOU</span>' : ''}</td>
+            <td class="number"><strong>${row.points}</strong></td>
+            <td class="number">${row.rounds}</td>
+            <td class="number">+${row.podiumBonus}</td>
+            <td class="number">${row.penalties}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+
+  const raceMap = {};
+  scores.forEach(score => {
+    if (!raceMap[score.raceId]) raceMap[score.raceId] = {};
+    raceMap[score.raceId][score.playerId] = Number(score.totalPoints) || 0;
+  });
+
+  const scoredRaces = races.filter(r => raceMap[r.raceId]);
+  raceTable.innerHTML = `
+    <table class="data-table">
+      <thead><tr><th>Race</th>${rows.map(r => `<th class="number">${escapeHtml(r.playerName)}</th>`).join('')}</tr></thead>
+      <tbody>
+        ${scoredRaces.map(race => `
+          <tr><td><strong>${escapeHtml(race.race)}</strong></td>${rows.map(row => `<td class="number">${raceMap[race.raceId][row.playerId] ?? '—'}</td>`).join('')}</tr>
+        `).join('')}
+      </tbody>
+    </table>
+  `;
+}
+
+function renderStatsPage() {
+  if (currentPage !== 'stats') return;
+  const container = document.getElementById('statsContent');
+  const rows = getLeaderboardRows();
+  const mine = rows.find(r => currentUser && r.playerId === currentUser.playerId);
+
+  if (!mine) {
+    container.innerHTML = '<div class="card"><div class="loading-row">Your stats will appear after the first scored race.</div></div>';
+    return;
+  }
+
+  const myScores = scores.filter(s => currentUser && s.playerId === currentUser.playerId);
+  const best = [...myScores].sort((a,b) => (Number(b.totalPoints)||0) - (Number(a.totalPoints)||0))[0];
+  const average = myScores.length ? (mine.points / myScores.length).toFixed(1) : '0.0';
+
+  container.innerHTML = `
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Championship points</div><div class="stat-value">${mine.points}</div><div class="stat-sub">Position #${rows.indexOf(mine) + 1}</div></div>
+      <div class="stat-card"><div class="stat-label">Average round</div><div class="stat-value">${average}</div><div class="stat-sub">points per scored race</div></div>
+      <div class="stat-card"><div class="stat-label">Best round</div><div class="stat-value">${best ? Number(best.totalPoints) || 0 : 0}</div><div class="stat-sub">${best ? escapeHtml((races.find(r => r.raceId === best.raceId) || {}).race || best.raceId) : '—'}</div></div>
+      <div class="stat-card"><div class="stat-label">Podium bonus</div><div class="stat-value">+${mine.podiumBonus}</div><div class="stat-sub">bonus points earned</div></div>
+    </div>
+
+    <div class="card">
+      <div class="section-heading-row"><div><div class="section-kicker">YOUR SEASON</div><h2>Race performance</h2></div></div>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Race</th><th class="number">Qualifying</th><th class="number">Sprint Q</th><th class="number">Sprint</th><th class="number">Race</th><th class="number">Total</th></tr></thead>
+          <tbody>
+            ${myScores.map(score => {
+              const race = races.find(r => r.raceId === score.raceId);
+              return `<tr><td><strong>${escapeHtml(race ? race.race : score.raceId)}</strong></td><td class="number">${score.qualifyingPoints ?? 0}</td><td class="number">${score.sprintQualifyingPoints ?? 0}</td><td class="number">${score.sprintPoints ?? 0}</td><td class="number">${score.racePoints ?? 0}</td><td class="number"><strong>${score.totalPoints ?? 0}</strong></td></tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  `;
+}
+
 /* =========================================================
    HELPERS
 ========================================================= */
@@ -4466,8 +5351,6 @@ null;
 
 isAdmin =
 false;
-
-scores = [];
 
 
 document
