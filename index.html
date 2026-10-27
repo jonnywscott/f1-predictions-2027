@@ -1787,6 +1787,34 @@ button:disabled{opacity:.65;cursor:wait!important;transform:none!important}
 @media(max-width:700px){body{padding-bottom:105px}main{padding-bottom:28px}#bottomNav{width:calc(100% - 20px);bottom:max(8px,env(safe-area-inset-bottom));padding:6px;border-radius:19px}.bottom-nav-link{font-size:9px;padding:7px 1px}.bottom-nav-link svg,.bottom-nav-link .nav-glyph{width:20px;height:20px}.header-inner{flex-wrap:nowrap!important}.user-box{display:none!important}}
 @media(min-width:701px){#bottomNav{bottom:18px}.bottom-nav-link{font-size:11px;padding:9px 4px}}
 
+
+/* Settings, rules and theme preferences */
+.profile-shortcuts-card{grid-column:1/-1}
+.profile-shortcuts{display:grid;gap:8px}
+.settings-shortcut{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:15px;border:1px solid var(--line,#e5e5e5);border-radius:13px;background:var(--surface,#fff);color:var(--text,#151515);cursor:pointer;transition:border-color .18s,transform .18s,background .18s}
+.settings-shortcut:hover{border-color:var(--accent,#e10600);transform:translateY(-1px)}
+.shortcut-icon{width:42px;height:42px;display:grid;place-items:center;flex-shrink:0;border-radius:12px;background:rgba(225,6,0,.09);color:var(--accent,#e10600);font-size:22px}
+.settings-shortcut>span:nth-child(2){display:grid;gap:4px;flex:1}.settings-shortcut small{color:var(--muted,#777);font-size:12px}.shortcut-arrow{font-size:26px;color:var(--muted,#777)}
+.settings-layout{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.settings-card{min-width:0}.settings-description{color:var(--muted,#777);line-height:1.55;margin:0 0 16px}
+.preference-option{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-top:1px solid var(--line,#e5e5e5);cursor:pointer}.preference-option input{margin-top:3px;accent-color:var(--accent,#e10600);width:17px;height:17px;flex-shrink:0}.preference-option span{display:grid;gap:5px}.preference-option small{color:var(--muted,#777);line-height:1.45}
+.theme-options{display:grid;grid-template-columns:1fr 1fr;gap:12px}.theme-choice{display:flex;flex-direction:column;align-items:flex-start;gap:7px;padding:16px;border:1px solid var(--line,#e5e5e5);border-radius:13px;background:var(--surface,#fff);color:var(--text,#151515);cursor:pointer;text-align:left}.theme-choice>span{font-size:24px}.theme-choice small{color:var(--muted,#777)}.theme-choice.active{border:2px solid var(--accent,#e10600);padding:15px;background:rgba(225,6,0,.055)}
+.rules-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.rules-card h2{margin:8px 0 10px}.rules-card p{line-height:1.65;color:var(--muted,#777);margin:0}.rules-scoring{display:grid;gap:0}.rules-scoring>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--line,#e5e5e5)}.rules-scoring span{color:var(--muted,#777)}.rules-scoring strong{white-space:nowrap}.rules-note{color:var(--muted,#777);font-size:13px;line-height:1.5;margin:18px 2px}
+body.button-reorder-mode .driver[draggable="true"]{cursor:default}
+body.button-reorder-mode .driver{user-select:none}
+/* Dark mode overrides keep the existing page structure and controls intact. */
+body.dark-mode{background:#101114!important;color:#f1f2f4!important;color-scheme:dark}
+body.dark-mode main,body.dark-mode .app-page{color:#f1f2f4}
+body.dark-mode .card,body.dark-mode .stat-box,body.dark-mode .calendar-race-card,body.dark-mode .race-detail-row,body.dark-mode .admin-management-row,body.dark-mode .admin-editor{background:#1a1c21!important;color:#f1f2f4!important;border-color:#30333a!important}
+body.dark-mode .card h1,body.dark-mode .card h2,body.dark-mode .card h3,body.dark-mode .page-heading h1,body.dark-mode .profile-main h2,body.dark-mode .settings-shortcut strong,body.dark-mode .rules-card h2{color:#f1f2f4}
+body.dark-mode .settings-shortcut,body.dark-mode .theme-choice,body.dark-mode .admin-row-actions button,body.dark-mode input,body.dark-mode select,body.dark-mode textarea{background:#22252b!important;color:#f1f2f4!important;border-color:#3a3d45!important}
+body.dark-mode .secondary-button,body.dark-mode .mobile-controls button{background:#30333a!important;color:#f1f2f4!important;border-color:#454952!important}
+body.dark-mode .table-wrap,body.dark-mode table,body.dark-mode th,body.dark-mode td{background:#1a1c21!important;color:#f1f2f4!important;border-color:#30333a!important}
+body.dark-mode .driver-list{background:#15171b!important;border-color:#30333a!important}
+body.dark-mode .driver{background:#22252b!important;color:#f1f2f4!important;border-color:#383b43!important}
+body.dark-mode .team,body.dark-mode .hint,body.dark-mode .settings-description,body.dark-mode .preference-option small,body.dark-mode .theme-choice small,body.dark-mode .rules-card p,body.dark-mode .rules-scoring span,body.dark-mode .settings-shortcut small{color:#a9adb7!important}
+body.dark-mode .loading-row,body.dark-mode .empty-state{color:#a9adb7}
+@media(max-width:800px){.settings-layout,.rules-grid{grid-template-columns:1fr}.profile-shortcuts-card{grid-column:auto}}
+
 </style>
 
 </head>
@@ -2007,13 +2035,14 @@ Other Players
           </div>
         </div>
 
-        <div class="card">
+        <div class="card profile-shortcuts-card">
           <div class="card-header">
-            <div><div class="eyebrow">SETTINGS</div><h2>Personalisation</h2></div>
+            <div><div class="eyebrow">YOUR ACCOUNT</div><h2>Quick links</h2></div>
           </div>
-          <div class="setting-row">
-            <div><strong>Prediction input</strong><p>Choose how you want to enter your predictions.</p></div>
-            <button id="profileSettingsButton" class="primary-button" onclick="openProfileSettings()">Personalisation</button>
+          <div class="profile-shortcuts">
+            <button class="settings-shortcut" onclick="openProfileSettings()"><span class="shortcut-icon">⚙</span><span><strong>Settings</strong><small>Personalisation and display preferences</small></span><span class="shortcut-arrow">›</span></button>
+            <button class="settings-shortcut" onclick="showPage('rules')"><span class="shortcut-icon">ⓘ</span><span><strong>Game rules</strong><small>How predictions and scoring work</small></span><span class="shortcut-arrow">›</span></button>
+            <button id="profileAdminShortcut" class="settings-shortcut hidden" onclick="showPage('admin')"><span class="shortcut-icon">⚙</span><span><strong>Admin panel</strong><small>Manage races, drivers and official results</small></span><span class="shortcut-arrow">›</span></button>
           </div>
         </div>
 
@@ -2052,6 +2081,52 @@ Other Players
       <div id="statsContent">
         <div class="card"><div class="loading-row">Loading stats...</div></div>
       </div>
+    </section>
+
+    <section id="settingsPage" class="app-page hidden">
+      <div class="page-heading">
+        <div><div class="breadcrumb"><button type="button" onclick="showPage('profile')">Profile</button><span aria-hidden="true">›</span><strong>Settings</strong></div><div class="eyebrow">PREFERENCES</div><h1>Settings</h1><p>Make F1 Predictions feel right for you. Your preferences are saved on this device.</p></div>
+      </div>
+      <div class="settings-layout">
+        <div class="card settings-card">
+          <div class="card-header"><div><div class="eyebrow">PERSONALISATION</div><h2>Prediction input</h2></div></div>
+          <p class="settings-description">Choose how you prefer to reorder drivers when making predictions.</p>
+          <label class="preference-option"><input type="radio" name="predictionInputMode" value="drag" onchange="setPredictionInputMode('drag')"><span><strong>Drag and drop</strong><small>Drag drivers into your preferred finishing order. Move buttons remain available on smaller screens.</small></span></label>
+          <label class="preference-option"><input type="radio" name="predictionInputMode" value="buttons" onchange="setPredictionInputMode('buttons')"><span><strong>Move buttons</strong><small>Use the up and down arrows to arrange your prediction instead of dragging.</small></span></label>
+        </div>
+        <div class="card settings-card">
+          <div class="card-header"><div><div class="eyebrow">APPEARANCE</div><h2>Display mode</h2></div></div>
+          <p class="settings-description">Choose a light or dark appearance. This preference is saved on this device.</p>
+          <div class="theme-options" role="group" aria-label="Display mode">
+            <button id="lightThemeButton" class="theme-choice" onclick="setTheme('light')"><span aria-hidden="true">☀</span><strong>Light</strong><small>Bright and clean</small></button>
+            <button id="darkThemeButton" class="theme-choice" onclick="setTheme('dark')"><span aria-hidden="true">☾</span><strong>Dark</strong><small>Easy on the eyes</small></button>
+          </div>
+        </div>
+        <div class="card settings-card">
+          <div class="card-header"><div><div class="eyebrow">HELP</div><h2>Game rules</h2></div></div>
+          <p class="settings-description">Not sure how points are awarded or when predictions lock?</p>
+          <button class="secondary-button" onclick="showPage('rules')">Read the rules <span aria-hidden="true">→</span></button>
+        </div>
+        <div id="settingsAdminCard" class="card settings-card hidden">
+          <div class="card-header"><div><div class="eyebrow">ADMINISTRATION</div><h2>Admin tools</h2></div></div>
+          <p class="settings-description">You have administrator access to race, driver and results management.</p>
+          <button class="primary-button" onclick="showPage('admin')">Open admin panel <span aria-hidden="true">→</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="rulesPage" class="app-page hidden">
+      <div class="page-heading">
+        <div><div class="breadcrumb"><button type="button" onclick="showPage('settings')">Settings</button><span aria-hidden="true">›</span><strong>Game rules</strong></div><div class="eyebrow">HOW TO PLAY</div><h1>Game rules</h1><p>Make your predictions before the session deadline and score points by getting each driver's finishing position right.</p></div>
+      </div>
+      <div class="rules-grid">
+        <div class="card rules-card"><div class="eyebrow">01 / PREDICTIONS</div><h2>Submit your order</h2><p>Arrange the drivers in the order you think they will finish. Save your prediction before qualifying begins. Once the session starts, that prediction is locked.</p></div>
+        <div class="card rules-card"><div class="eyebrow">02 / POINTS</div><h2>Scoring per driver</h2><div class="rules-scoring"><div><span>Exact position</span><strong>5 points</strong></div><div><span>1 position away</span><strong>4 points</strong></div><div><span>2 positions away</span><strong>3 points</strong></div><div><span>3 positions away</span><strong>2 points</strong></div><div><span>4 positions away</span><strong>1 point</strong></div><div><span>5+ positions away</span><strong>0 points</strong></div></div></div>
+        <div class="card rules-card"><div class="eyebrow">03 / SESSIONS</div><h2>Qualifying and race</h2><p>Qualifying predictions are scored against the official qualifying order. Race predictions are scored against the official Grand Prix finishing order. Your total combines the points awarded across scored sessions.</p></div>
+        <div class="card rules-card"><div class="eyebrow">04 / FAIR PLAY</div><h2>Deadlines and results</h2><p>Submit and save predictions before the relevant session starts. After the deadline, predictions are locked. Official results are entered by an administrator and are used to calculate scores and standings.</p></div>
+        <div class="card rules-card"><div class="eyebrow">05 / SPRINT WEEKENDS</div><h2>Sprint sessions</h2><p>Where sprint sessions are enabled for a race weekend, the app will show the relevant prediction tabs. Check the session tabs and deadline information for that weekend before submitting.</p></div>
+      </div>
+      <p class="rules-note">If a race weekend displays different session options, follow the options and deadline shown on that race's prediction page.</p>
     </section>
 
     <section id="adminPage" class="app-page hidden">
@@ -2290,8 +2365,51 @@ async function loadProfile() {
 }
 
 function openProfileSettings() {
-  showMessage('Personalisation settings will be added next.', 'success');
+  showPage('settings');
+  const mode = getPredictionInputMode();
+  document.querySelectorAll('input[name="predictionInputMode"]').forEach(input => { input.checked = input.value === mode; });
+  updateThemeButtons();
 }
+
+function getPredictionInputMode() {
+  try { return localStorage.getItem('f1PredictionInputMode') || 'drag'; } catch (e) { return 'drag'; }
+}
+
+function setPredictionInputMode(mode) {
+  if (mode !== 'drag' && mode !== 'buttons') return;
+  try { localStorage.setItem('f1PredictionInputMode', mode); } catch (e) {}
+  document.body.classList.toggle('button-reorder-mode', mode === 'buttons');
+  showMessage(mode === 'buttons' ? 'Prediction input set to move buttons.' : 'Prediction input set to drag and drop.', 'success');
+  if (currentPage === 'predictions' && currentRace) renderRace();
+}
+
+function setTheme(theme) {
+  if (theme !== 'light' && theme !== 'dark') return;
+  try { localStorage.setItem('f1DisplayTheme', theme); } catch (e) {}
+  document.body.classList.toggle('dark-mode', theme === 'dark');
+  updateThemeButtons();
+  showMessage(theme === 'dark' ? 'Dark mode enabled.' : 'Light mode enabled.', 'success');
+}
+
+function updateThemeButtons() {
+  let theme = 'light';
+  try { theme = localStorage.getItem('f1DisplayTheme') || 'light'; } catch (e) {}
+  const light = document.getElementById('lightThemeButton');
+  const dark = document.getElementById('darkThemeButton');
+  if (light) light.classList.toggle('active', theme === 'light');
+  if (dark) dark.classList.toggle('active', theme === 'dark');
+  document.body.classList.toggle('dark-mode', theme === 'dark');
+}
+
+function applySavedPreferences() {
+  let theme = 'light';
+  let mode = 'drag';
+  try { theme = localStorage.getItem('f1DisplayTheme') || 'light'; mode = localStorage.getItem('f1PredictionInputMode') || 'drag'; } catch (e) {}
+  document.body.classList.toggle('dark-mode', theme === 'dark');
+  document.body.classList.toggle('button-reorder-mode', mode === 'buttons');
+} 
+
+applySavedPreferences();
 
 
 /* =========================================================
@@ -3419,8 +3537,7 @@ document.createElement(
 div.className =
 'driver';
 
-div.draggable =
-true;
+div.draggable = getPredictionInputMode() !== 'buttons';
 
 div.dataset.driverId =
 driver.driverId;
@@ -3467,15 +3584,10 @@ onclick="moveDriver(event,this,1)"
 `;
 
 
-div.addEventListener(
-'dragstart',
-handleDragStart
-);
-
-div.addEventListener(
-'dragend',
-handleDragEnd
-);
+if (getPredictionInputMode() !== 'buttons') {
+  div.addEventListener('dragstart', handleDragStart);
+  div.addEventListener('dragend', handleDragEnd);
+}
 
 
 return div;
@@ -5233,7 +5345,7 @@ function showPage(page) {
     section.classList.toggle('hidden', section.id !== page + 'Page');
   });
 
-  const activePage = page === 'predictions' || page === 'raceDetail' ? 'calendar' : page;
+  const activePage = page === 'predictions' || page === 'raceDetail' ? 'calendar' : (page === 'settings' || page === 'rules' ? 'profile' : page);
   document.querySelectorAll('.bottom-nav-link').forEach(link => {
     link.classList.toggle('active', link.dataset.page === activePage);
   });
@@ -5241,6 +5353,10 @@ function showPage(page) {
   if (bottomNav) bottomNav.classList.toggle('hidden', !sessionToken);
   const adminBottom = document.getElementById('bottomAdminNav');
   if (adminBottom) adminBottom.classList.toggle('hidden', !isAdmin);
+  const adminShortcut = document.getElementById('profileAdminShortcut');
+  if (adminShortcut) adminShortcut.classList.toggle('hidden', !isAdmin);
+  const adminSettingsCard = document.getElementById('settingsAdminCard');
+  if (adminSettingsCard) adminSettingsCard.classList.toggle('hidden', !isAdmin);
   if (bottomNav) bottomNav.style.gridTemplateColumns = isAdmin ? 'repeat(6, minmax(0, 1fr))' : 'repeat(5, minmax(0, 1fr))';
 
   if (page === 'home') {
@@ -5254,6 +5370,11 @@ function showPage(page) {
 
   if (page === 'stats') {
     ensureScoresLoaded().then(renderStatsPage);
+  }
+  if (page === 'settings') {
+    const mode = getPredictionInputMode();
+    document.querySelectorAll('input[name="predictionInputMode"]').forEach(input => { input.checked = input.value === mode; });
+    updateThemeButtons();
   }
 }
 
