@@ -1762,6 +1762,31 @@ main{
 .race-detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}.race-detail-list{display:grid;gap:6px}.race-detail-row{display:grid;grid-template-columns:38px 1fr;align-items:center;gap:12px;padding:10px 12px;border-radius:10px;background:#f5f6f7}.race-detail-position{font-weight:950;color:#858990;text-align:center}.race-detail-row strong{display:block;font-size:14px}.race-detail-row small{display:block;color:#8b8f96;margin-top:2px}
 @media(max-width:700px){.calendar-race-card{grid-template-columns:38px 1fr}.calendar-action{grid-column:2;align-items:flex-start}.race-detail-grid{grid-template-columns:1fr}.race-detail-hero{align-items:flex-start;flex-direction:column}.race-calendar-button{width:100%;justify-content:space-between}}
 
+
+/* Floating Strava-inspired navigation and action feedback */
+:root{scroll-behavior:smooth}
+body{padding-bottom:112px}
+header .header-inner{min-height:72px}
+#menuToggle,#mainNav{display:none!important}
+#bottomNav{position:fixed;z-index:1000;left:50%;bottom:max(14px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(680px,calc(100% - 28px));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;padding:8px;background:rgba(22,23,27,.94);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,.12);border-radius:22px;box-shadow:0 12px 38px rgba(0,0,0,.28)}
+.bottom-nav-link{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:8px 3px;border:0;border-radius:14px;background:transparent;color:#aeb1b9;font-size:10px;font-weight:750;cursor:pointer;transition:background .18s,color .18s,transform .18s}
+.bottom-nav-link svg,.bottom-nav-link .nav-glyph{width:21px;height:21px;font-size:20px;line-height:21px}
+.bottom-nav-link.active{background:rgba(225,6,0,.18);color:#ff514b}
+.bottom-nav-link:active{transform:scale(.96)}
+.bottom-nav-link:focus-visible{outline:2px solid #ff514b;outline-offset:2px}
+#message{position:sticky;top:8px;z-index:900;box-shadow:0 8px 24px rgba(0,0,0,.12);animation:messageIn .22s ease both}
+@keyframes messageIn{from{opacity:0;transform:translateY(-7px)}to{opacity:1;transform:translateY(0)}}
+button:disabled{opacity:.65;cursor:wait!important;transform:none!important}
+.save-bar .primary-button,.admin-editor-actions button,.admin-quick-button{transition:transform .16s,filter .16s,box-shadow .16s}
+.save-bar .primary-button:not(:disabled):hover,.admin-editor-actions button:not(:disabled):hover{transform:translateY(-1px);box-shadow:0 5px 14px rgba(0,0,0,.12)}
+.driver-list .driver{transition:opacity .18s,transform .18s,box-shadow .18s}
+.driver-list .driver:active{transform:scale(.99)}
+.breadcrumb{flex-wrap:wrap;row-gap:6px}
+.breadcrumb button{border-radius:6px;padding:4px 2px}
+.breadcrumb button:focus-visible{outline:2px solid var(--f1-red);outline-offset:2px}
+@media(max-width:700px){body{padding-bottom:105px}main{padding-bottom:28px}#bottomNav{width:calc(100% - 20px);bottom:max(8px,env(safe-area-inset-bottom));padding:6px;border-radius:19px}.bottom-nav-link{font-size:9px;padding:7px 1px}.bottom-nav-link svg,.bottom-nav-link .nav-glyph{width:20px;height:20px}.header-inner{flex-wrap:nowrap!important}.user-box{display:none!important}}
+@media(min-width:701px){#bottomNav{bottom:18px}.bottom-nav-link{font-size:11px;padding:9px 4px}}
+
 </style>
 
 </head>
@@ -1779,16 +1804,6 @@ main{
       </div>
     </a>
 
-    <button id="menuToggle" class="menu-toggle" onclick="toggleMenu()" aria-label="Open menu">☰</button>
-
-    <nav id="mainNav" class="main-nav">
-      <button class="nav-link active" data-page="home" onclick="showPage('home')">Home</button>
-      <button class="nav-link" data-page="calendar" onclick="showPage('calendar')">Season Calendar</button>
-  <button class="nav-link" data-page="profile" onclick="showPage('profile')">Profile</button>
-      <button class="nav-link" data-page="leaderboard" onclick="showPage('leaderboard')">Leaderboard</button>
-      <button class="nav-link" data-page="stats" onclick="showPage('stats')">Stats</button>
-      <button id="adminNav" class="nav-link admin-nav hidden" data-page="admin" onclick="showPage('admin')">Admin</button>
-    </nav>
 
     <div id="userBox" class="user-box">
       <span id="userName"></span>
@@ -1968,7 +1983,7 @@ Other Players
 
     <section id="raceDetailPage" class="app-page hidden">
       <div class="page-heading">
-        <div><div class="eyebrow">RACE WEEKEND</div><h1 id="raceDetailTitle">Race Weekend</h1><p id="raceDetailSubtitle"></p></div>
+        <div><div class="breadcrumb"><button type="button" onclick="showPage('calendar')">Season Calendar</button><span aria-hidden="true">›</span><strong>Race Weekend</strong></div><div class="eyebrow">RACE WEEKEND</div><h1 id="raceDetailTitle">Race Weekend</h1><p id="raceDetailSubtitle"></p></div>
         <button class="secondary-button" onclick="showPage('calendar')">← Season Calendar</button>
       </div>
       <div id="raceDetailContent"></div>
@@ -3911,8 +3926,9 @@ document.getElementById(
 button.disabled =
 true;
 
+button.dataset.originalText = button.textContent;
 button.textContent =
-'Saving...';
+'Saving…';
 
 
 try {
@@ -3949,9 +3965,12 @@ data.predictions || [];
 
 
 showMessage(
-'Predictions saved successfully.',
+'✓ Predictions saved successfully. Your order has been updated.',
 'success'
 );
+button.classList.add('saved');
+button.textContent = '✓ Saved';
+setTimeout(() => { if (button && button.textContent === '✓ Saved') button.textContent = 'Save Predictions'; }, 2200);
 
 renderPredictionPanel();
 
@@ -3970,6 +3989,7 @@ false;
 
 button.textContent =
 'Save Predictions';
+button.classList.remove('saved');
 
 }
 
@@ -5213,13 +5233,15 @@ function showPage(page) {
     section.classList.toggle('hidden', section.id !== page + 'Page');
   });
 
-  document.querySelectorAll('.nav-link').forEach(link => {
-    const activePage = page === 'predictions' ? 'calendar' : page;
+  const activePage = page === 'predictions' || page === 'raceDetail' ? 'calendar' : page;
+  document.querySelectorAll('.bottom-nav-link').forEach(link => {
     link.classList.toggle('active', link.dataset.page === activePage);
   });
-
-  const nav = document.getElementById('mainNav');
-  if (nav) nav.classList.remove('open');
+  const bottomNav = document.getElementById('bottomNav');
+  if (bottomNav) bottomNav.classList.toggle('hidden', !sessionToken);
+  const adminBottom = document.getElementById('bottomAdminNav');
+  if (adminBottom) adminBottom.classList.toggle('hidden', !isAdmin);
+  if (bottomNav) bottomNav.style.gridTemplateColumns = isAdmin ? 'repeat(6, minmax(0, 1fr))' : 'repeat(5, minmax(0, 1fr))';
 
   if (page === 'home') {
     renderHome();
@@ -5596,6 +5618,16 @@ google.accounts.id
 }
 
 </script>
+
+
+<nav id="bottomNav" aria-label="Main navigation" class="hidden">
+  <button class="bottom-nav-link active" data-page="home" onclick="showPage('home')"><span class="nav-glyph" aria-hidden="true">⌂</span><span>Home</span></button>
+  <button class="bottom-nav-link" data-page="calendar" onclick="showPage('calendar')"><span class="nav-glyph" aria-hidden="true">▦</span><span>Calendar</span></button>
+  <button class="bottom-nav-link" data-page="leaderboard" onclick="showPage('leaderboard')"><span class="nav-glyph" aria-hidden="true">♜</span><span>Standings</span></button>
+  <button class="bottom-nav-link" data-page="stats" onclick="showPage('stats')"><span class="nav-glyph" aria-hidden="true">▥</span><span>Stats</span></button>
+  <button class="bottom-nav-link" data-page="profile" onclick="showPage('profile')"><span class="nav-glyph" aria-hidden="true">♙</span><span>Profile</span></button>
+  <button id="bottomAdminNav" class="bottom-nav-link hidden" data-page="admin" onclick="showPage('admin')"><span class="nav-glyph" aria-hidden="true">⚙</span><span>Admin</span></button>
+</nav>
 
 </body>
 
