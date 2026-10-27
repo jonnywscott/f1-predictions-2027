@@ -2112,6 +2112,11 @@ Other Players
           <p class="settings-description">You have administrator access to race, driver and results management.</p>
           <button class="primary-button" onclick="showPage('admin')">Open admin panel <span aria-hidden="true">→</span></button>
         </div>
+        <div id="settingsAdminAccessHelp" class="card settings-card hidden">
+          <div class="card-header"><div><div class="eyebrow">ADMINISTRATION</div><h2>Admin access not enabled</h2></div></div>
+          <p class="settings-description">Administrator access is controlled by the Google Sheets <strong>Settings</strong> tab. Add your Player ID to the value for <strong>Admin Player IDs</strong>, then sign out and sign back in. Your account ID is shown below.</p>
+          <p class="settings-description"><strong>Your Player ID:</strong> <code id="adminAccessPlayerId">Not available</code></p>
+        </div>
       </div>
     </section>
 
@@ -2762,39 +2767,29 @@ await loadApp();
 
 
 /*
-  Test admin access.
+  Read the explicit administrator flag from the backend.
+  Do not infer admin access from a general results request.
 */
-
 try {
-
-await apiCall(
-'results',
-{
-session:
-sessionToken
+  const access = await apiCall('me', { session: sessionToken });
+  isAdmin = access && access.admin === true;
+} catch (error) {
+  console.warn('Could not verify administrator access:', error);
+  isAdmin = false;
 }
-);
 
-isAdmin = true;
+const adminNav = document.getElementById('adminNav');
+const adminSection = document.getElementById('adminSection');
+if (adminNav) adminNav.classList.toggle('hidden', !isAdmin);
+if (adminSection) adminSection.classList.toggle('hidden', !isAdmin);
 
-document
-.getElementById(
-'adminNav'
-).classList.remove('hidden');
-
-document
-.getElementById(
-'adminSection'
-)
-.classList
-.remove('hidden');
-
-await loadAdmin();
-
-} catch(error) {
-
-isAdmin = false;
-
+if (isAdmin) {
+  try {
+    await loadAdmin();
+  } catch (error) {
+    console.error('Administrator tools could not be loaded:', error);
+    showMessage('Admin access is enabled, but the admin tools could not load: ' + (error.message || 'Unknown error'), 'error');
+  }
 }
 
 showPage('home');
@@ -5074,14 +5069,25 @@ resultsPayload
 );
 
 
+await refreshAdminResults();
+
+/*
+  The backend recalculates the saved race's score rows.
+  Clear the client cache so every view fetches the latest
+  standings instead of continuing to show old totals.
+*/
+scoresLoaded = false;
+scoresLoading = false;
+await ensureScoresLoaded();
+
+renderHome();
+renderLeaderboardPage();
+renderStatsPage();
+
 showMessage(
-data.message ||
-'Results saved.',
+(data && data.message) || 'Results saved and scores refreshed.',
 'success'
 );
-
-
-await refreshAdminResults();
 
 
 } catch(error) {
@@ -5357,6 +5363,10 @@ function showPage(page) {
   if (adminShortcut) adminShortcut.classList.toggle('hidden', !isAdmin);
   const adminSettingsCard = document.getElementById('settingsAdminCard');
   if (adminSettingsCard) adminSettingsCard.classList.toggle('hidden', !isAdmin);
+  const adminAccessHelp = document.getElementById('settingsAdminAccessHelp');
+  if (adminAccessHelp) adminAccessHelp.classList.toggle('hidden', isAdmin || !sessionToken);
+  const adminAccessPlayerId = document.getElementById('adminAccessPlayerId');
+  if (adminAccessPlayerId) adminAccessPlayerId.textContent = (currentUser && currentUser.playerId) ? currentUser.playerId : 'Not available';
   if (bottomNav) bottomNav.style.gridTemplateColumns = isAdmin ? 'repeat(6, minmax(0, 1fr))' : 'repeat(5, minmax(0, 1fr))';
 
   if (page === 'home') {
