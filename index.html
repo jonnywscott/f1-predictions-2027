@@ -1816,6 +1816,68 @@ body.dark-mode .admin-race-progress-row{background:#1a1c21;border-color:#30333a}
 body.dark-mode .admin-progress-round,body.dark-mode .admin-progress-badge.pending{background:#30333a;color:#f1f2f4}
 @media(max-width:850px){.admin-race-progress-row{grid-template-columns:34px minmax(0,1fr) auto}.admin-progress-sessions{grid-column:2/4}.admin-progress-open{grid-column:2/4;justify-self:start;padding-left:0}}
 @media(max-width:500px){.admin-race-progress-row{gap:9px;padding:10px}.admin-progress-session{font-size:10px}}
+/* Premium admin management polish */
+.admin-subview-heading{padding:16px 18px;border:1px solid var(--line);border-radius:15px;background:linear-gradient(110deg,rgba(225,6,0,.07),transparent 60%);margin-bottom:18px}
+.admin-subview-heading .secondary-button{border-radius:10px;padding:10px 13px}
+.admin-subview-heading .eyebrow{font-size:10px;letter-spacing:.13em;color:var(--f1-red,#e10600);font-weight:900}
+.admin-management-grid{align-items:start;gap:18px}
+.admin-management-card{padding:clamp(16px,2.3vw,24px);border-radius:17px;box-shadow:0 6px 22px rgba(16,17,20,.035);min-width:0}
+.admin-section-title{padding-bottom:15px;border-bottom:1px solid var(--line);margin-bottom:16px}
+.admin-section-title h2{font-size:21px;letter-spacing:-.4px}
+.admin-section-title .primary-button{border-radius:10px;padding:10px 13px;white-space:nowrap}
+.admin-management-list{gap:10px}
+.admin-management-row{position:relative;overflow:hidden;grid-template-columns:minmax(0,1fr) auto;padding:15px;border-radius:13px;background:var(--paper,#fff);transition:border-color .16s,transform .16s,box-shadow .16s}
+.admin-management-row:before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:transparent;transition:background .16s}
+.admin-management-row:hover{transform:translateY(-1px);border-color:#c9cbd0;box-shadow:0 7px 18px rgba(16,17,20,.05)}
+.admin-management-row:hover:before{background:var(--f1-red,#e10600)}
+.admin-management-row strong{font-size:14px;letter-spacing:-.1px}
+.admin-management-row small{font-size:11px;line-height:1.5}
+.admin-row-actions{align-items:center}
+.admin-row-actions button{border-radius:9px;padding:9px 11px;font-size:11px;transition:background .15s,border-color .15s}
+.admin-row-actions button:first-child{background:#f4f5f7}
+.admin-row-actions button:hover{border-color:var(--f1-red,#e10600);color:var(--f1-red,#e10600)}
+.admin-editor{padding:clamp(16px,2.5vw,22px);border:1px solid rgba(225,6,0,.2);border-radius:15px;background:linear-gradient(135deg,rgba(225,6,0,.035),var(--soft,#f8f8f9));box-shadow:0 10px 26px rgba(16,17,20,.045)}
+.admin-editor:before{content:"EDIT DETAILS";display:block;margin-bottom:15px;color:var(--f1-red,#e10600);font-size:10px;font-weight:950;letter-spacing:.14em}
+.admin-editor-grid{gap:16px}
+.admin-field{gap:7px;min-width:0}
+.admin-field label{font-size:10px;letter-spacing:.1em}
+.admin-field input,.admin-field select{min-height:43px;padding:11px 12px;border:1px solid #d9dbe0;border-radius:10px;font:inherit;transition:border-color .15s,box-shadow .15s}
+.admin-field input:focus,.admin-field select:focus{outline:none;border-color:var(--f1-red,#e10600);box-shadow:0 0 0 3px rgba(225,6,0,.1)}
+.admin-checkbox{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--paper,#fff);font-size:12px!important;letter-spacing:0!important;text-transform:none!important}
+.admin-checkbox input{accent-color:var(--f1-red,#e10600);width:16px;height:16px;min-height:0}
+.admin-editor-actions{padding-top:14px;border-top:1px solid var(--line);margin-top:18px}
+.admin-editor-actions button{min-height:42px;border-radius:10px;padding:10px 15px}
+#adminResultsArea{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;margin:18px 0 4px}
+#adminResultsArea select{min-width:0;width:100%;min-height:46px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--paper,#fff);font:inherit;font-weight:750}
+#adminResultsArea select:focus{outline:none;border-color:var(--f1-red,#e10600);box-shadow:0 0 0 3px rgba(225,6,0,.09)}
+.admin-results-view .admin-header{display:flex;align-items:center;justify-content:space-between;gap:14px}
+.admin-results-view .admin-header h2{font-size:21px}
+.admin-results-view #adminResultStatus{border-radius:12px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.5}
+.admin-results-view .ranked-entry-mode{display:block}
+.admin-results-view .ranked-entry-card{box-shadow:none}
+.admin-results-view .save-bar{position:sticky;bottom:10px;z-index:5;padding:12px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);margin-top:18px}
+.admin-results-view .save-bar .primary-button{width:100%;min-height:48px;border-radius:11px;font-size:14px;font-weight:900}
+body.dark-mode .admin-subview-heading{background:linear-gradient(110deg,rgba(225,6,0,.12),transparent 60%);border-color:#30333a}
+body.dark-mode .admin-subview-heading .breadcrumb strong,body.dark-mode .admin-subview-heading .breadcrumb button{color:#f1f2f4}
+body.dark-mode .admin-management-row{background:#1a1c21;border-color:#30333a}
+body.dark-mode .admin-management-row:hover{border-color:#555b65}
+body.dark-mode .admin-row-actions button,body.dark-mode .admin-row-actions button:first-child{background:#272a30;color:#f1f2f4;border-color:#3a3d45}
+body.dark-mode .admin-editor{background:linear-gradient(135deg,rgba(225,6,0,.08),#1a1c21);border-color:#55312f}
+body.dark-mode .admin-field input,body.dark-mode .admin-field select,body.dark-mode #adminResultsArea select{background:#22252b;color:#f1f2f4;border-color:#3a3d45}
+body.dark-mode .admin-checkbox{background:#22252b;border-color:#3a3d45}
+body.dark-mode .admin-results-view .save-bar{background:rgba(26,28,33,.92);border-color:#30333a}
+@media(max-width:600px){
+  .admin-section-title{align-items:flex-start;flex-direction:column}
+  .admin-section-title .primary-button{width:100%}
+  .admin-management-row{grid-template-columns:minmax(0,1fr);gap:12px}
+  .admin-row-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .admin-row-actions button{min-height:40px}
+  #adminResultsArea{grid-template-columns:1fr}
+  .admin-results-view .admin-header{align-items:flex-start}
+  .admin-editor-actions{display:grid;grid-template-columns:1fr 1fr}
+  .admin-editor-actions button{width:100%}
+}
+
 /* Admin dashboard and focused sub-views */
 .admin-dashboard-view{display:grid;gap:22px;margin-bottom:20px}
 .admin-dashboard-welcome{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:24px;border-radius:18px;background:linear-gradient(135deg,#17191f,#30343d);color:#fff}
