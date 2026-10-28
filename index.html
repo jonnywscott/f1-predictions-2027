@@ -1801,6 +1801,13 @@ button:disabled{opacity:.65;cursor:wait!important;transform:none!important}
 .rules-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.rules-card h2{margin:8px 0 10px}.rules-card p{line-height:1.65;color:var(--muted,#777);margin:0}.rules-scoring{display:grid;gap:0}.rules-scoring>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--line,#e5e5e5)}.rules-scoring span{color:var(--muted,#777)}.rules-scoring strong{white-space:nowrap}.rules-note{color:var(--muted,#777);font-size:13px;line-height:1.5;margin:18px 2px}
 body.button-reorder-mode .driver[draggable="true"]{cursor:default}
 body.button-reorder-mode .driver{user-select:none}
+/* Clear blank slots and simpler settings-to-admin navigation */
+.ranked-driver-input::placeholder{color:#969ba4;font-weight:550;opacity:1}
+.ranked-driver-row:not([data-driver-id]) .position{background:#fff0ef;color:#c21d17}
+.admin-navigation-help{margin-top:14px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:var(--paper,#fff);color:var(--muted);font-size:13px;line-height:1.55}
+.admin-navigation-help strong{color:var(--ink)}
+body.dark-mode .admin-navigation-help{background:#1a1c21;color:#a9adb7;border-color:#30333a}
+body.dark-mode .admin-navigation-help strong{color:#f1f2f4}
 /* Searchable, numbered finishing-order editor for touch and desktop */
 .ranked-entry-card{border:1px solid var(--line);border-radius:16px;background:var(--paper,#fff);padding:clamp(14px,2.5vw,24px);box-shadow:0 8px 28px rgba(16,17,20,.045)}
 .ranked-entry-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}
@@ -2073,7 +2080,7 @@ Other Players
           <div class="profile-shortcuts">
             <button class="settings-shortcut" onclick="openProfileSettings()"><span class="shortcut-icon">⚙</span><span><strong>Settings</strong><small>Personalisation and display preferences</small></span><span class="shortcut-arrow">›</span></button>
             <button class="settings-shortcut" onclick="showPage('rules')"><span class="shortcut-icon">ⓘ</span><span><strong>Game rules</strong><small>How predictions and scoring work</small></span><span class="shortcut-arrow">›</span></button>
-            <button id="profileAdminShortcut" class="settings-shortcut hidden" onclick="showPage('admin')"><span class="shortcut-icon">⚙</span><span><strong>Admin panel</strong><small>Manage races, drivers and official results</small></span><span class="shortcut-arrow">›</span></button>
+            
           </div>
         </div>
 
@@ -3394,9 +3401,7 @@ function renderPredictionPanel() {
 
   document.getElementById('saveButton').disabled = false;
   const saved = getSavedOrder(currentTab);
-  const orderedDrivers = saved.length
-    ? [...saved, ...drivers.filter(d => !saved.some(s => s.driverId === d.driverId))]
-    : drivers.slice();
+  const orderedDrivers = saved.length === drivers.length ? saved : drivers.map(() => null);
 
   if (getPredictionInputMode() === 'typeahead') {
     container.innerHTML = `
@@ -3456,17 +3461,17 @@ function renderRankedDriverList(list, orderedDrivers, context) {
   orderedDrivers.forEach((driver, index) => {
     const row = document.createElement('div');
     row.className = 'driver ranked-driver-row';
-    row.dataset.driverId = driver.driverId;
+    row.dataset.driverId = driver ? driver.driverId : '';
     row.draggable = false;
     row.innerHTML = `
       <div class="position">${index + 1}</div>
       <div class="ranked-driver-field">
         <input class="ranked-driver-input" type="text" list="driverNameSuggestions"
-          value="${escapeHtml(driver.driver || '')}" autocomplete="off" autocapitalize="words"
+          value="${escapeHtml(driver ? driver.driver || '' : '')}" placeholder="Type driver name…" autocomplete="off" autocapitalize="words"
           aria-label="Position ${index + 1} driver" data-context="${context}">
-        <div class="team">${escapeHtml(driver.team || '')}</div>
+        <div class="team">${escapeHtml(driver ? driver.team || '' : '')}</div>
       </div>
-      <span class="ranked-driver-hint">Edit</span>`;
+      <span class="ranked-driver-hint">${driver ? 'Edit' : 'Choose'}</span>`;
     const input = row.querySelector('.ranked-driver-input');
     input.addEventListener('change', () => handleRankedDriverInput(input));
     input.addEventListener('keydown', event => {
@@ -3481,12 +3486,14 @@ function renderRankedDriverList(list, orderedDrivers, context) {
 
 
 function updateRankedDriverRow(row, driver) {
-  if (!row || !driver) return;
-  row.dataset.driverId = driver.driverId;
+  if (!row) return;
+  row.dataset.driverId = driver ? driver.driverId : '';
   const input = row.querySelector('.ranked-driver-input');
   const team = row.querySelector('.team');
-  if (input) input.value = driver.driver || '';
-  if (team) team.textContent = driver.team || '';
+  const hint = row.querySelector('.ranked-driver-hint');
+  if (input) input.value = driver ? driver.driver || '' : '';
+  if (team) team.textContent = driver ? driver.team || '' : '';
+  if (hint) hint.textContent = driver ? 'Edit' : 'Choose';
 }
 
 
@@ -3512,7 +3519,7 @@ function handleRankedDriverInput(input) {
     const otherRow = [...list.querySelectorAll('.ranked-driver-row')]
       .find(candidate => candidate !== row && candidate.dataset.driverId === selected.driverId);
     updateRankedDriverRow(row, selected);
-    if (otherRow && current) updateRankedDriverRow(otherRow, current);
+    if (otherRow) updateRankedDriverRow(otherRow, current || null);
   } else {
     input.value = selected.driver;
   }
@@ -4048,6 +4055,15 @@ return;
 
 }
 
+
+if (getPredictionInputMode() === 'typeahead') {
+  const rows = [...document.querySelectorAll('#predictionList .ranked-driver-row')];
+  const ids = rows.map(row => row.dataset.driverId).filter(Boolean);
+  if (rows.length !== drivers.length || ids.length !== drivers.length || new Set(ids).size !== drivers.length) {
+    showMessage('Please choose a driver for every position before saving.', 'error');
+    return;
+  }
+}
 
 const button =
 document.getElementById(
@@ -4906,9 +4922,7 @@ function renderAdminResultList() {
   if (available) available.innerHTML = '';
 
   const saved = getSavedResultOrder();
-  const ordered = saved.length
-    ? [...saved, ...drivers.filter(d => !saved.some(s => s.driverId === d.driverId))]
-    : drivers.slice();
+  const ordered = saved.length === drivers.length ? saved : drivers.map(() => null);
 
   renderRankedDriverList(list, ordered, 'results');
 
@@ -4939,12 +4953,13 @@ document.querySelectorAll(
 
 
 if (
-list.length !==
-drivers.length
+list.length !== drivers.length ||
+[...list].some(el => !el.dataset.driverId) ||
+new Set([...list].map(el => el.dataset.driverId)).size !== drivers.length
 ) {
 
 showMessage(
-'You must place every active driver into the result order.',
+'Choose a different driver for every numbered position before saving results.',
 'error'
 );
 
@@ -5306,16 +5321,16 @@ function showPage(page) {
   const bottomNav = document.getElementById('bottomNav');
   if (bottomNav) bottomNav.classList.toggle('hidden', !sessionToken);
   const adminBottom = document.getElementById('bottomAdminNav');
-  if (adminBottom) adminBottom.classList.toggle('hidden', !isAdmin);
+  if (adminBottom) adminBottom.classList.add('hidden');
   const adminShortcut = document.getElementById('profileAdminShortcut');
-  if (adminShortcut) adminShortcut.classList.toggle('hidden', !isAdmin);
+  if (adminShortcut) adminShortcut.classList.add('hidden');
   const adminSettingsCard = document.getElementById('settingsAdminCard');
   if (adminSettingsCard) adminSettingsCard.classList.toggle('hidden', !isAdmin);
   const adminAccessHelp = document.getElementById('settingsAdminAccessHelp');
   if (adminAccessHelp) adminAccessHelp.classList.toggle('hidden', isAdmin || !sessionToken);
   const adminAccessPlayerId = document.getElementById('adminAccessPlayerId');
   if (adminAccessPlayerId) adminAccessPlayerId.textContent = (currentUser && currentUser.playerId) ? currentUser.playerId : 'Not available';
-  if (bottomNav) bottomNav.style.gridTemplateColumns = isAdmin ? 'repeat(6, minmax(0, 1fr))' : 'repeat(5, minmax(0, 1fr))';
+  if (bottomNav) bottomNav.style.gridTemplateColumns = 'repeat(5, minmax(0, 1fr))';
 
   if (page === 'home') {
     renderHome();
