@@ -1801,6 +1801,21 @@ button:disabled{opacity:.65;cursor:wait!important;transform:none!important}
 .rules-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.rules-card h2{margin:8px 0 10px}.rules-card p{line-height:1.65;color:var(--muted,#777);margin:0}.rules-scoring{display:grid;gap:0}.rules-scoring>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--line,#e5e5e5)}.rules-scoring span{color:var(--muted,#777)}.rules-scoring strong{white-space:nowrap}.rules-note{color:var(--muted,#777);font-size:13px;line-height:1.5;margin:18px 2px}
 body.button-reorder-mode .driver[draggable="true"]{cursor:default}
 body.button-reorder-mode .driver{user-select:none}
+/* Race-by-race results status */
+.admin-dashboard-subtitle{margin:6px 0 0;color:var(--muted);font-size:13px;line-height:1.5}
+.admin-race-progress-list{display:grid;gap:9px}
+.admin-race-progress-row{display:grid;grid-template-columns:38px minmax(120px,1fr) minmax(220px,1.4fr) auto;align-items:center;gap:14px;padding:13px;border:1px solid var(--line);border-radius:13px;background:var(--paper,#fff)}
+.admin-progress-round{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:#f1f2f4;color:#5f636b;font-size:11px;font-weight:950}
+.admin-progress-race{display:grid;gap:4px;min-width:0}.admin-progress-race strong{font-size:13px}.admin-progress-race small{font-size:11px;color:var(--muted)}
+.admin-progress-sessions{display:grid;gap:5px}
+.admin-progress-session{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:var(--muted)}
+.admin-progress-badge{display:inline-flex;align-items:center;justify-content:center;padding:4px 7px;border-radius:999px;font-size:10px;font-weight:850;white-space:nowrap}
+.admin-progress-badge.complete{background:#e3f7e8;color:#126b2d}.admin-progress-badge.pending{background:#f1f2f4;color:#6d7178}.admin-progress-badge.partial{background:#fff0d8;color:#8b5700}
+.admin-progress-open{border:0;background:transparent;color:var(--f1-red,#e10600);font-size:12px;font-weight:850;white-space:nowrap;cursor:pointer;padding:8px}
+body.dark-mode .admin-race-progress-row{background:#1a1c21;border-color:#30333a}
+body.dark-mode .admin-progress-round,body.dark-mode .admin-progress-badge.pending{background:#30333a;color:#f1f2f4}
+@media(max-width:850px){.admin-race-progress-row{grid-template-columns:34px minmax(0,1fr) auto}.admin-progress-sessions{grid-column:2/4}.admin-progress-open{grid-column:2/4;justify-self:start;padding-left:0}}
+@media(max-width:500px){.admin-race-progress-row{gap:9px;padding:10px}.admin-progress-session{font-size:10px}}
 /* Admin dashboard and focused sub-views */
 .admin-dashboard-view{display:grid;gap:22px;margin-bottom:20px}
 .admin-dashboard-welcome{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:24px;border-radius:18px;background:linear-gradient(135deg,#17191f,#30343d);color:#fff}
@@ -2226,6 +2241,10 @@ Other Players
             <div class="admin-dashboard-stat"><span>Race results entered</span><strong id="adminStatRaceResults">—</strong><small>Complete finishing orders</small></div>
             <div class="admin-dashboard-stat"><span>Qualifying results entered</span><strong id="adminStatQualResults">—</strong><small>Complete qualifying orders</small></div>
             <div class="admin-dashboard-stat"><span>Active drivers</span><strong id="adminStatDrivers">—</strong><small>Eligible for predictions</small></div>
+          </div>
+          <div class="admin-dashboard-section admin-race-progress-section">
+            <div><div class="eyebrow">SEASON PROGRESS</div><h3>Results progress by race</h3><p class="admin-dashboard-subtitle">See which race and qualifying results have been entered. Sprint weekends include extra sessions.</p></div>
+            <div id="adminRaceProgressList" class="admin-race-progress-list"><div class="loading-row">Loading race progress…</div></div>
           </div>
           <div class="admin-dashboard-section">
             <div><div class="eyebrow">QUICK ACTIONS</div><h3>What would you like to do?</h3></div>
@@ -4674,6 +4693,13 @@ race.qualifyingStart
    ADMIN
 ========================================================= */
 
+function openAdminResultsForRace(raceId) {
+  const raceSelect = document.getElementById('adminRaceSelect');
+  if (raceSelect) raceSelect.value = raceId;
+  changeAdminRace();
+  showAdminView('results');
+}
+
 function showAdminView(view) {
   if (!isAdmin) return;
   const dashboard = document.getElementById('adminDashboardView');
@@ -4719,6 +4745,31 @@ function renderAdminDashboard() {
   if (raceResults) raceResults.textContent = `${completedFor('racePosition')} / ${allRaces.length}`;
   if (qualResults) qualResults.textContent = `${completedFor('qualifyingPosition')} / ${allRaces.length}`;
   if (driverCount) driverCount.textContent = String(activeDrivers.length);
+
+  const progress = document.getElementById('adminRaceProgressList');
+  if (progress) {
+    const statusFor = (race, field) => {
+      const ids = new Set(resultRows.filter(row => row.raceId === race.raceId && Number(row[field]) > 0).map(row => row.driverId));
+      return ids.size >= required ? 'Complete' : ids.size ? `${ids.size}/${required} entered` : 'Not entered';
+    };
+    const badge = status => `<span class="admin-progress-badge ${status === 'Complete' ? 'complete' : status === 'Not entered' ? 'pending' : 'partial'}">${escapeHtml(status)}</span>`;
+    progress.innerHTML = allRaces.length ? allRaces.map((race,index) => {
+      const raceStatus = statusFor(race,'racePosition');
+      const qualStatus = statusFor(race,'qualifyingPosition');
+      const sessions = [
+        ['Qualifying',qualStatus],
+        ...(isTrue(race.sprint) ? [['Sprint qualifying',statusFor(race,'sprintQualifyingPosition')],['Sprint',statusFor(race,'sprintPosition')]] : []),
+        ['Race',raceStatus]
+      ];
+      const complete = sessions.every(([,status]) => status === 'Complete');
+      return `<div class="admin-race-progress-row">
+        <div class="admin-progress-round">${String(index+1).padStart(2,'0')}</div>
+        <div class="admin-progress-race"><strong>${escapeHtml(race.race || race.name || 'Unnamed race')}</strong><small>${complete ? 'All result sessions complete' : 'Results still required'}</small></div>
+        <div class="admin-progress-sessions">${sessions.map(([name,status]) => `<div class="admin-progress-session"><span>${escapeHtml(name)}</span>${badge(status)}</div>`).join('')}</div>
+        <button class="admin-progress-open" onclick="openAdminResultsForRace('${escapeAttr(race.raceId)}')">Manage results <span aria-hidden="true">›</span></button>
+      </div>`;
+    }).join('') : '<div class="empty-state">No races are configured yet.</div>';
+  }
 }
 
 
