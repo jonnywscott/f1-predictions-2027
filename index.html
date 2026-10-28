@@ -1801,6 +1801,37 @@ button:disabled{opacity:.65;cursor:wait!important;transform:none!important}
 .rules-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.rules-card h2{margin:8px 0 10px}.rules-card p{line-height:1.65;color:var(--muted,#777);margin:0}.rules-scoring{display:grid;gap:0}.rules-scoring>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--line,#e5e5e5)}.rules-scoring span{color:var(--muted,#777)}.rules-scoring strong{white-space:nowrap}.rules-note{color:var(--muted,#777);font-size:13px;line-height:1.5;margin:18px 2px}
 body.button-reorder-mode .driver[draggable="true"]{cursor:default}
 body.button-reorder-mode .driver{user-select:none}
+/* Searchable, numbered finishing-order editor for touch and desktop */
+.ranked-entry-card{border:1px solid var(--line);border-radius:16px;background:var(--paper,#fff);padding:clamp(14px,2.5vw,24px);box-shadow:0 8px 28px rgba(16,17,20,.045)}
+.ranked-entry-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:16px}
+.ranked-entry-heading h3{margin:0 0 6px;font-size:20px;letter-spacing:-.3px}
+.ranked-entry-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.ranked-entry-count{flex-shrink:0;border-radius:999px;padding:7px 10px;background:#f1f2f4;color:#5d626a;font-size:11px;font-weight:850;white-space:nowrap}
+.ranked-entry-count.complete{background:#e3f7e8;color:#126b2d}
+.ranked-entry-list{display:grid;gap:7px;background:transparent;border:0;padding:0}
+.ranked-driver-row{display:grid;grid-template-columns:42px minmax(0,1fr) auto;align-items:center;gap:12px;padding:8px 12px;min-height:66px;border:1px solid var(--line);border-radius:12px;background:var(--paper,#fff);box-shadow:0 2px 8px rgba(16,17,20,.025)}
+.ranked-driver-row .position{display:grid;place-items:center;width:36px;height:36px;border-radius:10px;background:#f0f1f3;color:#4f535b;font-size:13px;font-weight:950}
+.ranked-driver-field{min-width:0;display:grid;gap:3px}
+.ranked-driver-input{width:100%;min-width:0;min-height:42px;border:1px solid transparent;border-radius:9px;padding:8px 10px;background:#f7f8f9;color:var(--ink);font:inherit;font-size:14px;font-weight:850;outline:none}
+.ranked-driver-input:focus{border-color:var(--f1-red,#e10600);background:var(--paper,#fff);box-shadow:0 0 0 3px rgba(225,6,0,.09)}
+.ranked-driver-field .team{padding:0 10px;font-size:11px}
+.ranked-driver-hint{color:var(--muted);font-size:10px;font-weight:850;text-transform:uppercase;letter-spacing:.06em}
+.ranked-entry-note{margin:14px 0 0;color:var(--muted);font-size:12px;line-height:1.5}
+.ranked-entry-mode>div:nth-child(2){display:none}
+body.dark-mode .ranked-entry-card,body.dark-mode .ranked-driver-row{background:#1a1c21!important;border-color:#30333a!important}
+body.dark-mode .ranked-driver-row .position{background:#30333a;color:#f1f2f4}
+body.dark-mode .ranked-driver-input{background:#22252b;color:#f1f2f4}
+body.dark-mode .ranked-entry-count{background:#30333a;color:#f1f2f4}
+@media(max-width:600px){
+  .ranked-entry-heading{display:grid;gap:10px}
+  .ranked-entry-count{justify-self:start}
+  .ranked-driver-row{grid-template-columns:36px minmax(0,1fr);gap:8px;padding:7px;min-height:62px}
+  .ranked-driver-row .position{width:32px;height:32px}
+  .ranked-driver-hint{display:none}
+  .ranked-driver-input{min-height:44px;font-size:16px}
+  .ranked-entry-card{padding:12px}
+}
+
 /* Dark mode overrides keep the existing page structure and controls intact. */
 body.dark-mode{background:#101114!important;color:#f1f2f4!important;color-scheme:dark}
 body.dark-mode main,body.dark-mode .app-page{color:#f1f2f4}
@@ -2090,9 +2121,10 @@ Other Players
       <div class="settings-layout">
         <div class="card settings-card">
           <div class="card-header"><div><div class="eyebrow">PERSONALISATION</div><h2>Prediction input</h2></div></div>
-          <p class="settings-description">Choose how you prefer to reorder drivers when making predictions.</p>
-          <label class="preference-option"><input type="radio" name="predictionInputMode" value="drag" onchange="setPredictionInputMode('drag')"><span><strong>Drag and drop</strong><small>Drag drivers into your preferred finishing order. Move buttons remain available on smaller screens.</small></span></label>
-          <label class="preference-option"><input type="radio" name="predictionInputMode" value="buttons" onchange="setPredictionInputMode('buttons')"><span><strong>Move buttons</strong><small>Use the up and down arrows to arrange your prediction instead of dragging.</small></span></label>
+          <p class="settings-description">Choose how you want to build your finishing order. Search by driver name for the easiest phone experience.</p>
+          <label class="preference-option"><input type="radio" name="predictionInputMode" value="typeahead" onchange="setPredictionInputMode('typeahead')"><span><strong>Search driver names</strong><small>Choose a driver for each numbered position using autocomplete. Recommended for phones.</small></span></label>
+          <label class="preference-option"><input type="radio" name="predictionInputMode" value="drag" onchange="setPredictionInputMode('drag')"><span><strong>Drag and drop</strong><small>Drag drivers into your preferred finishing order on desktop.</small></span></label>
+          <label class="preference-option"><input type="radio" name="predictionInputMode" value="buttons" onchange="setPredictionInputMode('buttons')"><span><strong>Move buttons</strong><small>Use the up and down arrows to arrange your prediction.</small></span></label>
         </div>
         <div class="card settings-card">
           <div class="card-header"><div><div class="eyebrow">APPEARANCE</div><h2>Display mode</h2></div></div>
@@ -2192,21 +2224,14 @@ Loading results...
 </div>
 
 
-<div class="prediction-layout">
+<div class="prediction-layout ranked-entry-mode">
 
 
 <div>
 
 <div class="panel-title">
-
-<h3>
-Actual Result
-</h3>
-
-<span class="hint">
-Drag to reorder
-</span>
-
+<h3>Actual Result</h3>
+<span class="hint">Type a driver name to change a position</span>
 </div>
 
 <div
@@ -2217,7 +2242,7 @@ Drag to reorder
 </div>
 
 
-<div>
+<div class="ranked-entry-unused hidden">
 
 <div class="panel-title">
 
@@ -2377,14 +2402,19 @@ function openProfileSettings() {
 }
 
 function getPredictionInputMode() {
-  try { return localStorage.getItem('f1PredictionInputMode') || 'drag'; } catch (e) { return 'drag'; }
+  try { return localStorage.getItem('f1PredictionInputMode') || 'typeahead'; } catch (e) { return 'typeahead'; }
 }
 
 function setPredictionInputMode(mode) {
-  if (mode !== 'drag' && mode !== 'buttons') return;
+  if (!['typeahead', 'drag', 'buttons'].includes(mode)) return;
   try { localStorage.setItem('f1PredictionInputMode', mode); } catch (e) {}
   document.body.classList.toggle('button-reorder-mode', mode === 'buttons');
-  showMessage(mode === 'buttons' ? 'Prediction input set to move buttons.' : 'Prediction input set to drag and drop.', 'success');
+  const messages = {
+    typeahead: 'Prediction input set to searchable driver names.',
+    buttons: 'Prediction input set to move buttons.',
+    drag: 'Prediction input set to drag and drop.'
+  };
+  showMessage(messages[mode], 'success');
   if (currentPage === 'predictions' && currentRace) renderRace();
 }
 
@@ -2408,8 +2438,8 @@ function updateThemeButtons() {
 
 function applySavedPreferences() {
   let theme = 'light';
-  let mode = 'drag';
-  try { theme = localStorage.getItem('f1DisplayTheme') || 'light'; mode = localStorage.getItem('f1PredictionInputMode') || 'drag'; } catch (e) {}
+  let mode = 'typeahead';
+  try { theme = localStorage.getItem('f1DisplayTheme') || 'light'; mode = localStorage.getItem('f1PredictionInputMode') || 'typeahead'; } catch (e) {}
   document.body.classList.toggle('dark-mode', theme === 'dark');
   document.body.classList.toggle('button-reorder-mode', mode === 'buttons');
 } 
@@ -3347,172 +3377,166 @@ false
 ========================================================= */
 
 function renderPredictionPanel() {
+  const container = document.getElementById('predictionContent');
+  container.innerHTML = '';
 
-const container =
-document.getElementById(
-'predictionContent'
-);
+  const lock = getPredictionLock(currentTab);
+  if (lock.locked) {
+    container.innerHTML = `
+      <div class="message" style="display:block">
+        🔒 <strong>${escapeHtml(lock.title)}</strong><br>
+        ${escapeHtml(lock.message)}
+      </div>`;
+    document.getElementById('saveButton').disabled = true;
+    renderReadOnlyPredictions();
+    return;
+  }
 
-container.innerHTML = '';
+  document.getElementById('saveButton').disabled = false;
+  const saved = getSavedOrder(currentTab);
+  const orderedDrivers = saved.length
+    ? [...saved, ...drivers.filter(d => !saved.some(s => s.driverId === d.driverId))]
+    : drivers.slice();
 
+  if (getPredictionInputMode() === 'typeahead') {
+    container.innerHTML = `
+      <div class="ranked-entry-card">
+        <div class="ranked-entry-heading">
+          <div><h3>Build your prediction</h3><p>Choose a driver for each finishing position. Start typing a name to see suggestions.</p></div>
+          <span class="ranked-entry-count" id="predictionEntryCount">Ready to edit</span>
+        </div>
+        <datalist id="driverNameSuggestions"></datalist>
+        <div id="predictionList" class="driver-list ranked-entry-list"></div>
+        <p class="ranked-entry-note">Selecting a driver already used elsewhere swaps their positions, so every driver appears exactly once.</p>
+      </div>`;
+    renderRankedDriverList(document.getElementById('predictionList'), orderedDrivers, 'prediction');
+    updatePredictionEntryStatus();
+    return;
+  }
 
-const lock =
-getPredictionLock(
-currentTab
-);
+  container.innerHTML = `
+    <div class="prediction-layout">
+      <div>
+        <div class="panel-title"><h3>Your Prediction</h3><span class="hint">Drag to reorder</span></div>
+        <div id="predictionList" class="driver-list"></div>
+      </div>
+      <div>
+        <div class="panel-title"><h3>Available Drivers</h3><span class="hint">Drag into prediction</span></div>
+        <div id="availableList" class="driver-list"></div>
+      </div>
+    </div>`;
 
-
-if (lock.locked) {
-
-container.innerHTML = `
-
-<div class="message"
-style="display:block">
-
-🔒
-<strong>
-${escapeHtml(lock.title)}
-</strong>
-
-<br>
-
-${escapeHtml(lock.message)}
-
-</div>
-
-`;
-
-document.getElementById(
-'saveButton'
-).disabled =
-true;
-
-
-renderReadOnlyPredictions();
-
-return;
-
+  const predictionList = document.getElementById('predictionList');
+  const availableList = document.getElementById('availableList');
+  const selectedIds = orderedDrivers.map(d => d.driverId);
+  drivers.filter(d => !selectedIds.includes(d.driverId)).forEach(driver => availableList.appendChild(createDriverElement(driver)));
+  orderedDrivers.forEach(driver => predictionList.appendChild(createDriverElement(driver)));
+  setupDragDrop(predictionList);
+  setupDragDrop(availableList);
 }
 
 
-document.getElementById(
-'saveButton'
-).disabled =
-false;
+function ensureDriverNameSuggestions() {
+  let datalist = document.getElementById('driverNameSuggestions');
+  if (!datalist) {
+    datalist = document.createElement('datalist');
+    datalist.id = 'driverNameSuggestions';
+    document.body.appendChild(datalist);
+  }
+  datalist.innerHTML = drivers.map(driver =>
+    `<option value="${escapeHtml(driver.driver)}"></option>`
+  ).join('');
+}
 
 
-const saved =
-getSavedOrder(
-currentTab
-);
+function renderRankedDriverList(list, orderedDrivers, context) {
+  if (!list) return;
+  ensureDriverNameSuggestions();
+  list.innerHTML = '';
+  orderedDrivers.forEach((driver, index) => {
+    const row = document.createElement('div');
+    row.className = 'driver ranked-driver-row';
+    row.dataset.driverId = driver.driverId;
+    row.draggable = false;
+    row.innerHTML = `
+      <div class="position">${index + 1}</div>
+      <div class="ranked-driver-field">
+        <input class="ranked-driver-input" type="text" list="driverNameSuggestions"
+          value="${escapeHtml(driver.driver || '')}" autocomplete="off" autocapitalize="words"
+          aria-label="Position ${index + 1} driver" data-context="${context}">
+        <div class="team">${escapeHtml(driver.team || '')}</div>
+      </div>
+      <span class="ranked-driver-hint">Edit</span>`;
+    const input = row.querySelector('.ranked-driver-input');
+    input.addEventListener('change', () => handleRankedDriverInput(input));
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        input.blur();
+      }
+    });
+    list.appendChild(row);
+  });
+}
 
 
-const orderedDrivers =
-saved.length
-? saved
-: drivers.slice();
+function updateRankedDriverRow(row, driver) {
+  if (!row || !driver) return;
+  row.dataset.driverId = driver.driverId;
+  const input = row.querySelector('.ranked-driver-input');
+  const team = row.querySelector('.team');
+  if (input) input.value = driver.driver || '';
+  if (team) team.textContent = driver.team || '';
+}
 
 
-container.innerHTML = `
+function handleRankedDriverInput(input) {
+  const row = input.closest('.ranked-driver-row');
+  const list = input.closest('.driver-list');
+  if (!row || !list) return;
 
-<div class="prediction-layout">
+  const typed = input.value.trim().toLowerCase();
+  const selected = drivers.find(driver =>
+    String(driver.driver || '').trim().toLowerCase() === typed ||
+    String(driver.driverId || '').trim().toLowerCase() === typed
+  );
+  const current = drivers.find(driver => driver.driverId === row.dataset.driverId);
 
-<div>
+  if (!selected) {
+    input.value = current ? current.driver : '';
+    showMessage('Choose a driver from the autocomplete suggestions.', 'error');
+    return;
+  }
 
-<div class="panel-title">
+  if (selected.driverId !== row.dataset.driverId) {
+    const otherRow = [...list.querySelectorAll('.ranked-driver-row')]
+      .find(candidate => candidate !== row && candidate.dataset.driverId === selected.driverId);
+    updateRankedDriverRow(row, selected);
+    if (otherRow && current) updateRankedDriverRow(otherRow, current);
+  } else {
+    input.value = selected.driver;
+  }
 
-<h3>Your Prediction</h3>
-
-<span class="hint">
-Drag to reorder
-</span>
-
-</div>
-
-<div
-id="predictionList"
-class="driver-list"
-></div>
-
-</div>
-
-<div>
-
-<div class="panel-title">
-
-<h3>Available Drivers</h3>
-
-<span class="hint">
-Drag into prediction
-</span>
-
-</div>
-
-<div
-id="availableList"
-class="driver-list"
-></div>
-
-</div>
-
-</div>
-
-`;
+  if (input.dataset.context === 'prediction') updatePredictionEntryStatus();
+}
 
 
-const predictionList =
-document.getElementById(
-'predictionList'
-);
-
-const availableList =
-document.getElementById(
-'availableList'
-);
-
-
-const selectedIds =
-orderedDrivers.map(
-d =>
-d.driverId
-);
-
-
-drivers
-.filter(
-d =>
-!selectedIds.includes(
-d.driverId
-)
-)
-.forEach(
-driver =>
-availableList.appendChild(
-createDriverElement(
-driver
-)
-)
-);
-
-
-orderedDrivers.forEach(
-driver =>
-predictionList.appendChild(
-createDriverElement(
-driver
-)
-)
-);
-
-
-setupDragDrop(
-predictionList
-);
-
-setupDragDrop(
-availableList
-);
-
+function updatePredictionEntryStatus() {
+  const list = document.getElementById('predictionList');
+  const count = document.getElementById('predictionEntryCount');
+  const save = document.getElementById('saveButton');
+  if (!list) return;
+  const rows = [...list.querySelectorAll('.ranked-driver-row')];
+  const ids = rows.map(row => row.dataset.driverId);
+  const complete = rows.length === drivers.length &&
+    ids.every(Boolean) &&
+    new Set(ids).size === drivers.length &&
+    drivers.every(driver => ids.includes(driver.driverId));
+  if (count) {
+    count.textContent = complete ? `${drivers.length} / ${drivers.length} ready` : 'Check driver order';
+    count.classList.toggle('complete', complete);
+  }
+  if (save) save.disabled = !complete;
 }
 
 
@@ -4874,107 +4898,31 @@ r.driverId
 
 
 function renderAdminResultList() {
+  if (!currentAdminRace) return;
 
-if (!currentAdminRace)
-return;
+  const list = document.getElementById('resultList');
+  const available = document.getElementById('resultAvailableList');
+  if (!list) return;
+  if (available) available.innerHTML = '';
 
+  const saved = getSavedResultOrder();
+  const ordered = saved.length
+    ? [...saved, ...drivers.filter(d => !saved.some(s => s.driverId === d.driverId))]
+    : drivers.slice();
 
-const list =
-document.getElementById(
-'resultList'
-);
+  renderRankedDriverList(list, ordered, 'results');
 
-const available =
-document.getElementById(
-'resultAvailableList'
-);
-
-
-list.innerHTML = '';
-
-available.innerHTML = '';
-
-
-const saved =
-getSavedResultOrder();
-
-
-const ordered =
-saved.length
-? saved
-: [];
-
-
-const selectedIds =
-ordered.map(
-d =>
-d.driverId
-);
-
-
-ordered.forEach(
-driver =>
-list.appendChild(
-createDriverElement(
-driver
-)
-)
-);
-
-
-drivers
-.filter(
-d =>
-!selectedIds.includes(
-d.driverId
-)
-)
-.forEach(
-driver =>
-available.appendChild(
-createDriverElement(
-driver
-)
-)
-);
-
-
-setupDragDrop(list);
-
-setupDragDrop(available);
-
-updatePositions();
-
-
-const status =
-document.getElementById(
-'adminResultStatus'
-);
-
-
-if (
-saved.length ===
-drivers.length
-) {
-
-status.className =
-'result-status complete';
-
-status.textContent =
-'✓ Results entered for this session.';
-
-} else {
-
-status.className =
-'result-status';
-
-status.textContent =
-saved.length
-? `${saved.length} of ${drivers.length} positions entered.`
-: 'No results entered yet.';
-
-}
-
+  const status = document.getElementById('adminResultStatus');
+  if (!status) return;
+  if (saved.length === drivers.length) {
+    status.className = 'result-status complete';
+    status.textContent = '✓ All finishing positions are saved. Edit any position by typing a driver name.';
+  } else {
+    status.className = 'result-status';
+    status.textContent = saved.length
+      ? `${saved.length} of ${drivers.length} official positions previously saved. Complete the order below, then save.`
+      : `Enter the official finishing order below, from P1 to P${drivers.length}.`;
+  }
 }
 
 
