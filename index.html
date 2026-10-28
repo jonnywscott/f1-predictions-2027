@@ -1801,6 +1801,39 @@ button:disabled{opacity:.65;cursor:wait!important;transform:none!important}
 .rules-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.rules-card h2{margin:8px 0 10px}.rules-card p{line-height:1.65;color:var(--muted,#777);margin:0}.rules-scoring{display:grid;gap:0}.rules-scoring>div{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-top:1px solid var(--line,#e5e5e5)}.rules-scoring span{color:var(--muted,#777)}.rules-scoring strong{white-space:nowrap}.rules-note{color:var(--muted,#777);font-size:13px;line-height:1.5;margin:18px 2px}
 body.button-reorder-mode .driver[draggable="true"]{cursor:default}
 body.button-reorder-mode .driver{user-select:none}
+/* Admin dashboard and focused sub-views */
+.admin-dashboard-view{display:grid;gap:22px;margin-bottom:20px}
+.admin-dashboard-welcome{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:24px;border-radius:18px;background:linear-gradient(135deg,#17191f,#30343d);color:#fff}
+.admin-dashboard-welcome h2{margin:6px 0;font-size:clamp(24px,4vw,32px);letter-spacing:-.7px}
+.admin-dashboard-welcome p{margin:0;color:#c0c3cb;line-height:1.5;font-size:14px}
+.admin-dashboard-welcome .eyebrow{color:#ff817b}
+.admin-dashboard-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.admin-dashboard-stat{display:grid;gap:8px;align-content:start;padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--paper,#fff)}
+.admin-dashboard-stat span{font-size:12px;color:var(--muted);font-weight:750}
+.admin-dashboard-stat strong{font-size:clamp(25px,3vw,34px);line-height:1;font-weight:950;letter-spacing:-1px}
+.admin-dashboard-stat small{font-size:11px;color:var(--muted);line-height:1.4}
+.admin-dashboard-section{display:grid;gap:14px}
+.admin-dashboard-section h3{margin:4px 0 0;font-size:20px}
+.admin-dashboard-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.admin-dashboard-action{display:flex;align-items:center;gap:12px;min-width:0;text-align:left;padding:17px;border:1px solid var(--line);border-radius:14px;background:var(--paper,#fff);color:var(--ink);cursor:pointer;transition:transform .16s,border-color .16s,box-shadow .16s}
+.admin-dashboard-action:hover{transform:translateY(-2px);border-color:var(--f1-red,#e10600);box-shadow:0 8px 22px rgba(16,17,20,.07)}
+.admin-action-icon{display:grid;place-items:center;flex-shrink:0;width:42px;height:42px;border-radius:12px;background:rgba(225,6,0,.09);font-size:22px}
+.admin-dashboard-action>span:nth-child(2){display:grid;gap:5px;flex:1;min-width:0}
+.admin-dashboard-action strong{font-size:14px}
+.admin-dashboard-action small{font-size:11px;line-height:1.45;color:var(--muted)}
+.admin-action-arrow{font-size:25px;color:var(--muted)}
+.admin-dashboard-checklist{padding:18px;border:1px solid var(--line);border-radius:14px;background:var(--paper,#fff)}
+.admin-dashboard-checklist ul{margin:0;padding-left:20px;display:grid;gap:9px;color:var(--muted);font-size:13px;line-height:1.5}
+.admin-subview-heading{display:flex;align-items:center;gap:16px;margin:4px 0 16px}
+.admin-subview-heading>div{display:grid;gap:4px}
+.admin-subview-heading h2{margin:0;font-size:24px}
+.admin-subview-heading p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.admin-subview-heading .secondary-button{flex-shrink:0}
+body.dark-mode .admin-dashboard-stat,body.dark-mode .admin-dashboard-action,body.dark-mode .admin-dashboard-checklist{background:#1a1c21;color:#f1f2f4;border-color:#30333a}
+body.dark-mode .admin-dashboard-action strong{color:#f1f2f4}
+body.dark-mode .admin-dashboard-action small,body.dark-mode .admin-dashboard-stat span,body.dark-mode .admin-dashboard-stat small,body.dark-mode .admin-dashboard-checklist ul{color:#a9adb7}
+@media(max-width:850px){.admin-dashboard-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.admin-dashboard-actions{grid-template-columns:1fr}}
+@media(max-width:560px){.admin-dashboard-welcome{padding:18px}.admin-dashboard-stat{padding:14px}.admin-subview-heading{align-items:flex-start;flex-direction:column}.admin-dashboard-action{padding:14px}}
 /* Clear blank slots and simpler settings-to-admin navigation */
 .ranked-driver-input::placeholder{color:#969ba4;font-weight:550;opacity:1}
 .ranked-driver-row:not([data-driver-id]) .position{background:#fff0ef;color:#c21d17}
@@ -2183,8 +2216,36 @@ Other Players
             <p>Enter official results or manage the season. Your changes here affect scoring and standings.</p>
           </div>
         </div>
-        <div class="card">
-
+        <div id="adminDashboardView" class="admin-dashboard-view">
+          <div class="admin-dashboard-welcome">
+            <div><div class="eyebrow">SEASON CONTROL CENTRE</div><h2>Admin overview</h2><p>Check progress across the season, then jump straight to the task you need.</p></div>
+            <span class="admin-badge">ADMIN</span>
+          </div>
+          <div class="admin-dashboard-stats">
+            <div class="admin-dashboard-stat"><span>Races configured</span><strong id="adminStatRaces">—</strong><small>In the season calendar</small></div>
+            <div class="admin-dashboard-stat"><span>Race results entered</span><strong id="adminStatRaceResults">—</strong><small>Complete finishing orders</small></div>
+            <div class="admin-dashboard-stat"><span>Qualifying results entered</span><strong id="adminStatQualResults">—</strong><small>Complete qualifying orders</small></div>
+            <div class="admin-dashboard-stat"><span>Active drivers</span><strong id="adminStatDrivers">—</strong><small>Eligible for predictions</small></div>
+          </div>
+          <div class="admin-dashboard-section">
+            <div><div class="eyebrow">QUICK ACTIONS</div><h3>What would you like to do?</h3></div>
+            <div class="admin-dashboard-actions">
+              <button class="admin-dashboard-action" onclick="showAdminView('results')"><span class="admin-action-icon">📋</span><span><strong>Results management</strong><small>Enter qualifying, sprint and race finishing orders</small></span><span class="admin-action-arrow">›</span></button>
+              <button class="admin-dashboard-action" onclick="showAdminView('races')"><span class="admin-action-icon">🏁</span><span><strong>Race management</strong><small>Set race dates, sprint weekends and active status</small></span><span class="admin-action-arrow">›</span></button>
+              <button class="admin-dashboard-action" onclick="showAdminView('drivers')"><span class="admin-action-icon">🏎️</span><span><strong>Driver management</strong><small>Edit driver names, teams and active status</small></span><span class="admin-action-arrow">›</span></button>
+            </div>
+          </div>
+          <div class="admin-dashboard-section admin-dashboard-checklist">
+            <div><div class="eyebrow">ADMIN CHECKLIST</div><h3>Important reminders</h3></div>
+            <ul>
+              <li>Confirm race and session dates are correct before prediction deadlines.</li>
+              <li>Enter all finishing positions for a session, then save the results.</li>
+              <li>After saving, check the standings to confirm points have updated as expected.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card admin-results-view hidden">
+<div class="admin-subview-heading"><button class="secondary-button" onclick="showAdminView('home')">← Admin home</button><div><div class="eyebrow">RESULTS</div><h2>Results management</h2><p>Select a race and session, enter the official order, and save.</p></div></div>
 <div class="admin-header">
 
 <div>
@@ -2228,7 +2289,7 @@ ADMIN
 </div>
 
 
-<div class="card">
+<div class="card admin-results-view hidden">
 
 
 <div
@@ -2301,14 +2362,15 @@ Save Results
 
 </div>
 
-        <div id="adminManagementArea" class="admin-management-grid">
-          <div class="card admin-management-card">
+        <div id="adminManagementArea" class="admin-management-grid hidden">
+          <div class="admin-subview-heading"><button class="secondary-button" onclick="showAdminView('home')">← Admin home</button><div><div class="eyebrow">SEASON SETUP</div><h2 id="adminManagementHeading">Management</h2><p>Make changes carefully; these settings affect the live game.</p></div></div>
+          <div id="adminRaceManagementCard" class="card admin-management-card">
             <div class="admin-section-title"><div><div class="eyebrow">RACE MANAGEMENT</div><h2>Races</h2></div><button class="primary-button" onclick="newAdminRace()">+ Add Race</button></div>
             <div id="adminRaceEditor" class="admin-editor hidden"></div>
             <div id="adminRacesTable" class="admin-management-list"><div class="loading-row">Loading races...</div></div>
           </div>
 
-          <div class="card admin-management-card">
+          <div id="adminDriverManagementCard" class="card admin-management-card">
             <div class="admin-section-title"><div><div class="eyebrow">DRIVER MANAGEMENT</div><h2>Drivers</h2></div><button class="primary-button" onclick="newAdminDriver()">+ Add Driver</button></div>
             <div id="adminDriverEditor" class="admin-editor hidden"></div>
             <div id="adminDriversTable" class="admin-management-list"><div class="loading-row">Loading drivers...</div></div>
@@ -4612,6 +4674,54 @@ race.qualifyingStart
    ADMIN
 ========================================================= */
 
+function showAdminView(view) {
+  if (!isAdmin) return;
+  const dashboard = document.getElementById('adminDashboardView');
+  const resultsViews = document.querySelectorAll('.admin-results-view');
+  const management = document.getElementById('adminManagementArea');
+  if (dashboard) dashboard.classList.toggle('hidden', view !== 'home');
+  resultsViews.forEach(el => el.classList.toggle('hidden', view !== 'results'));
+  if (management) management.classList.toggle('hidden', view !== 'races' && view !== 'drivers');
+
+  const raceCard = document.getElementById('adminRaceManagementCard');
+  const driverCard = document.getElementById('adminDriverManagementCard');
+  if (raceCard) raceCard.classList.toggle('hidden', view !== 'races');
+  if (driverCard) driverCard.classList.toggle('hidden', view !== 'drivers');
+  const heading = document.getElementById('adminManagementHeading');
+  if (heading) heading.textContent = view === 'drivers' ? 'Driver management' : 'Race management';
+
+  if (view === 'results') {
+    refreshAdminResults().then(renderAdminDashboard);
+  } else if (view === 'races' || view === 'drivers') {
+    loadAdminManagement();
+  }
+  if (view === 'home') renderAdminDashboard();
+  const section = document.getElementById('adminPage');
+  if (section) section.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+
+function renderAdminDashboard() {
+  const allRaces = (window.adminRaces && window.adminRaces.length) ? window.adminRaces : (races || []);
+  const allDrivers = (window.adminDrivers && window.adminDrivers.length) ? window.adminDrivers : (drivers || []);
+  const activeDrivers = allDrivers.filter(d => d.active === undefined || isTrue(d.active));
+  const required = activeDrivers.length || 22;
+  const resultRows = Array.isArray(results) ? results : [];
+  const completedFor = field => allRaces.filter(race => {
+    const ids = new Set(resultRows.filter(row => row.raceId === race.raceId && Number(row[field]) > 0).map(row => row.driverId));
+    return ids.size >= required;
+  }).length;
+  const raceCount = document.getElementById('adminStatRaces');
+  const raceResults = document.getElementById('adminStatRaceResults');
+  const qualResults = document.getElementById('adminStatQualResults');
+  const driverCount = document.getElementById('adminStatDrivers');
+  if (raceCount) raceCount.textContent = String(allRaces.filter(r => r.active === undefined || isTrue(r.active)).length);
+  if (raceResults) raceResults.textContent = `${completedFor('racePosition')} / ${allRaces.length}`;
+  if (qualResults) qualResults.textContent = `${completedFor('qualifyingPosition')} / ${allRaces.length}`;
+  if (driverCount) driverCount.textContent = String(activeDrivers.length);
+}
+
+
 async function loadAdmin() {
 
 const adminRaceSelect =
@@ -4653,6 +4763,8 @@ renderAdminSessions();
 
 await refreshAdminResults();
 await loadAdminManagement();
+showAdminView('home');
+renderAdminDashboard();
 
 }
 
@@ -5099,6 +5211,7 @@ async function loadAdminManagement(){
     window.adminDrivers = driverData.drivers || [];
     renderAdminRaces();
     renderAdminDrivers();
+    renderAdminDashboard();
   } catch(error) {
     console.error('Admin management failed:', error);
     const raceEl=document.getElementById('adminRacesTable');
